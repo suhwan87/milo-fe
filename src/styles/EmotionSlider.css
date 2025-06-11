@@ -1,36 +1,47 @@
-.slider-wrapper {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 16px 0;
+/* ✅ 슬라이드 전체 wrapper */
+.slider-container {
+  position: relative;
+  padding: 32px 0 64px;
+  overflow: hidden; /* 카드 밖으로 삐져나오지 않도록 */
 }
 
+/* ✅ Swiper 내부 구조에서 잘림 방지 */
+.swiper,
+.swiper-wrapper,
+.swiper-slide {
+  overflow: visible !important;
+}
+
+/* ✅ 카드 스타일 */
 .slide-card {
-  flex: 0 0 auto;
-  width: 320px;
+  width: 100%;
+  max-width: 100%;
   background-color: #fff4ea;
   border-radius: 20px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  overflow: visible;
 }
 
+/* ✅ 카드 상단 라벨 */
 .slide-label {
   background-color: #f5b971;
   color: #6b6b6b;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: bold;
   padding: 4px 12px;
   border-radius: 999px;
-
   position: absolute;
-  top: -12px; /* ✅ 위로 살짝 올라오게 */
-  left: 32px; /* ✅ 좌측 여백 */
+  top: -16px;
+  left: 16px;
+  z-index: 5;
 }
 
+/* ✅ 캐릭터 + 말풍선 정렬 */
 .slide-content {
   display: flex;
   align-items: center;
@@ -55,13 +66,35 @@
   white-space: pre-line;
 }
 
+/* ✅ 버튼 */
 .slide-button {
   margin-top: auto;
   padding: 8px 20px;
   font-size: 14px;
-  background-color: #f5b971;
+  background-color: #ff8827;
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  align-self: center;
+}
+
+/* ✅ 외부 인디케이터 위치 (Swiper 바깥) */
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.custom-pagination .swiper-pagination-bullet {
+  background-color: #ccc;
+  opacity: 1;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 50%;
+}
+
+.custom-pagination .swiper-pagination-bullet-active {
+  background-color: #ff8827;
 }
