@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+}
+
+.header-logo {
+  font-family: 'Tadak', sans-serif;
+  font-size: 52px;
+  font-weight: normal;
+  color: #222;
+}
+
+.header-logo .dot {
+  font-size: 28px;
+  color: #444;
+  position: relative;
+  top: -4px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.header-icon {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+}
