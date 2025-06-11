@@ -12,24 +12,18 @@
   color: #222;
 }
 
-.header-logo .dot {
-  font-size: 28px;
-  color: #444;
-  position: relative;
-  top: -4px;
-}
-
 .header-icons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 10px;
 }
 
 .header-icon {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: 2px solid #ccc;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 18px;
   background-color: white;
   cursor: pointer;
 }

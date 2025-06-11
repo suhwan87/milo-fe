@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -10,6 +10,7 @@ import main2 from '../assets/characters/main2.png';
 
 const EmotionSlider = () => {
   const paginationRef = useRef(null);
+  const [isReady, setIsReady] = useState(false); // ✅ 타이밍 제어용 상태
 
   const slides = [
     {
@@ -24,52 +25,54 @@ const EmotionSlider = () => {
     },
   ];
 
+  useEffect(() => {
+    // ✅ ref가 렌더링된 뒤에만 Swiper 활성화
+    setIsReady(true);
+  }, []);
+
   return (
     <div className="slider-container">
-      <Swiper
-        slidesPerView={1}
-        spaceBetween={0}
-        pagination={{
-          el: paginationRef.current,
-          clickable: true,
-        }}
-        onSwiper={(swiper) => {
-          // Swiper 초기화 후에 ref 연결
-          setTimeout(() => {
-            if (
-              swiper.params.pagination &&
-              typeof swiper.params.pagination.el === 'string'
-            ) {
+      {isReady && (
+        <Swiper
+          slidesPerView={1.1}
+          spaceBetween={20}
+          centeredSlides={true}
+          modules={[Pagination]}
+          pagination={{
+            clickable: true,
+            el: paginationRef.current,
+          }}
+          onSwiper={(swiper) => {
+            if (swiper.params.pagination && paginationRef.current) {
               swiper.params.pagination.el = paginationRef.current;
               swiper.pagination.init();
+              swiper.pagination.render();
               swiper.pagination.update();
             }
-          });
-        }}
-        modules={[Pagination]}
-        className="custom-swiper"
-      >
-        {slides.map((item, index) => (
-          <SwiperSlide key={index}>
-            <div className="slide-card">
-              <div className="slide-label">{item.title}</div>
-              <div className="slide-content">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="slide-character"
-                />
-                <div className="speech-bubble">
-                  <p>{item.description}</p>
+          }}
+        >
+          {slides.map((item, index) => (
+            <SwiperSlide key={index}>
+              <div className="slide-card">
+                <div className="slide-label">{item.title}</div>
+                <div className="slide-content">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="slide-character"
+                  />
+                  <div className="speech-bubble">
+                    <p>{item.description}</p>
+                  </div>
                 </div>
+                <button className="slide-button">시작하기</button>
               </div>
-              <button className="slide-button">시작하기</button>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
 
-      {/* ✅ 반드시 DOM에 있어야 함 */}
+      {/* ✅ 바깥 인디케이터 DOM은 항상 존재 */}
       <div className="custom-pagination" ref={paginationRef}></div>
     </div>
   );
