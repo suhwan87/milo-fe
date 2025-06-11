@@ -1,6 +1,6 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/Splash.css"; // CSS 따로 분리
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Splash.css'; // CSS 따로 분리
 
 function Splash() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function Splash() {
           <br />
           milo가 함께 할게요
         </p>
-        <button onClick={() => navigate("/login")}>지금 시작하기</button>
+        <button onClick={() => navigate('/login')}>지금 시작하기</button>
       </div>
 
       <img

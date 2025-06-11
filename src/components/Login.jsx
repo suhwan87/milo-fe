@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/Login.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Login.css';
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   //   const handleLogin = (e) => {
   //     e.preventDefault();
@@ -42,14 +42,14 @@ function Login() {
           required
         />
         <div className="find-info">
-          <span onClick={() => navigate("/find-id")}>아이디 찾기 </span> |
-          <span onClick={() => navigate("/find-password")}> 비밀번호 찾기</span>
+          <span onClick={() => navigate('/find-id')}>아이디 찾기 </span> |
+          <span onClick={() => navigate('/find-password')}> 비밀번호 찾기</span>
         </div>
         <button type="submit">로그인</button>
       </form>
       <p className="login-footer">
-        아직 계정이 없으신가요?{" "}
-        <span onClick={() => navigate("/signup")}>Signup</span>
+        아직 계정이 없으신가요?{' '}
+        <span onClick={() => navigate('/signup')}>Signup</span>
       </p>
     </div>
   );

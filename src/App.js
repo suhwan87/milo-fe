@@ -1,12 +1,12 @@
 import React from 'react';
 import './fonts/TDTDTadakTadak.ttf';
 import './styles/App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Splash from "./components/Splash.jsx";
-import Login from "./components/Login.jsx";
-import SignUp from "./components/SignUp.jsx";
-import FindId from "./components/FindId";
-import FindPassword from "./components/FindPassword";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Splash from './components/Splash.jsx';
+import Login from './components/Login.jsx';
+import SignUp from './components/SignUp.jsx';
+import FindId from './components/FindId';
+import FindPassword from './components/FindPassword';
 import MainPage from 'pages/MainPage';
 
 function App() {
@@ -28,7 +28,6 @@ function App() {
 
         {/* 메인 페이지 */}
         <Route path="/main" element={<MainPage />} />
-        
       </Routes>
     </Router>
   );
