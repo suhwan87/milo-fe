@@ -1,12 +1,21 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/Splash.css"; // CSS 따로 분리
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Splash.css'; // CSS 따로 분리
+import splashCharacter from '../assets/characters/splash-character.png';
 
 function Splash() {
   const navigate = useNavigate();
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleStart = () => {
+    setFadeOut(true); // 페이드아웃 트리거
+    setTimeout(() => {
+      navigate('/login'); // 500ms 뒤 페이지 이동
+    }, 500);
+  };
 
   return (
-    <div className="splash">
+    <div className={`splash ${fadeOut ? 'fade-out' : ''}`}>
       <div className="splash-header">
         <h1 className="logo">Milo.</h1>
         <svg
@@ -28,14 +37,10 @@ function Splash() {
           <br />
           milo가 함께 할게요
         </p>
-        <button onClick={() => navigate("/login")}>지금 시작하기</button>
+        <button onClick={handleStart}>지금 시작하기</button>
       </div>
 
-      <img
-        src="/assets/milo_character.png"
-        alt="milo 캐릭터"
-        className="character"
-      />
+      <img src={splashCharacter} alt="milo 캐릭터" className="character" />
     </div>
   );
 }

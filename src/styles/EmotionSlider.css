@@ -27,10 +27,9 @@
   border-radius: 999px;
 
   position: absolute;
-  top: -12px;     /* ✅ 위로 살짝 올라오게 */
-  left: 32px;     /* ✅ 좌측 여백 */
+  top: -12px; /* ✅ 위로 살짝 올라오게 */
+  left: 32px; /* ✅ 좌측 여백 */
 }
-
 
 .slide-content {
   display: flex;

@@ -6,7 +6,6 @@
   background-color: #ffffff;
 }
 
-
 /* 상단 주황 영역 */
 .splash-header {
   width: 100%;
@@ -80,4 +79,20 @@
   position: absolute;
   bottom: -10px;
   right: -20px;
+}
+
+/* 페이드 아웃 효과 */
+.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
