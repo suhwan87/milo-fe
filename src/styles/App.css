@@ -1,0 +1,24 @@
+/* App.css */
+@font-face {
+  font-family: 'Tadak';
+  src: url('../fonts/TDTDTadakTadak.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: #fffaf5;
+    font-family: 'Tadak', sans-serif;
+}
+
+#root {
+  max-width: 390px;
+  margin: 0 auto;
+}

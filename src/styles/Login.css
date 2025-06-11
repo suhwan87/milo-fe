@@ -1,0 +1,114 @@
+/* 로그인 전체화면 구조 */
+.login-container {
+  width: 100%;
+  padding: 3rem;
+  box-sizing: border-box;
+  max-width: 390px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  background-color: #ffffff;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #444;
+}
+
+
+/* 너구리 + 로고*/
+.character-logo {
+  position: relative;
+}
+
+/* 너구리 */
+.character1 {
+  position: absolute;
+  top: -100px;     /* 화면 하단에 닿도록 */
+  left: 50%;         /* 가운데 기준선 */
+  transform: translateX(-50%); /* 정확히 가운데 정렬 */
+  width: 100px;
+  z-index: 1;
+}
+
+/* 로고 */
+.logo1 {
+  font-size: 3.5rem;
+  font-weight: normal;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'Tadak', sans-serif;
+}
+
+
+/* 로그인 폼 구조 */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+
+/* 로그인 input 박스 */
+.login-form input {
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #ffb680;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
+}
+
+
+.login-form button {
+  padding: 1rem;
+  background-color: #ff9f4a;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
+}
+
+.login-form button:hover {
+  background-color: #ff8b26;
+}
+
+.login-form button:active {
+  transform: scale(0.99);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+
+/* 아이디/비번 찾기 */
+.find-info {
+  margin: 5px 0px 5px 0px;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #555555;
+  font-weight: bold;
+}
+
+.find-info span {
+  cursor: pointer;
+  font-weight: normal;
+  margin: 0 0.3rem;
+}
+
+/* 회원가입 */
+.login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #555555;
+}
+
+.login-footer span {
+  color: #ff9f4a;
+  margin-left: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
