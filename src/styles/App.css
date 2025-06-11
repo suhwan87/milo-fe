@@ -6,6 +6,8 @@
   font-style: normal;
 }
 
+
+/* ✅ 2. 기본 리셋 및 앱 전체 스타일 */
 * {
   margin: 0;
   padding: 0;
@@ -18,7 +20,37 @@ html, body {
     font-family: 'Tadak', sans-serif;
 }
 
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #222;
+}
+
 #root {
   max-width: 390px;
   margin: 0 auto;
+}
+
+/* ✅ 3. 전체 앱 컨테이너 - 모바일 앱처럼 가운데 정렬 */
+.app-container {
+  max-width: 430px;           /* 아이폰 기준 너비 */
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #fffefc;
+}
+
+/* ✅ 4. 기본 태그 정리 */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+/* ✅ 5. Milo 로고 폰트 적용용 클래스 */
+.tadak-font {
+  font-family: 'Tadak', sans-serif;
 }

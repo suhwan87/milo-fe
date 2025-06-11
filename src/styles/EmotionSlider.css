@@ -1,0 +1,68 @@
+.slider-wrapper {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 16px 0;
+}
+
+.slide-card {
+  flex: 0 0 auto;
+  width: 320px;
+  background-color: #fff4ea;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slide-label {
+  background-color: #f5b971;
+  color: #6b6b6b;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 999px;
+
+  position: absolute;
+  top: -12px;     /* ✅ 위로 살짝 올라오게 */
+  left: 32px;     /* ✅ 좌측 여백 */
+}
+
+
+.slide-content {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+.slide-character {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-right: 12px;
+}
+
+.speech-bubble {
+  background-color: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  color: #333;
+  white-space: pre-line;
+}
+
+.slide-button {
+  margin-top: auto;
+  padding: 8px 20px;
+  font-size: 14px;
+  background-color: #f5b971;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}

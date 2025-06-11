@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import React from 'react';
 import './fonts/TDTDTadakTadak.ttf';
 import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -7,6 +7,7 @@ import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import FindId from "./components/FindId";
 import FindPassword from "./components/FindPassword";
+import MainPage from 'pages/MainPage';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path="/find-id" element={<FindId />} />
         <Route path="/find-password" element={<FindPassword />} />
 
+        {/* 메인 페이지 */}
+        <Route path="/main" element={<MainPage />} />
         
       </Routes>
     </Router>
