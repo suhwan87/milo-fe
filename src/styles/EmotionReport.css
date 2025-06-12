@@ -1,0 +1,12 @@
+.report-container {
+  padding: 20px;
+  background-color: #fffaf5;
+  min-height: 100vh;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}

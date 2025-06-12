@@ -9,7 +9,8 @@ import SignUp from './components/SignUp.jsx';
 import FindId from './components/FindId';
 import FindPassword from './components/FindPassword';
 import MainPage from './pages/MainPage';
-import AppLayout from './components/AppLayout'; // ✅ 새로 추가
+import AppLayout from './components/AppLayout';
+import EmotionReport from './pages/EmotionReport';
 
 function App() {
   return (
@@ -55,6 +56,14 @@ function App() {
           element={
             <AppLayout>
               <MainPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/emotion-report"
+          element={
+            <AppLayout>
+              <EmotionReport />
             </AppLayout>
           }
         />

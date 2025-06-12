@@ -2,12 +2,11 @@
   background-color: #fffefc;
   padding: 15px;
   border-top: 3px solid #ffb26f;
-  /*border-bottom: 3px solid #FFB26F;*/
   margin-bottom: 10px;
   cursor: pointer;
 }
 
-.report-header {
+.keyword-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
