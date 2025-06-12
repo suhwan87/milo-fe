@@ -11,6 +11,9 @@ import FindPassword from './components/FindPassword';
 import MainPage from './pages/MainPage';
 import AppLayout from './components/AppLayout';
 import EmotionReport from './pages/EmotionReport';
+import ChatBot1 from './pages/ChatBot1';
+import RolePlay from './pages/RolePlay';
+import ChatBot2 from './pages/ChatBot2';
 
 function App() {
   return (
@@ -67,6 +70,9 @@ function App() {
             </AppLayout>
           }
         />
+        <Route path="/chat" element={<ChatBot1 />} />
+        <Route path="/roleplay" element={<RolePlay />} />
+        <Route path="/roleplay/chat" element={<ChatBot2 />} />
       </Routes>
     </Router>
   );

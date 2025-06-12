@@ -1,0 +1,187 @@
+/* 📦 전체 채팅 레이아웃 */
+.chat-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fffaf0;
+  max-width: 598px;
+  margin: 0 auto;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 📌 상단 헤더 */
+.chat-header {
+  padding: 18px 18px;
+  background-color: #FFF4DE;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-title {
+  font-family: 'Tadak', sans-serif;
+  font-size: 40px;
+  margin: 0 auto;
+  transform: translateX(-16px);
+}
+
+.back-button {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.end-button {
+  font-size: 13px;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  background-color: #ff9f4a;
+  color: rgb(44, 44, 44);
+  border-radius: 30px;
+  box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
+}
+
+.header-space {
+  width: 24px;
+}
+
+/* 💬 채팅 메시지 영역 */
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #FFF4DE;
+  display: flex;
+  flex-direction: column-reverse;
+
+  /* ✅ 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+}
+
+.chat-body::-webkit-scrollbar {
+  display: none;
+}
+
+
+.chat-message {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.chat-message.user {
+  justify-content: flex-end;
+}
+
+/* 🐻 챗봇 캐릭터 */
+.bot-avatar img {
+  width: 50px;
+}
+.bot-name {
+  font-size: 15px;
+  color: #555;
+  text-align: center;
+}
+
+/* 💬 말풍선 스타일 */
+.message-bubble {
+  max-width: 70%;
+  padding: 12px 14px;
+  position: relative;
+  white-space: pre-line;
+  font-size: 14px;
+  border-radius: 16px;
+}
+
+/* 챗봇 말풍선 */
+.message-bubble.bot {
+  background-color: white;
+  margin-left: 20px;
+}
+
+/* 사용자 말풍선 */
+.message-bubble.user {
+  background-color: #ffb680;
+  color: white;
+  border: none;
+}
+
+/* 사용자 말풍선 꼬리 - 오른쪽 */
+.message-bubble.user::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  background-color: #ffb680;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* 챗봇 말풍선 꼬리 - 왼쪽 */
+.message-bubble.bot::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+/* 📐 말풍선 + 시간 묶음 정렬 */
+.bubble-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: 80%;
+}
+
+/* 사용자 메시지는 오른쪽 정렬 */
+.bubble-wrapper.user {
+  justify-content: flex-end;
+}
+
+/* 시간 표시 */
+.timestamp {
+  font-size: 10px;
+  color: #888;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+
+/* 📝 메시지 입력창 */
+.chat-input-area {
+  position: relative;
+  padding: 20px 16px;
+  background-color: #fff4de;
+}
+
+/* 텍스트 입력 필드 */
+.chat-input-area input {
+  width: 100%;
+  padding: 20px 44px 20px 20px;
+  border: 1.5px solid #ffb680;
+  border-radius: 999px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+}
+
+/* 전송 버튼 (종이비행기 아이콘) */
+.send-button {
+  position: absolute;
+  right: 40px;
+  top: 55%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+}
