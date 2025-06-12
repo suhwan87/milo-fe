@@ -110,7 +110,6 @@
   color: #ff7a1a; /* 좀 더 진한 오렌지 색상 */
 }
 
-
 /* 페이드 아웃 효과 */
 .fade-out {
   animation: fadeOut 0.5s ease forwards;

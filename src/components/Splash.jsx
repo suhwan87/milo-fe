@@ -1,4 +1,4 @@
-import React, { useState /* useEffect, useRef */ } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Splash.css'; // CSS 따로 분리
 import splashCharacter from '../assets/characters/splash-character.png';
@@ -6,7 +6,6 @@ import splashCharacter from '../assets/characters/splash-character.png';
 function Splash() {
   const navigate = useNavigate();
   const [fadeOut, setFadeOut] = useState(false);
-  // const characterRef = useRef(null);
 
   const handleStart = () => {
     setFadeOut(true); // 페이드아웃 트리거
@@ -14,19 +13,6 @@ function Splash() {
       navigate('/login'); // 500ms 뒤 페이지 이동
     }, 500);
   };
-
-  // useEffect(() => {
-  //   const character = characterRef.current;
-  //   character.classList.add('shake');
-
-  //   // 3초 후 class 제거 → 반복 방지
-  //   const timer = setTimeout(() => {
-  //     character.classList.remove('shake');
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-
   return (
     <div className={`splash ${fadeOut ? 'fade-out' : ''}`}>
       <div className="splash-header">
@@ -53,12 +39,7 @@ function Splash() {
         <button onClick={handleStart}>지금 시작하기</button>
       </div>
 
-      <img
-        /*ref={characterRef}*/
-        src={splashCharacter}
-        alt="milo 캐릭터"
-        className="character"
-      />
+      <img src={splashCharacter} alt="milo 캐릭터" className="character" />
     </div>
   );
 }

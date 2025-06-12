@@ -78,8 +78,6 @@
   }
 }
 
-
-
 .splash-text button {
   background-color: #ffb680;
   color: white;
@@ -116,15 +114,23 @@
   animation-delay: 1.8s;
 }
 
-
-
-/* 약한 회전 흔들림 효과 */
+/* 너구리 캐릭터 - 회전 흔들림 효과 */
 @keyframes tilt {
-  0%   { transform: rotate(0deg) translateY(0px); }
-  25%  { transform: rotate(-2deg) translateY(-1px); }
-  50%  { transform: rotate(2deg) translateY(0px); }
-  75%  { transform: rotate(-1deg) translateY(1px); }
-  100% { transform: rotate(0deg) translateY(0px); }
+  0% {
+    transform: rotate(0deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(-2deg) translateY(-1px);
+  }
+  50% {
+    transform: rotate(2deg) translateY(0px);
+  }
+  75% {
+    transform: rotate(-1deg) translateY(1px);
+  }
+  100% {
+    transform: rotate(0deg) translateY(0px);
+  }
 }
 
 /* 페이드 아웃 효과 */
