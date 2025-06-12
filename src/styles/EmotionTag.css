@@ -1,0 +1,9 @@
+.emotion-tag {
+  display: inline-block;
+  background-color: #ffe1ba;
+  color: #333;
+  padding: 6px 14px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}

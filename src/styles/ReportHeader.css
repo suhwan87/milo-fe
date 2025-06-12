@@ -1,0 +1,19 @@
+.report-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+.back-button {
+  font-size: 20px;
+  background: none;
+  border: none;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.report-header h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
