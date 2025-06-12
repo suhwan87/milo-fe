@@ -12,7 +12,7 @@
 /* 📌 상단 헤더 */
 .chat-header {
   padding: 18px 18px;
-  background-color: #FFF4DE;
+  background-color: #fff4de;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,7 +52,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background-color: #FFF4DE;
+  background-color: #fff4de;
   display: flex;
   flex-direction: column-reverse;
 
@@ -64,7 +64,6 @@
 .chat-body::-webkit-scrollbar {
   display: none;
 }
-
 
 .chat-message {
   display: flex;
@@ -110,7 +109,7 @@
 
 /* 사용자 말풍선 꼬리 - 오른쪽 */
 .message-bubble.user::after {
-  content: "";
+  content: '';
   position: absolute;
   right: -12px;
   top: 12px;
@@ -122,7 +121,7 @@
 
 /* 챗봇 말풍선 꼬리 - 왼쪽 */
 .message-bubble.bot::before {
-  content: "";
+  content: '';
   position: absolute;
   left: -12px;
   top: 12px;

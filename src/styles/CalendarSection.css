@@ -43,8 +43,8 @@
   border-radius: 50%;
   width: 54px;
   height: 54px;
-  font-size: 28px;             /* ✅ 아이콘 크기 조절 */
-  display: flex;               /* ✅ 가운데 정렬 */
+  font-size: 28px; /* ✅ 아이콘 크기 조절 */
+  display: flex; /* ✅ 가운데 정렬 */
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -53,9 +53,8 @@
   transform: translateY(-50%);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.11);
   cursor: pointer;
-  padding: 0;                  /* ✅ padding 제거로 크기 정확히 맞춤 */
+  padding: 0; /* ✅ padding 제거로 크기 정확히 맞춤 */
 }
-
 
 /* 텍스트 구성 */
 .calendar-toggle-info {
@@ -124,10 +123,10 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 598px;  /* 앱 화면 폭 기준 */
+  max-width: 598px; /* 앱 화면 폭 기준 */
   height: 100vh;
   background: transparent; /* 클릭은 가능하지만 안 보이게 */
-  background-color: rgba(153, 153, 153, 0.6);  /* ✅ #999 투명 버전 */
+  background-color: rgba(153, 153, 153, 0.6); /* ✅ #999 투명 버전 */
   z-index: 180; /* 슬라이드보다 낮고, 컨텐츠보다는 높게 */
 }
 
@@ -158,4 +157,3 @@
 .nav-button:hover {
   color: #000;
 }
-
