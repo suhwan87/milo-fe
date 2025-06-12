@@ -43,7 +43,7 @@ const EmotionChart = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // ✅ 상단 "기쁨" 제거
+        display: false,
       },
       tooltip: {
         enabled: true,

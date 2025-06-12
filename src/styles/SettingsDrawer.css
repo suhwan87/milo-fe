@@ -1,12 +1,14 @@
-/* 전체 화면 어둡게 */
+/* SettingsDrawer.css */
+
+/* ✅ 앱 내부에만 슬라이드 오버레이 적용 */
 .drawer-overlay {
-  position: fixed;
+  position: absolute;  /* fixed → absolute */
   inset: 0;
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  z-index: 999;
+  z-index: 10;
 }
 
 .drawer-overlay.visible {
@@ -14,20 +16,22 @@
   pointer-events: auto;
 }
 
-/* 슬라이딩 메뉴 */
+/* ✅ 앱 내부에서만 슬라이드 나옴 */
 .drawer {
-  position: fixed;
+  position: absolute;  /* fixed → absolute */
   top: 0;
-  right: -100%; /* 기본은 화면 밖 */
-  width: 80%;
-  max-width: 360px;
+  right: -100%;
+  width: 70%;
+  max-width: 380px;
   height: 100%;
   background-color: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 20;
   transition: right 0.3s ease;
   padding: 20px;
   box-sizing: border-box;
+  border-top-left-radius: 16px;  /* 선택사항: 둥글게 */
+  border-bottom-left-radius: 16px;
 }
 
 .drawer.open {

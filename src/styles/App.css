@@ -52,3 +52,13 @@ p {
 .tadak-font {
   font-family: 'Tadak', sans-serif;
 }
+
+.app-frame {
+  max-width: 598px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #fffefc;
+  /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);*/
+  position: relative;
+  overflow-x: hidden;
+}
