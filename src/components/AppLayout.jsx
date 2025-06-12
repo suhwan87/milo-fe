@@ -1,9 +1,22 @@
 // src/components/AppLayout.jsx
-import React from 'react';
-import '../styles/App.css'; // .app-frame 정의 포함
+import React, { useState } from 'react';
+import '../styles/App.css';
+import Header from './Header';
+import SettingsDrawer from './SettingsDrawer';
 
 const AppLayout = ({ children }) => {
-  return <div className="app-frame">{children}</div>;
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  return (
+    <div className="app-frame">
+      <Header onDrawerToggle={() => setDrawerOpen(true)} />
+      <SettingsDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
+      {children}
+    </div>
+  );
 };
 
 export default AppLayout;
