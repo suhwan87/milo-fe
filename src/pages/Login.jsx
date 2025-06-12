@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import loginCharacter from '../assets/characters/login-character.png';
+import Swal from 'sweetalert2';
 
 function Login() {
   const navigate = useNavigate();
@@ -9,17 +10,33 @@ function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleNavigate = (path) => {
+    setFadeOut(true);
+    setTimeout(() => {
+      navigate(path);
+    }, 300); // 페이드아웃과 타이밍 맞춤
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
     // 로그인 로직 (추후 Firebase 또는 API 연동)
     console.log('Login attempt:', { id, password });
 
-    setFadeOut(true); // 페이드아웃 트리거
-    setTimeout(() => {
-      navigate('/main'); // 500ms 뒤 페이지 이동
-    }, 300);
+    // ✅ SweetAlert2 알림
+    Swal.fire({
+      title: '로그인 완료!',
+      text: '환영합니다 😊',
+      icon: 'success',
+      confirmButtonColor: '#ffa158',
+      confirmButtonText: '확인',
+    }).then(() => {
+      // 페이드아웃
+      setFadeOut(true);
+      setTimeout(() => {
+        navigate('/main'); // 500ms 뒤 페이지 이동
+      }, 300);
+    });
   };
-
   return (
     <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
       <div className="login-container">
@@ -45,17 +62,18 @@ function Login() {
             required
           />
           <div className="find-info">
-            <span onClick={() => navigate('/find-id')}>아이디 찾기 </span> |
-            <span onClick={() => navigate('/find-password')}>
+            <span onClick={() => handleNavigate('/find-id')}>아이디 찾기</span>{' '}
+            |
+            <span onClick={() => handleNavigate('/find-password')}>
               {' '}
               비밀번호 찾기
             </span>
           </div>
-          <button type="submit">로그인</button>
+          <button type="submit">Login</button>
         </form>
         <p className="login-footer">
           아직 계정이 없으신가요?{' '}
-          <span onClick={() => navigate('/signup')}>Signup</span>
+          <span onClick={() => handleNavigate('/signup')}>Signup</span>
         </p>
       </div>
     </div>

@@ -3,9 +3,9 @@ import './fonts/TDTDTadakTadak.ttf';
 import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Splash from './components/Splash.jsx';
-import Login from './components/Login.jsx';
-import SignUp from './components/SignUp.jsx';
+import Splash from './pages/Splash.jsx';
+import Login from './pages/Login.jsx';
+import SignUp from './pages/SignUp.jsx';
 import FindId from './components/FindId';
 import FindPassword from './components/FindPassword';
 import MainPage from './pages/MainPage';
