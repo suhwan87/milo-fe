@@ -1,29 +1,31 @@
 // src/components/Header.jsx
 import React, { useState } from 'react';
 import '../styles/Header.css';
-import SettingsDrawer from './SettingsDrawer'; // ✅ 이거 경로 확인
+import SettingsDrawer from './SettingsDrawer';
 
 const Header = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <header className="header">
-      <h1 className="header-logo" style={{ fontFamily: 'Tadak' }}>
-        Milo.
-      </h1>
-      <div className="header-icons">
-        <button className="header-icon">🤍</button>
-        <button className="header-icon" onClick={() => setDrawerOpen(true)}>
-          ☰
-        </button>
-      </div>
+    <div style={{ position: 'relative' }}>
+      <header className="header">
+        <h1 className="header-logo" style={{ fontFamily: 'Tadak' }}>
+          Milo.
+        </h1>
+        <div className="header-icons">
+          <button className="header-icon">🤍</button>
+          <button className="header-icon" onClick={() => setDrawerOpen(true)}>
+            ☰
+          </button>
+        </div>
+      </header>
 
-      {/* ✅ 설정 Drawer 연결 */}
+      {/* ✅ drawer를 header 바깥에서 but app-frame 안에서 */}
       <SettingsDrawer
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
       />
-    </header>
+    </div>
   );
 };
 

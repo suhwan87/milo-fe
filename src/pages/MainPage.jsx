@@ -8,7 +8,7 @@ import 'styles/App.css'; // global css 연결
 
 const MainPage = () => {
   return (
-    <div className="app-container">
+    <div className="#root">
       <Header />
       <EmotionSlider />
       <EmotionKeyword />
