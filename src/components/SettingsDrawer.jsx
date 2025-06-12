@@ -19,19 +19,19 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         </div>
 
         <div className="drawer-section">
-          <p className="section-title">회원정보</p>
+          <p className="setting-section-title">회원정보</p>
           <div className="drawer-item">닉네임 변경</div>
           <div className="drawer-item">비밀번호 변경</div>
         </div>
 
         <div className="drawer-section">
-          <p className="section-title">챗봇</p>
+          <p className="setting-section-title">챗봇</p>
           <div className="drawer-item">대화 스타일 변경</div>
           <div className="drawer-item">앱 초기화</div>
         </div>
 
         <div className="drawer-section">
-          <p className="section-title">서비스</p>
+          <p className="setting-section-title">서비스</p>
           <div className="drawer-item">문의하기</div>
           <div className="drawer-item">서비스 이용약관</div>
           <div className="drawer-item">로그아웃</div>

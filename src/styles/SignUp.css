@@ -204,7 +204,6 @@
   padding-left: 3.2px;
 }
 
-
 /* 페이드 아웃 효과 */
 .fade-out {
   animation: fadeOut 0.5s ease forwards;

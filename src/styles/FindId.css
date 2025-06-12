@@ -1,18 +1,18 @@
 /* 아이디 찾기 전체 컨테이너 */
 .findid-container {
-    width: 100%;
-    margin-top: 200px;
-    padding: 50px;
-    flex-direction: column;
-    justify-content: center;
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #fff;
-    box-sizing: border-box;
+  width: 100%;
+  margin-top: 200px;
+  padding: 50px;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fff;
+  box-sizing: border-box;
 }
 
 /* 타이틀 */
 .findid-title {
-      text-align: center;
+  text-align: center;
   font-size: 24px;
   margin-bottom: 40px;
   color: #333;
@@ -67,18 +67,19 @@
 
 .result-box h3 {
   margin: 50px 0 10px 10px;
-  
 }
 
 /* 성공/실패 메시지 공통 */
-.success-box, .fail-box {
+.success-box,
+.fail-box {
   background-color: #fef9f4;
   border: 1px solid #ffd5aa;
   border-radius: 15px;
   padding: 20px;
 }
 
-.found-id, .no-result {
+.found-id,
+.no-result {
   font-size: 15px;
   margin-bottom: 20px;
   color: #333;
