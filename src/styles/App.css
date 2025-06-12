@@ -25,14 +25,9 @@ body {
   color: #222;
 }
 
-#root {
-  max-width: 390px;
-  margin: 0 auto;
-}
-
 /* ✅ 3. 전체 앱 컨테이너 - 모바일 앱처럼 가운데 정렬 */
-.app-container {
-  max-width: 430px; /* 아이폰 기준 너비 */
+#root {
+  max-width: 598px;
   margin: 0 auto;
   padding: 16px;
   background-color: #fffefc;

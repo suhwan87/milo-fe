@@ -33,6 +33,27 @@
   font-weight: bold;
   z-index: 2;
   font-family: 'Tadak', sans-serif;
+  animation: bounceIn 1.8s ease-out forwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(20px);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+  80% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* 텍스트 + 버튼 영역 */
@@ -46,7 +67,18 @@
   line-height: 1.2;
   margin-bottom: 20px;
   font-family: 'Tadak', sans-serif;
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 0s; /* 기존 1s → 0.3s로 줄임 */
 }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+
 
 .splash-text button {
   background-color: #ffb680;
@@ -79,6 +111,20 @@
   position: absolute;
   bottom: -10px;
   right: -20px;
+  animation: tilt 3s ease-in-out 1 forwards;
+  transform-origin: bottom center;
+  animation-delay: 1.8s;
+}
+
+
+
+/* 약한 회전 흔들림 효과 */
+@keyframes tilt {
+  0%   { transform: rotate(0deg) translateY(0px); }
+  25%  { transform: rotate(-2deg) translateY(-1px); }
+  50%  { transform: rotate(2deg) translateY(0px); }
+  75%  { transform: rotate(-1deg) translateY(1px); }
+  100% { transform: rotate(0deg) translateY(0px); }
 }
 
 /* 페이드 아웃 효과 */

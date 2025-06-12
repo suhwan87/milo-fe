@@ -5,6 +5,7 @@ import loginCharacter from '../assets/characters/login-character.png';
 
 function Login() {
   const navigate = useNavigate();
+  const [fadeOut, setFadeOut] = useState(false);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,42 +13,51 @@ function Login() {
     e.preventDefault();
     // 로그인 로직 (추후 Firebase 또는 API 연동)
     console.log('Login attempt:', { id, password });
-    navigate('/main'); // 임시 이동
+
+    setFadeOut(true); // 페이드아웃 트리거
+    setTimeout(() => {
+      navigate('/main'); // 500ms 뒤 페이지 이동
+    }, 300);
   };
 
   return (
-    <div className="login-container">
-      <div className="character-logo">
-        <img src={loginCharacter} alt="milo 캐릭터" className="character1" />
-        <h2 className="logo1">Milo.</h2>
-      </div>
-      <form className="login-form" onSubmit={handleLogin}>
-        아이디
-        <input
-          type="text"
-          placeholder="아이디를 입력해주세요"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          required
-        />
-        비밀번호
-        <input
-          type="password"
-          placeholder="비밀번호를 입력해주세요"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <div className="find-info">
-          <span onClick={() => navigate('/find-id')}>아이디 찾기 </span> |
-          <span onClick={() => navigate('/find-password')}> 비밀번호 찾기</span>
+    <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
+      <div className="login-container">
+        <div className="character-logo">
+          <img src={loginCharacter} alt="milo 캐릭터" className="character1" />
+          <h2 className="logo1">Milo.</h2>
         </div>
-        <button type="submit">로그인</button>
-      </form>
-      <p className="login-footer">
-        아직 계정이 없으신가요?{' '}
-        <span onClick={() => navigate('/signup')}>Signup</span>
-      </p>
+        <form className="login-form" onSubmit={handleLogin}>
+          아이디
+          <input
+            type="text"
+            placeholder="아이디를 입력해주세요"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
+          비밀번호
+          <input
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="find-info">
+            <span onClick={() => navigate('/find-id')}>아이디 찾기 </span> |
+            <span onClick={() => navigate('/find-password')}>
+              {' '}
+              비밀번호 찾기
+            </span>
+          </div>
+          <button type="submit">로그인</button>
+        </form>
+        <p className="login-footer">
+          아직 계정이 없으신가요?{' '}
+          <span onClick={() => navigate('/signup')}>Signup</span>
+        </p>
+      </div>
     </div>
   );
 }
