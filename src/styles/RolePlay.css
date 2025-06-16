@@ -96,9 +96,9 @@
   outline: none;
   line-height: 1.6;
   resize: none;
-  overflow-y: scroll;            
-  scrollbar-width: none;       
-  -ms-overflow-style: none;  
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   max-height: 160px; /* 반드시 스크롤 생기게 */
   overflow-y: auto;
   padding-right: 12px;
@@ -109,9 +109,8 @@
 }
 
 .target-input::-webkit-scrollbar {
-  display: none;                
+  display: none;
 }
-
 
 .previous-answer {
   font-size: 13px;

@@ -2,6 +2,7 @@ import React from 'react';
 import './fonts/TDTDTadakTadak.ttf';
 import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './components/chartConfig'; // 차트 등록
 
 import Splash from './pages/Splash.jsx';
 import Login from './pages/Login.jsx';
