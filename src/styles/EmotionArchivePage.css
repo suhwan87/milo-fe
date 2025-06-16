@@ -1,0 +1,231 @@
+/* EmotionArchivePage.css */
+
+.archive-page-container {
+  max-width: 598px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fffefc;
+}
+
+/* 헤더 */
+.archive-page-header {
+  position: relative; /* 기준 박스 */
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  height: 48px;
+}
+
+.archive-page-header .back-button {
+  font-size: 24px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  margin-left: 20px;
+  cursor: pointer;
+  z-index: 1; /* 겹침 방지 */
+}
+
+.archive-page-header h2 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+
+/* 월 선택 */
+.archive-page-month-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.archive-page-month-selector .arrow {
+  font-size: 28px;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.arrow.disabled {
+  color: #ccc;
+  pointer-events: none;
+}
+
+.archive-page-emotion-calendar,
+.archive-page-emotion-chart,
+.archive-page-summary {
+  transition: all 0.3s ease;
+}
+
+
+/* 감정 기록 줄 */
+.archive-page-record-section {
+  margin: 10px 0;
+}
+
+.archive-page-record-header {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 👈 텍스트 간격만 살짝 조정 */
+}
+
+.record-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #222;
+}
+
+.record-count {
+  font-size: 14px;
+  color: #555;
+}
+
+.record-count .highlight {
+  color: #ff8800;
+  font-weight: bold;
+}
+
+
+.archive-page-record-line {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;                /* ✅ 이모지 간격 좁히기 */
+  padding-top: 20px;
+  margin-top: 16px;
+}
+
+.archive-page-record-line::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: calc(36px + 24px + 60px); /* 👈 총합 박스 너비 + margin-right 추정 */
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+
+.record-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  color: #444;
+  position: relative;
+  margin-left: 24px;
+  top: -18px;
+  z-index: 1;
+}
+
+.record-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+
+
+/* ✅ 총합 박스도 간격 안에서 정렬되도록 */
+.record-total {
+  padding: 6px 30px;
+  background-color: #fff4e9;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+  margin-left: 24px;
+  top: -18px;
+  z-index: 1;
+}
+
+
+
+/* 감정 분포 */
+.radar-chart-container {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: 0 auto;
+}
+
+.radar-icon {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  font-size: 12px;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.radar-icon img {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 2px;
+}
+
+.emotion-archive-section {
+  padding: 60px 0;
+  margin: 0 0 32px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: transparent;
+  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+.emotion-archive-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+  text-align: left;
+}
+
+.emotion-chart-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* 총평 */
+.archive-page-summary {
+  display: flex;
+  align-items: center;
+  background-color: #fff4e9;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
+}
+
+.archive-page-summary-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+.archive-page-summary-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+}
