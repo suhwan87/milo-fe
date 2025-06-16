@@ -83,18 +83,35 @@
 
 .target-input {
   width: 80%;
-  font-size: 18px;
-  text-align: center;
-
-  /* 🔽 아래 4줄이 핵심 */
-  border: none;
+  min-height: 44px;
+  max-height: 200px; /* 너무 길어지는 것 방지 */
+  padding: 12px 18px;
+  margin: 12px auto;
+  border: 1.5px solid #ffb680;
+  border-radius: 20px;
+  font-size: 15px;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #fffefc;
+  color: #333;
   outline: none;
-  background-color: transparent;
-  caret-color: #333; /* 커서 색상 */
+  line-height: 1.6;
+  resize: none;
+  overflow-y: scroll;            
+  scrollbar-width: none;       
+  -ms-overflow-style: none;  
+  max-height: 160px; /* 반드시 스크롤 생기게 */
+  overflow-y: auto;
+  padding-right: 12px;
 
-  /* 추가 정리용 */
-  padding: 10px 0;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(255, 182, 128, 0.15);
+  transition: height 0.2s ease;
 }
+
+.target-input::-webkit-scrollbar {
+  display: none;                
+}
+
 
 .previous-answer {
   font-size: 13px;

@@ -1,5 +1,5 @@
 // src/pages/RolePlay.jsx
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Character from '../assets/characters/login-character.png';
 import '../styles/RolePlay.css';
@@ -19,9 +19,11 @@ const RolePlay = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+    e.target.style.height = 'auto'; // 높이 초기화
+    e.target.style.height = `${e.target.scrollHeight}px`; // 내용에 맞게 자동 증가
+  };
 
   const handleNext = () => {
     if (inputValue.trim() === '') return;
@@ -77,12 +79,13 @@ const RolePlay = () => {
 
         <p className="prompt-text">{steps[step].question}</p>
 
-        <input
-          ref={inputRef}
+        <textarea
           className="target-input"
-          type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleChange}
+          placeholder="입력해 주세요"
+          rows={1}
+          ref={inputRef}
         />
 
         {answers[step] && (
