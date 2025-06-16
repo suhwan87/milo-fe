@@ -15,6 +15,7 @@ import ChatBot1 from './pages/ChatBot1';
 import RolePlay from './pages/RolePlay';
 import ChatBot2 from './pages/ChatBot2';
 import EmotionArchivePage from './pages/EmotionArchivePage';
+import MindDrawerPage from './pages/MindDrawerPage';
 
 function App() {
   return (
@@ -60,6 +61,14 @@ function App() {
           element={
             <AppLayout>
               <MainPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/mind-drawer"
+          element={
+            <AppLayout>
+              <MindDrawerPage />
             </AppLayout>
           }
         />

@@ -14,7 +14,9 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       {/* 사이드 메뉴 */}
       <div className={`drawer ${isOpen ? 'open' : ''}`}>
         <div className="drawer-header">
-          <button onClick={onClose}>←</button>
+          <button onClick={onClose} className="back-button">
+            ←
+          </button>
           <span>설정</span>
         </div>
 
