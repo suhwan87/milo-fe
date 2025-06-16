@@ -2,7 +2,7 @@
 import React from 'react';
 import EmotionSlider from 'components/EmotionSlider';
 import EmotionKeyword from 'components/EmotionKeyword';
-import EmotionChart from 'components/EmotionChart';
+import EmotionArchive from 'components/EmotionArchive';
 import 'styles/App.css'; // global css 연결
 
 const MainPage = () => {
@@ -10,7 +10,7 @@ const MainPage = () => {
     <div className="#root">
       <EmotionSlider />
       <EmotionKeyword />
-      <EmotionChart />
+      <EmotionArchive />
     </div>
   );
 };

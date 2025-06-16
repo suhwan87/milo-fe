@@ -12,7 +12,7 @@ const EmotionKeyword = () => {
   };
 
   return (
-    <div className="report-section" onClick={handleClick}>
+    <div className="report-section card-section" onClick={handleClick}>
       {' '}
       {/* ✅ 클릭 이벤트 적용 */}
       <div className="keyword-header">
