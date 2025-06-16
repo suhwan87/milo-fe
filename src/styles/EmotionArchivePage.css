@@ -37,7 +37,6 @@
   margin: 0;
 }
 
-
 /* 월 선택 */
 .archive-page-month-selector {
   display: flex;
@@ -67,7 +66,6 @@
   transition: all 0.3s ease;
 }
 
-
 /* 감정 기록 줄 */
 .archive-page-record-section {
   margin: 10px 0;
@@ -96,12 +94,11 @@
   font-weight: bold;
 }
 
-
 .archive-page-record-line {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 10px;                /* ✅ 이모지 간격 좁히기 */
+  gap: 10px; /* ✅ 이모지 간격 좁히기 */
   padding-top: 20px;
   margin-top: 16px;
 }
@@ -116,7 +113,6 @@
   background-color: #ccc;
   z-index: 0;
 }
-
 
 .record-item {
   display: flex;
@@ -138,7 +134,6 @@
   margin-bottom: 4px;
 }
 
-
 /* ✅ 총합 박스도 간격 안에서 정렬되도록 */
 .record-total {
   padding: 6px 30px;
@@ -153,8 +148,6 @@
   top: -18px;
   z-index: 1;
 }
-
-
 
 /* 감정 분포 */
 .radar-chart-container {
@@ -192,7 +185,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-
 .emotion-archive-title {
   font-size: 18px;
   font-weight: bold;
@@ -206,7 +198,6 @@
   justify-content: center;
   align-items: center;
 }
-
 
 /* 총평 */
 .archive-page-summary {
