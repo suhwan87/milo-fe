@@ -14,6 +14,7 @@ import EmotionReport from './pages/EmotionReport';
 import ChatBot1 from './pages/ChatBot1';
 import RolePlay from './pages/RolePlay';
 import ChatBot2 from './pages/ChatBot2';
+import EmotionArchivePage from './pages/EmotionArchivePage';
 
 function App() {
   return (
@@ -67,6 +68,14 @@ function App() {
           element={
             <AppLayout>
               <EmotionReport />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/emotion-archive"
+          element={
+            <AppLayout>
+              <EmotionArchivePage />
             </AppLayout>
           }
         />
