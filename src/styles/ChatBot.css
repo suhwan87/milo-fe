@@ -196,8 +196,9 @@
 /* 회복 문장 저장 모달 */
 .folder-modal {
   position: fixed;
-  width: 80%;
+  width: 100%;
   bottom: 0px;
+  max-width: 598px;
   background-color: #fffaf5;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
