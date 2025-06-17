@@ -14,6 +14,7 @@ import MainPage from './pages/MainPage';
 import AppLayout from './components/AppLayout';
 import EmotionReport from './pages/EmotionReport';
 import EmotionArchivePage from './pages/EmotionArchivePage';
+import MindDrawerPage from './pages/MindDrawerPage';
 // 챗봇
 import ChatBot1 from './pages/ChatBot1';
 import RolePlay from './pages/RolePlay';
@@ -70,6 +71,14 @@ function App() {
           element={
             <AppLayout>
               <MainPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/mind-drawer"
+          element={
+            <AppLayout>
+              <MindDrawerPage />
             </AppLayout>
           }
         />
