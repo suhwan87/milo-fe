@@ -17,7 +17,7 @@ export default function ChangeStyle() {
       confirmButtonText: '확인',
       confirmButtonColor: '#ff9f4a',
     }).then(() => {
-      navigate('/main'); // 혹은 뒤로가기
+      navigate('/main');
     });
   };
 

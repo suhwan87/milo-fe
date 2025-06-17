@@ -62,8 +62,8 @@
   box-sizing: border-box;
 }
 
-input:focus,
-textarea:focus {
+.inquiry-input:focus,
+.inquiry-textarea:focus {
   outline: none;
   border: 2px solid #ff9f4a; /* 주황색 */
   box-shadow: 0 0 0 1px rgba(255, 159, 74, 0.2); /* 부드러운 외곽 강조 효과 */
