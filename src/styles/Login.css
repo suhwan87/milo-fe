@@ -23,11 +23,8 @@
 .character1 {
   position: absolute;
   top: -120px;
-  /* 화면 하단에 닿도록 */
   left: 50%;
-  /* 가운데 기준선 */
   transform: translateX(-50%);
-  /* 정확히 가운데 정렬 */
   width: 130px;
   z-index: 1;
 }

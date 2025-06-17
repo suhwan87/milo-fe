@@ -2,9 +2,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
+import { useDrawerStore } from '../stores/useDrawerStore';
 
 const Header = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
+  const openDrawer = useDrawerStore((state) => state.openDrawer);
 
   return (
     <header className="header">
