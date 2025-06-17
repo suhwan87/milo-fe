@@ -13,7 +13,6 @@
   }
 }
 
-
 /* 폴더 정보 바 */
 .folder-info {
   position: relative;
@@ -81,7 +80,7 @@
   background-color: #fff3d8;
   padding: 16px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 14px;
   position: relative;
 }
@@ -139,23 +138,51 @@
   color: #999;
 }
 
-.folder-info.color-1 { background-color: #fff6d1; }
-.folder-info.color-1 .folder-tab { background-color: #ffe793; }
+.folder-info.color-1 {
+  background-color: #fff6d1;
+}
+.folder-info.color-1 .folder-tab {
+  background-color: #ffe793;
+}
 
-.folder-info.color-2 { background-color: #ffd484; }
-.folder-info.color-2 .folder-tab { background-color: #ffc760; }
+.folder-info.color-2 {
+  background-color: #ffd484;
+}
+.folder-info.color-2 .folder-tab {
+  background-color: #ffc760;
+}
 
-.folder-info.color-3 { background-color: #fff1dc; }
-.folder-info.color-3 .folder-tab { background-color: #ffe9c4; }
+.folder-info.color-3 {
+  background-color: #fff1dc;
+}
+.folder-info.color-3 .folder-tab {
+  background-color: #ffe9c4;
+}
 
-.folder-info.color-4 { background-color: #f8d1dc; }
-.folder-info.color-4 .folder-tab { background-color: #f0b8c4; }
+.folder-info.color-4 {
+  background-color: #f8d1dc;
+}
+.folder-info.color-4 .folder-tab {
+  background-color: #f0b8c4;
+}
 
-.folder-info.color-5 { background-color: #cde8ff; }
-.folder-info.color-5 .folder-tab { background-color: #a7d4ff; }
+.folder-info.color-5 {
+  background-color: #cde8ff;
+}
+.folder-info.color-5 .folder-tab {
+  background-color: #a7d4ff;
+}
 
-.folder-info.color-6 { background-color: #e2f0d9; }
-.folder-info.color-6 .folder-tab { background-color: #c7e0b0; }
+.folder-info.color-6 {
+  background-color: #e2f0d9;
+}
+.folder-info.color-6 .folder-tab {
+  background-color: #c7e0b0;
+}
 
-.folder-info.color-7 { background-color: #ede8ff; }
-.folder-info.color-7 .folder-tab { background-color: #d8d2ff; }
+.folder-info.color-7 {
+  background-color: #ede8ff;
+}
+.folder-info.color-7 .folder-tab {
+  background-color: #d8d2ff;
+}

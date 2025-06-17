@@ -109,13 +109,34 @@
 }
 
 /* 색상 클래스 정의 */
-.color-1 { --bg: #fff6d1; --tab: #ffe793; }
-.color-2 { --bg: #ffd484; --tab: #ffc760; }
-.color-3 { --bg: #fff1dc; --tab: #ffe9c4; }
-.color-4 { --bg: #f8d1dc; --tab: #f0b8c4; }
-.color-5 { --bg: #cde8ff; --tab: #a7d4ff; }
-.color-6 { --bg: #e2f0d9; --tab: #c7e0b0; }
-.color-7 { --bg: #ede8ff; --tab: #d8d2ff; }
+.color-1 {
+  --bg: #fff6d1;
+  --tab: #ffe793;
+}
+.color-2 {
+  --bg: #ffd484;
+  --tab: #ffc760;
+}
+.color-3 {
+  --bg: #fff1dc;
+  --tab: #ffe9c4;
+}
+.color-4 {
+  --bg: #f8d1dc;
+  --tab: #f0b8c4;
+}
+.color-5 {
+  --bg: #cde8ff;
+  --tab: #a7d4ff;
+}
+.color-6 {
+  --bg: #e2f0d9;
+  --tab: #c7e0b0;
+}
+.color-7 {
+  --bg: #ede8ff;
+  --tab: #d8d2ff;
+}
 
 /* 모달 스타일 */
 .modal-overlay {
@@ -210,8 +231,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 10;
-  min-width: 80px;          /* ✅ 너비 확보 */
-  white-space: nowrap;      /* ✅ 줄바꿈 방지 */
+  min-width: 80px; /* ✅ 너비 확보 */
+  white-space: nowrap; /* ✅ 줄바꿈 방지 */
 }
 
 .folder-menu button {
@@ -222,11 +243,9 @@
   text-align: left;
   font-size: 14px;
   cursor: pointer;
-  white-space: nowrap;      /* ✅ 줄바꿈 방지 */
+  white-space: nowrap; /* ✅ 줄바꿈 방지 */
 }
 
 .folder-menu button:hover {
   background-color: #fff1dc;
 }
-
-

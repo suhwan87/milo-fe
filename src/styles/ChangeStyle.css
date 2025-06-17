@@ -43,7 +43,9 @@
   cursor: pointer;
   box-sizing: border-box;
   background-color: #fff;
-  transition: border 0.3s ease, background-color 0.3s ease;
+  transition:
+    border 0.3s ease,
+    background-color 0.3s ease;
   min-height: 240px; /* ✅ 고정 높이 추가 */
 }
 
@@ -85,7 +87,7 @@
 
 /* 챗봇 스타일 저장 버튼 */
 .style-save-button {
-  margin: 32px auto 48px;       /* 위: 작게 / 아래: 적당히 */
+  margin: 32px auto 48px; /* 위: 작게 / 아래: 적당히 */
   display: block;
   width: 140px;
   padding: 14px 0;
@@ -94,8 +96,8 @@
   color: white;
   font-weight: bold;
   font-size: 15px;
-  border-radius: 999px;         /* pill 모양 */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  border-radius: 999px; /* pill 모양 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
