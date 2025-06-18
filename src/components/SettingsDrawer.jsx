@@ -1,4 +1,3 @@
-// src/components/SettingsDrawer.jsx
 import React from 'react';
 import '../styles/SettingsDrawer.css';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +11,7 @@ import Swal from 'sweetalert2';
 const SettingsDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-  // 앱 초기화
+  // ✅ 앱 초기화: localStorage 전체 삭제
   const handleResetApp = () => {
     Swal.fire({
       title: '앱초기화',
@@ -31,14 +30,13 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // ✅ 앱 데이터 초기화 로직
         localStorage.clear();
         window.location.reload();
       }
     });
   };
 
-  // 로그아웃
+  // ✅ 로그아웃: 토큰만 삭제 + 로그인 이동
   const handleLogout = () => {
     Swal.fire({
       title: '정말 로그아웃하시겠어요?',
@@ -51,9 +49,8 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       cancelButtonColor: '#dcdcdc',
     }).then((result) => {
       if (result.isConfirmed) {
-        // ✅ 로그아웃 처리 로직
-        localStorage.clear(); // 또는 특정 토큰 제거
-        navigate('/login'); // 로그인 페이지로 이동
+        localStorage.removeItem('token'); // ✅ 토큰만 제거
+        navigate('/login', { replace: true }); // ✅ replace로 뒤로가기 차단
       }
     });
   };
