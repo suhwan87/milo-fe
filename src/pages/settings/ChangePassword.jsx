@@ -4,6 +4,7 @@ import { FiLock } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import '../../styles/ChangePassword.css';
 import { useDrawerStore } from '../../stores/useDrawerStore';
+import api from '../../config/axios'; // ✅ axios 인스턴스 사용
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -17,7 +18,8 @@ export default function ChangePassword() {
   const [errorNew, setErrorNew] = useState('');
   const [errorConfirm, setErrorConfirm] = useState('');
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
+    // ✅ 프론트 유효성 검사
     if (!currentPw) {
       setErrorCurrent('현재 비밀번호를 입력해주세요.');
       setErrorNew('');
@@ -43,12 +45,32 @@ export default function ChangePassword() {
       return;
     }
 
-    Swal.fire({
-      icon: 'success',
-      title: '비밀번호가 변경되었습니다.',
-      confirmButtonText: '확인',
-      confirmButtonColor: '#ff9f4a',
-    }).then(() => navigate('/main'));
+    // ✅ 서버에 비밀번호 변경 요청
+    try {
+      await api.patch('/api/users/password', {
+        currentPassword: currentPw,
+        newPassword: newPw,
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: '비밀번호가 변경되었습니다.',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#ff9f4a',
+      }).then(() => navigate('/main'));
+    } catch (err) {
+      console.error('비밀번호 변경 오류:', err);
+      const msg =
+        err.response?.data?.message ||
+        (typeof err.response?.data === 'string' ? err.response.data : '') ||
+        '비밀번호 변경에 실패했습니다.';
+      Swal.fire({
+        icon: 'error',
+        title: '변경 실패',
+        text: msg,
+        confirmButtonColor: '#d33',
+      });
+    }
   };
 
   return (
@@ -57,7 +79,7 @@ export default function ChangePassword() {
         <span
           className="pw-back"
           onClick={() => {
-            setShouldAutoOpen(true); // 플래그 설정
+            setShouldAutoOpen(true);
             navigate('/main');
           }}
         >
@@ -86,7 +108,6 @@ export default function ChangePassword() {
           <p className="pw-hint">새 비밀번호</p>
           <div className="pw-input-box">
             <FiLock className="pw-input-icon" />
-
             <input
               type="password"
               placeholder="문자, 숫자, 특수문자 포함 8~20자"
@@ -99,7 +120,6 @@ export default function ChangePassword() {
           <p className="pw-hint">새 비밀번호 확인</p>
           <div className="pw-input-box">
             <FiLock className="pw-input-icon" />
-
             <input
               type="password"
               placeholder="새 비밀번호를 한 번 더 입력해주세요."
