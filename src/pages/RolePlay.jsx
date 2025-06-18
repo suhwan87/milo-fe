@@ -1,6 +1,7 @@
-// src/pages/RolePlay.jsx
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../config/axios';
+import Swal from 'sweetalert2';
 import Character from '../assets/characters/login-character.png';
 import '../styles/RolePlay.css';
 
@@ -12,48 +13,95 @@ const steps = [
   { id: 5, question: '상대방과 어떤 상황이었나요?' },
 ];
 
-const RolePlay = () => {
+function RolePlay() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState(Array(steps.length).fill(''));
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
-  const navigate = useNavigate();
+  const [fadeOut, setFadeOut] = useState(false);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
-    e.target.style.height = 'auto'; // 높이 초기화
-    e.target.style.height = `${e.target.scrollHeight}px`; // 내용에 맞게 자동 증가
+    e.target.style.height = 'auto';
+    e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (inputValue.trim() === '') return;
 
     const updated = [...answers];
     updated[step] = inputValue;
-
     setAnswers(updated);
     setInputValue('');
 
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
-      localStorage.setItem('roleplayAnswers', JSON.stringify(updated));
-      // ✅ 마지막 단계에서 입력값들과 함께 페이지 이동
-      navigate('/roleplay/chat', { state: { answers: updated } });
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          Swal.fire({
+            title: '오류!',
+            text: '로그인이 필요합니다.',
+            icon: 'error',
+            confirmButtonColor: '#d33',
+          });
+          navigate('/login');
+          return;
+        }
+
+        const payload = {
+          userId,
+          name: updated[0],
+          relationship: updated[1],
+          tone: updated[2],
+          personality: updated[3],
+          situation: updated[4],
+        };
+
+        const res = await api.post('/api/character', payload);
+        const characterId = res.data;
+
+        Swal.fire({
+          title: '역할 저장 완료!',
+          text: '이제 역할극을 시작해볼까요?',
+          icon: 'success',
+          confirmButtonColor: '#ffa158',
+        }).then(() => {
+          setFadeOut(true);
+          setTimeout(() => {
+            navigate('/roleplay/chat', {
+              state: {
+                characterId,
+                userId,
+              },
+            });
+          }, 300);
+        });
+      } catch (err) {
+        console.error('역할 저장 실패:', err);
+        Swal.fire({
+          title: '실패!',
+          text: '역할을 저장하지 못했습니다.',
+          icon: 'error',
+          confirmButtonColor: '#d33',
+        });
+      }
     }
   };
 
   return (
-    <div className="roleplay-container">
+    <div className={`roleplay-container ${fadeOut ? 'fade-out' : ''}`}>
       <div className="roleplay-header">
         <span
           className="back-button"
           onClick={() => {
             if (step > 0) {
               setStep(step - 1);
-              setInputValue(answers[step - 1] || ''); // 이전 값 복원
+              setInputValue(answers[step - 1] || '');
             } else {
-              navigate(-1); // 첫 단계일 땐 원래대로 페이지 이동
+              navigate(-1);
             }
           }}
         >
@@ -98,6 +146,6 @@ const RolePlay = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RolePlay;
