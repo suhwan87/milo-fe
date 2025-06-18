@@ -5,25 +5,10 @@ import Character from '../assets/characters/login-character.png';
 import Drawer from '../assets/icons/drawer.png'; // 폴더 이미지
 import { FiHeart, FiSend } from 'react-icons/fi'; // 빈 하트 아이콘
 import { AiFillHeart } from 'react-icons/ai'; // 채워진 하트 아이콘
+import api from '../config/axios';
 
 const ChatBot1 = () => {
-  const [messages, setMessages] = useState([
-    {
-      sender: 'bot',
-      text: '안녕하세요,\n오늘 하루 어떠셨나요?',
-      time: '00:00',
-    },
-    {
-      sender: 'user',
-      text: '너무 지쳤어 아무것도 하기 싫고\n그냥 숨고 싶은 느낌이야',
-      time: '00:00',
-    },
-    {
-      sender: 'bot',
-      text: '그런 날도 있죠. 너무 애쓰지 않아도 괜찮아요.\n어떤 일이 있었는지 조금 나눠줄 수 있을까요?',
-      time: '00:00',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const navigate = useNavigate();
   const [input, setInput] = useState('');
@@ -45,8 +30,7 @@ const ChatBot1 = () => {
     }
   }, [messages]);
 
-  // 메시지 전송
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === '') return;
 
     const now = new Date();
@@ -55,8 +39,50 @@ const ChatBot1 = () => {
       minute: '2-digit',
     });
 
+    // 1. 사용자 메시지를 화면에 즉시 렌더링
     setMessages((prev) => [...prev, { sender: 'user', text: input, time }]);
+
+    // 2. 입력창 초기화
     setInput('');
+
+    // 3. GPT 응답 대기 메시지 추가
+    const waitingMessage = {
+      sender: 'bot',
+      text: '마일로가 응답을 작성 중입니다...',
+      time,
+      waiting: true, // 구분용
+    };
+    setMessages((prev) => [...prev, waitingMessage]);
+
+    try {
+      // 4. 토큰 등 정보 설정
+      // 5. 백엔드로 메시지 전송
+      const response = await api.post('/api/chat/send', {
+        message: input,
+      });
+
+      // 6. GPT 응답 수신 및 메시지 추가
+      const replyTime = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      // 6. GPT 응답 수신 후 "대기 메시지"를 실제 응답으로 대체
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const index = newMessages.findIndex((msg) => msg.waiting);
+        if (index !== -1) {
+          newMessages[index] = {
+            sender: 'bot',
+            text: response.data.output ?? '(응답 없음)',
+            time: replyTime,
+          };
+        }
+        return newMessages;
+      });
+    } catch (err) {
+      console.error('응답 실패:', err);
+    }
   };
 
   // 회복 문장 저장 모달 열기
@@ -131,7 +157,7 @@ const ChatBot1 = () => {
                   <>
                     <div className="timestamp">{msg.time}</div>
                     <div className={`message-bubble ${msg.sender}`}>
-                      {msg.text.split('\n').map((line, i) => (
+                      {(msg.text ?? '').split('\n').map((line, i) => (
                         <p key={i}>{line}</p>
                       ))}
                     </div>
@@ -139,7 +165,7 @@ const ChatBot1 = () => {
                 ) : (
                   <>
                     <div className={`message-bubble ${msg.sender}`}>
-                      {msg.text.split('\n').map((line, i) => (
+                      {(msg.text ?? '').split('\n').map((line, i) => (
                         <p key={i}>{line}</p>
                       ))}
                     </div>
