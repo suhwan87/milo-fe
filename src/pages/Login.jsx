@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import loginCharacter from '../assets/characters/login-character.png';
 import Swal from 'sweetalert2';
-import axios from 'axios';
+import api from '../config/axios'; // ✅ axios 인스턴스 사용
 
 function Login() {
   const navigate = useNavigate();
@@ -21,13 +21,10 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        'http://localhost:8085/api/users/login',
-        {
-          userId: id,
-          password: password,
-        }
-      );
+      const response = await api.post('/api/users/login', {
+        userId: id,
+        password: password,
+      });
 
       const token = response.data.token;
       localStorage.setItem('token', token); // ✅ JWT 토큰 저장
@@ -40,9 +37,7 @@ function Login() {
         confirmButtonText: '확인',
       }).then(() => {
         setFadeOut(true);
-        setTimeout(() => {
-          navigate('/main'); // 성공 시 메인 페이지로 이동
-        }, 300);
+        setTimeout(() => navigate('/main'), 300);
       });
     } catch (error) {
       console.error('로그인 실패:', error);

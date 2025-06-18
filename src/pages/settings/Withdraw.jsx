@@ -6,24 +6,56 @@ import Character from '../../assets/characters/crying-character.png';
 import Flower from '../../assets/icons/flower.png';
 import { FiLock } from 'react-icons/fi';
 import { useDrawerStore } from '../../stores/useDrawerStore';
+import api from '../../config/axios'; // ✅ axios 인스턴스
 
 export default function Withdraw() {
   const navigate = useNavigate();
-  const { openDrawer } = useDrawerStore();
+  const { setShouldAutoOpen } = useDrawerStore();
+
   const [step, setStep] = useState(1);
   const [password, setPassword] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState(false);
 
-  const { setShouldAutoOpen } = useDrawerStore();
+  // ✅ 실제 탈퇴 요청 처리
+  const requestWithdraw = async () => {
+    try {
+      await api.delete('/api/users/delete', {
+        data: { password: password }, // ✅ body에 비밀번호 전달
+      });
 
+      Swal.fire({
+        icon: 'success',
+        title: '탈퇴 완료',
+        text: '그동안 함께해주셔서 감사합니다.',
+        confirmButtonColor: '#ffa158',
+        confirmButtonText: '확인',
+      });
+
+      localStorage.removeItem('token'); // ✅ 토큰 제거
+      setStep(2); // 완료 페이지 전환
+    } catch (err) {
+      console.error(err);
+      setError(true);
+
+      Swal.fire({
+        icon: 'error',
+        title: '탈퇴 실패',
+        text:
+          err.response?.data ||
+          '비밀번호가 일치하지 않거나 서버 오류가 발생했습니다.',
+        confirmButtonColor: '#d33',
+        confirmButtonText: '확인',
+      });
+    }
+  };
+
+  // ✅ 탈퇴 버튼 클릭 시 확인 모달 → 실제 탈퇴 요청
   const handleWithdraw = () => {
-    if (password !== '1234') {
+    if (!password) {
       setError(true);
       return;
     }
-
-    setError(false);
 
     Swal.fire({
       title: '정말 탈퇴하시겠어요?',
@@ -41,7 +73,7 @@ export default function Withdraw() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        setStep(2);
+        requestWithdraw();
       }
     });
   };
@@ -52,11 +84,10 @@ export default function Withdraw() {
       {step === 1 && (
         <div>
           <div className="withdraw-header">
-            {/* ← 뒤로가기 버튼은 step 1에서만 표시 */}
             <span
               className="back-button"
               onClick={() => {
-                setShouldAutoOpen(true); // 플래그 설정
+                setShouldAutoOpen(true);
                 navigate('/main');
               }}
             >
@@ -64,6 +95,7 @@ export default function Withdraw() {
             </span>
             <span className="withdraw-title">회원탈퇴</span>
           </div>
+
           <div className="withdraw-wraper">
             <h2 className="withdraw-check">비밀번호를 확인합니다.</h2>
             <div className="withdraw-input-wrapper">
@@ -79,7 +111,10 @@ export default function Withdraw() {
               <FiLock className="withdraw-input-icon" />
             </div>
 
-            {error && <p className="withdraw-error">다시 한번 확인해주세요.</p>}
+            {error && (
+              <p className="withdraw-error">비밀번호를 다시 확인해주세요.</p>
+            )}
+
             <button className="withdraw-button" onClick={handleWithdraw}>
               탈퇴하기
             </button>
@@ -87,7 +122,7 @@ export default function Withdraw() {
         </div>
       )}
 
-      {/* STEP 2: 탈퇴 완료 메시지 */}
+      {/* STEP 2: 탈퇴 완료 화면 */}
       {step === 2 && (
         <div className="withdraw-success">
           <img src={Character} alt="탈퇴완료" className="success-image" />
