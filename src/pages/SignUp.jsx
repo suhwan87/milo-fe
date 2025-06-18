@@ -22,7 +22,8 @@ function SignUp() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
   // 에러메시지
-  const [passwordError, setPasswordError] = useState('');
+  const [passwordFormatError, setPasswordFormatError] = useState('');
+  const [passwordMatchError, setPasswordMatchError] = useState('');
   const [agreementError, setAgreementError] = useState('');
 
   // 아이디 중복 체크시
@@ -57,11 +58,23 @@ function SignUp() {
   // 회원가입 폼 제출시
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setPasswordError('');
+    setPasswordFormatError('');
+    setPasswordMatchError('');
     setAgreementError('');
 
+    // 비밀번호 정규식 검사
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,20}$/;
+
+    if (!passwordRegex.test(password)) {
+      setPasswordFormatError(
+        '비밀번호는 8~20자, 문자/숫자/특수문자를 포함해야 합니다.'
+      );
+      return;
+    }
+
     if (password !== passwordConfirm) {
-      setPasswordError('비밀번호가 일치하지 않습니다.');
+      setPasswordMatchError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
@@ -122,7 +135,6 @@ function SignUp() {
               placeholder="아이디 입력(6~20자)"
               value={id}
               onChange={(e) => setId(e.target.value)}
-              required
             />
             <button
               type="button"
@@ -146,8 +158,11 @@ function SignUp() {
             placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~20자)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
+          {/* ✅ 패스워드 정규식 검사 표시 */}
+          {passwordFormatError && (
+            <p className="error-message">{passwordFormatError}</p>
+          )}
 
           <label>비밀번호 확인</label>
           <input
@@ -155,10 +170,11 @@ function SignUp() {
             placeholder="비밀번호 재입력"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
-            required
           />
           {/* ✅ 패스워드 불일치 메시지 표시 */}
-          {passwordError && <p className="error-message">{passwordError}</p>}
+          {passwordMatchError && (
+            <p className="error-message">{passwordMatchError}</p>
+          )}
 
           <label>닉네임</label>
           <input
@@ -166,7 +182,6 @@ function SignUp() {
             placeholder="닉네임을 입력해주세요"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            required
           />
 
           <label>이메일</label>
@@ -175,7 +190,6 @@ function SignUp() {
             placeholder="이메일을 입력해주세요"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
 
           {/* 이용약관 */}
