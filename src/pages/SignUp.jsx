@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SignUp.css';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 
 function SignUp() {
@@ -26,25 +27,35 @@ function SignUp() {
 
   // 아이디 중복 체크시
   const handleCheckDuplicate = async () => {
-    // try {
-    //   //예시: 실제로는 백엔드 API로 요청해야 함
-    //   const response = await fetch(`/api/check-id?id=${id}`);
-    //   const data = await response.json();
-    //   if (data.available) {
-    //     setIsIdAvailable(true);
-    //     setIdMessage('사용 가능한 아이디입니다.');
-    //   } else {
-    //     setIsIdAvailable(false);
-    //     setIdMessage('이미 존재하는 아이디입니다.');
-    //   }
-    // } catch (error) {
-    //   setIdMessage('오류가 발생했습니다.');
-    //   setIsIdAvailable(false);
-    // }
+    if (!id) {
+      setIdMessage('아이디를 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8085/api/users/check-id`,
+        {
+          params: { id: id },
+        }
+      );
+
+      if (response.data === true) {
+        setIsIdAvailable(true);
+        setIdMessage('✅ 사용 가능한 아이디입니다.');
+      } else {
+        setIsIdAvailable(false);
+        setIdMessage('❌ 이미 존재하는 아이디입니다.');
+      }
+    } catch (error) {
+      console.error(error);
+      setIsIdAvailable(false);
+      setIdMessage('⚠️ 중복 확인 중 오류가 발생했습니다.');
+    }
   };
 
   // 회원가입 폼 제출시
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setPasswordError('');
     setAgreementError('');
@@ -59,22 +70,42 @@ function SignUp() {
       return;
     }
 
-    console.log('회원가입 정보:', { id, password, nickname, email });
-    // 이후 서버 연동 예정
+    try {
+      console.log('axios 요청 직전');
+      const response = await axios.post(
+        'http://localhost:8085/api/users/register',
+        {
+          userId: id,
+          password: password,
+          nickname: nickname,
+          email: email,
+        }
+      );
+      console.log('axios 응답:', response);
 
-    // ✅ SweetAlert2로 알림 후 이동
-    Swal.fire({
-      title: '회원가입 완료!',
-      text: '로그인 페이지로 이동합니다 😊',
-      icon: 'success',
-      confirmButtonColor: '#ffa158',
-      confirmButtonText: '확인',
-    }).then(() => {
-      setFadeOut(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 300); // 페이드아웃 타이밍 맞춤
-    });
+      // ✅ 성공 시 알림 후 이동
+      Swal.fire({
+        title: '회원가입 완료!',
+        text: '로그인 페이지로 이동합니다 😊',
+        icon: 'success',
+        confirmButtonColor: '#ffa158',
+        confirmButtonText: '확인',
+      }).then(() => {
+        setFadeOut(true);
+        setTimeout(() => {
+          navigate('/login');
+        }, 300);
+      });
+    } catch (error) {
+      // ❌ 실패 시 에러 처리
+      Swal.fire({
+        title: '회원가입 실패!',
+        text: error.response?.data || '서버 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: '확인',
+      });
+    }
   };
 
   return (
