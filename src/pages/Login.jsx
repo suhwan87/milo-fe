@@ -1,8 +1,10 @@
+// src/components/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import loginCharacter from '../assets/characters/login-character.png';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
@@ -12,31 +14,51 @@ function Login() {
 
   const handleNavigate = (path) => {
     setFadeOut(true);
-    setTimeout(() => {
-      navigate(path);
-    }, 300); // 페이드아웃과 타이밍 맞춤
+    setTimeout(() => navigate(path), 300);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // 로그인 로직 (추후 Firebase 또는 API 연동)
-    console.log('Login attempt:', { id, password });
 
-    // ✅ SweetAlert2 알림
-    Swal.fire({
-      title: '로그인 완료!',
-      text: '환영합니다 😊',
-      icon: 'success',
-      confirmButtonColor: '#ffa158',
-      confirmButtonText: '확인',
-    }).then(() => {
-      // 페이드아웃
-      setFadeOut(true);
-      setTimeout(() => {
-        navigate('/main'); // 500ms 뒤 페이지 이동
-      }, 300);
-    });
+    try {
+      const response = await axios.post(
+        'http://localhost:8085/api/users/login',
+        {
+          userId: id,
+          password: password,
+        }
+      );
+
+      const token = response.data.token;
+      localStorage.setItem('token', token); // ✅ JWT 토큰 저장
+
+      Swal.fire({
+        title: '로그인 완료!',
+        text: '환영합니다 😊',
+        icon: 'success',
+        confirmButtonColor: '#ffa158',
+        confirmButtonText: '확인',
+      }).then(() => {
+        setFadeOut(true);
+        setTimeout(() => {
+          navigate('/main'); // 성공 시 메인 페이지로 이동
+        }, 300);
+      });
+    } catch (error) {
+      console.error('로그인 실패:', error);
+
+      Swal.fire({
+        title: '로그인 실패!',
+        text:
+          error.response?.data?.message ||
+          '아이디 또는 비밀번호를 확인해주세요.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: '확인',
+      });
+    }
   };
+
   return (
     <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
       <div className="login-container">
@@ -63,9 +85,8 @@ function Login() {
           />
           <div className="find-info">
             <span onClick={() => handleNavigate('/find-id')}>아이디 찾기</span>{' '}
-            |
+            |{' '}
             <span onClick={() => handleNavigate('/find-password')}>
-              {' '}
               비밀번호 찾기
             </span>
           </div>
