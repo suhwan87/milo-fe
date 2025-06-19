@@ -24,13 +24,11 @@ const ChatBot2 = () => {
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
 
-  // 시간 포맷
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // 사용자 인증 및 대화 불러오기
   useEffect(() => {
     if (!userId) {
       Swal.fire({
@@ -43,7 +41,6 @@ const ChatBot2 = () => {
     fetchLogs();
   }, [userId, navigate]);
 
-  // 메시지 자동 스크롤 및 로컬 저장
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -56,7 +53,6 @@ const ChatBot2 = () => {
     }
   }, [messages, userId]);
 
-  // 서버로부터 대화 로그 가져오기
   const fetchLogs = async () => {
     try {
       const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
@@ -78,7 +74,6 @@ const ChatBot2 = () => {
     }
   };
 
-  // 메시지 전송
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -149,10 +144,19 @@ const ChatBot2 = () => {
       cancelButtonText: '취소',
       confirmButtonColor: '#ff9f4a',
       cancelButtonColor: '#dcdcdc',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem(`roleplayMessages_${userId}`);
-        navigate('/main');
+        try {
+          await api.delete(`/api/character/${userId}`);
+          localStorage.removeItem(`roleplayMessages_${userId}`);
+          navigate('/main');
+        } catch (err) {
+          Swal.fire({
+            title: '삭제 실패',
+            text: '역할극 종료 처리 중 오류가 발생했어요.',
+            icon: 'error',
+          });
+        }
       }
     });
   };
@@ -165,7 +169,7 @@ const ChatBot2 = () => {
         </span>
         <span className="chat-title">Milo.</span>
         <span className="end-button" onClick={handleEnd}>
-          종료
+          리허설 종료
         </span>
         <span className="header-space" />
       </div>
