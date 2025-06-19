@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import '../styles/CalendarSection.css';
 
-const CalendarView = () => {
+const CalendarView = ({ onDateSelect, selectedDate }) => {
   const today = new Date();
+  today.setHours(12);
   const [viewDate, setViewDate] = useState(new Date(today));
 
   const year = viewDate.getFullYear();
-  const month = viewDate.getMonth(); // 0-indexed
+  const month = viewDate.getMonth();
 
   const firstDay = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
@@ -21,14 +22,30 @@ const CalendarView = () => {
   };
 
   const handleNextMonth = () => {
-    const newDate = new Date(viewDate.setMonth(month + 1));
-    setViewDate(new Date(newDate));
+    const next = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+    next.setHours(0, 0, 0, 0);
+
+    // 오늘 이후 달로 못 넘어가게 제한
+    const todayMonth = today.getFullYear() * 12 + today.getMonth();
+    const nextMonth = next.getFullYear() * 12 + next.getMonth();
+
+    if (nextMonth <= todayMonth) {
+      setViewDate(next);
+    }
   };
 
-  const isToday = (day) =>
-    day === today.getDate() &&
-    today.getMonth() === month &&
-    today.getFullYear() === year;
+  const isSelected = (day) =>
+    selectedDate &&
+    selectedDate.getDate() === day &&
+    selectedDate.getMonth() === month &&
+    selectedDate.getFullYear() === year;
+
+  const handleDateClick = (day) => {
+    if (!day) return;
+    const date = new Date(year, month, day);
+    date.setHours(12);
+    onDateSelect(date);
+  };
 
   return (
     <div className="calendar-view">
@@ -39,7 +56,14 @@ const CalendarView = () => {
         <div className="calendar-title">
           {viewDate.toLocaleString('en-US', { month: 'long' })} {year}
         </div>
-        <button className="nav-button" onClick={handleNextMonth}>
+        <button
+          className="nav-button"
+          onClick={handleNextMonth}
+          disabled={
+            viewDate.getFullYear() === today.getFullYear() &&
+            viewDate.getMonth() === today.getMonth()
+          }
+        >
           ▶
         </button>
       </div>
@@ -56,8 +80,12 @@ const CalendarView = () => {
 
       <div className="calendar-days">
         {days.map((day, idx) => (
-          <span key={idx} className={isToday(day) ? 'selected' : ''}>
-            {day ? day : ''}
+          <span
+            key={idx}
+            className={isSelected(day) ? 'selected' : ''}
+            onClick={() => handleDateClick(day)}
+          >
+            {day || ''}
           </span>
         ))}
       </div>

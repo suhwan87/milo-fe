@@ -105,6 +105,7 @@
   border-radius: 50%;
   font-size: 14px;
   color: #333;
+  cursor: pointer;
 }
 
 .calendar-days .selected {
@@ -136,6 +137,11 @@
   align-items: center;
   margin-bottom: 12px;
   padding: 0 12px;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .calendar-title {
