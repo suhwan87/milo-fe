@@ -26,8 +26,9 @@ function Login() {
         password: password,
       });
 
-      const token = response.data.token;
-      localStorage.setItem('token', token); // ✅ JWT 토큰 저장
+      const { token, userId } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId); // ✅ userId도 저장
 
       Swal.fire({
         title: '로그인 완료!',

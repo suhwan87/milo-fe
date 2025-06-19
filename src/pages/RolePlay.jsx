@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../config/axios';
 import Swal from 'sweetalert2';
@@ -20,6 +20,33 @@ function RolePlay() {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
   const [fadeOut, setFadeOut] = useState(false);
+
+  // ✅ 진입 시 역할 존재 여부 확인
+  useEffect(() => {
+    const checkCharacter = async () => {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        Swal.fire({
+          title: '로그인이 필요합니다.',
+          text: '로그인 후 다시 시도해 주세요.',
+          icon: 'warning',
+          confirmButtonColor: '#ffa158',
+        }).then(() => navigate('/login'));
+        return;
+      }
+
+      try {
+        const res = await api.get(`/api/character/${userId}/exists`);
+        if (res.data === true) {
+          navigate('/roleplay/chat');
+        }
+      } catch (error) {
+        console.error('역할 존재 여부 확인 실패:', error);
+      }
+    };
+
+    checkCharacter();
+  }, [navigate]);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
@@ -72,18 +99,16 @@ function RolePlay() {
           setFadeOut(true);
           setTimeout(() => {
             navigate('/roleplay/chat', {
-              state: {
-                characterId,
-                userId,
-              },
+              state: { characterId, userId },
             });
           }, 300);
         });
       } catch (err) {
-        console.error('역할 저장 실패:', err);
+        const errorMsg =
+          err.response?.data?.message || '역할을 저장하지 못했습니다.';
         Swal.fire({
           title: '실패!',
-          text: '역할을 저장하지 못했습니다.',
+          text: errorMsg,
           icon: 'error',
           confirmButtonColor: '#d33',
         });
