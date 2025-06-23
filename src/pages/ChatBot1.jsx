@@ -186,6 +186,12 @@ const ChatBot1 = () => {
 
   // ✅ 사용자가 채팅을 종료(뒤로가기)
   const handleExit = async () => {
+    // 0. 채팅 여부 확인
+    if (messages.length === 0) {
+      navigate('/main'); // 👉 바로 뒤로가기
+      return;
+    }
+
     // 1. 저장 중 알림 표시
     Swal.fire({
       title: '저장 중...',
@@ -197,11 +203,20 @@ const ChatBot1 = () => {
     });
 
     try {
-      // 2. FastAPI 호출
+      // 2. API 호출
       const res = await api.post('/api/session/end');
       console.log('✅ 종료 응답:', res.data);
 
-      // 3. 저장 성공 시 알림 변경
+      const { status } = res.data;
+
+      // 3. 대화가 없었다는 FastAPI 응답일 경우
+      if (status === 'no_messages') {
+        Swal.close(); // 로딩 창 닫기
+        navigate('/main');
+        return;
+      }
+
+      // 4. 저장 성공 시 알림 표시
       Swal.fire({
         icon: 'success',
         title: '채팅이 종료되었어요',
@@ -213,7 +228,7 @@ const ChatBot1 = () => {
     } catch (err) {
       console.error('❌ 종료 오류:', err);
 
-      // 4. 실패 시 에러 알림
+      // 5. 실패 시 에러 알림
       Swal.fire({
         icon: 'error',
         title: '종료에 실패했어요',

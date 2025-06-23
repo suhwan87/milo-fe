@@ -31,7 +31,9 @@
   border-radius: 40px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 14px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 /* 화살표 버튼 */
@@ -119,7 +121,6 @@
   margin-bottom: 50px;
 }
 
-
 .folder-sentence-content {
   padding: 10px;
   line-height: 1.7;
@@ -134,7 +135,6 @@
   font-size: 15px;
   color: #999;
 }
-
 
 /* 문장 컬러 */
 .folder-info.color-1 {
