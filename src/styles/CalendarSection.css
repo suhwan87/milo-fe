@@ -16,7 +16,8 @@
 }
 
 .calendar-slide-wrapper.open {
-  transform: translateX(-50%) translateY(0%); /* 위로 슬라이드 */
+  transform: translateX(-50%) translateY(0%); /* 위로 슬라이드*/
+  overflow: visible;
 }
 
 /* 👇 하단 토글바 */
@@ -105,11 +106,31 @@
   border-radius: 50%;
   font-size: 14px;
   color: #333;
+  cursor: pointer;
+}
+
+.calendar-days .marked {
+  position: relative;
+  color: #666;
+}
+
+.calendar-days .marked::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #ffa94d; /* 감정 리포트 존재 표시 */
 }
 
 .calendar-days .selected {
   background-color: #ffa64d;
   color: white;
+  border-radius: 50%;
+  font-weight: bold;
 }
 
 /* 🔒 하단 덮힘 방지용 여백 (EmotionReport.css에 있으면 좋음) */
@@ -136,6 +157,11 @@
   align-items: center;
   margin-bottom: 12px;
   padding: 0 12px;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .calendar-title {

@@ -1,38 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/ChatBot.css';
-import Character from '../assets/characters/login-character.png';
+import { useNavigate } from 'react-router-dom';
+import api from '../config/axios';
 import Swal from 'sweetalert2';
+import Character from '../assets/characters/login-character.png';
 import Drawer from '../assets/icons/drawer.png';
 import { FiHeart, FiSend } from 'react-icons/fi';
 import { AiFillHeart } from 'react-icons/ai';
+import '../styles/ChatBot.css';
 
 const ChatBot2 = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const chatBodyRef = useRef(null);
+  const userId = localStorage.getItem('userId');
 
-  // 역할극 정보 불러오기
-  const [messages, setMessages] = useState(() => {
-    const answers =
-      location.state?.answers ||
-      JSON.parse(localStorage.getItem('roleplayAnswers')) ||
-      [];
-
-    return answers.length
-      ? [
-          {
-            sender: 'bot',
-            text: `역할극을 시작할게요.\n상대방은 ${answers[0]}이고, ${answers[1]} 관계예요.\n말투는 ${answers[2]}, 성격은 ${answers[3]}이며,\n상황은 "${answers[4]}"입니다.`,
-            time: new Date().toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-          },
-        ]
-      : [];
-  });
-
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [savedMessageIds, setSavedMessageIds] = useState([]);
@@ -43,25 +24,83 @@ const ChatBot2 = () => {
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
 
-  // 메시지 추가 시 자동 스크롤
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  useEffect(() => {
+    if (!userId) {
+      Swal.fire({
+        title: '오류 발생',
+        text: '사용자 정보를 찾을 수 없습니다.',
+        icon: 'error',
+      }).then(() => navigate('/main'));
+      return;
+    }
+    fetchLogs();
+  }, [userId, navigate]);
+
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
-  }, [messages]);
+    if (userId) {
+      localStorage.setItem(
+        `roleplayMessages_${userId}`,
+        JSON.stringify(messages)
+      );
+    }
+  }, [messages, userId]);
 
-  // 메시지 전송
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const time = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    setMessages((prev) => [...prev, { sender: 'user', text: input, time }]);
-    setInput('');
+  const fetchLogs = async () => {
+    try {
+      const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
+      const logs = res.data.flatMap((log) => [
+        {
+          sender: 'user',
+          text: log.sender,
+          time: formatTime(log.createdAt),
+        },
+        {
+          sender: 'bot',
+          text: log.responder,
+          time: formatTime(log.createdAt),
+        },
+      ]);
+      setMessages(logs);
+    } catch (err) {
+      console.error('대화 로그 불러오기 실패:', err);
+    }
   };
 
-  // 회복 문장 저장 모달 열기
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userTime = formatTime(new Date());
+    setMessages((prev) => [
+      ...prev,
+      { sender: 'user', text: input, time: userTime },
+    ]);
+    setInput('');
+
+    try {
+      const res = await api.post('/api/roleplay', { user_id: userId, input });
+      const botReply = res.data.output || '응답을 받아오지 못했습니다.';
+      const botTime = formatTime(new Date());
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'bot', text: botReply, time: botTime },
+      ]);
+    } catch {
+      Swal.fire({
+        title: '전송 실패',
+        text: 'GPT 응답을 받아오지 못했어요.',
+        icon: 'error',
+      });
+    }
+  };
+
   const handleSave = (idx) => {
     if (savedMessageIds.includes(idx)) {
       setSavedMessageIds((prev) => prev.filter((id) => id !== idx));
@@ -73,7 +112,6 @@ const ChatBot2 = () => {
     setShowFolderModal(true);
   };
 
-  // 회복 문장 저장 확정
   const handleConfirm = () => {
     if (tempSelectedIdx !== null && selectedFolders.length > 0) {
       setSavedMessageIds((prev) => [...new Set([...prev, tempSelectedIdx])]);
@@ -83,7 +121,6 @@ const ChatBot2 = () => {
     setSelectedFolders([]);
   };
 
-  // 회복 문장 폴더 생성
   const handleAddFolder = () => {
     const trimmed = newFolderName.trim();
     if (!trimmed || folders.includes(trimmed)) {
@@ -97,7 +134,6 @@ const ChatBot2 = () => {
     setFolderError('');
   };
 
-  // 역할극 종료 처리(모든 설정 삭제)
   const handleEnd = () => {
     Swal.fire({
       title: '정말 종료하시겠어요?',
@@ -108,10 +144,19 @@ const ChatBot2 = () => {
       cancelButtonText: '취소',
       confirmButtonColor: '#ff9f4a',
       cancelButtonColor: '#dcdcdc',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('roleplayAnswers');
-        navigate('/main');
+        try {
+          await api.delete(`/api/character/${userId}`);
+          localStorage.removeItem(`roleplayMessages_${userId}`);
+          navigate('/main');
+        } catch (err) {
+          Swal.fire({
+            title: '삭제 실패',
+            text: '역할극 종료 처리 중 오류가 발생했어요.',
+            icon: 'error',
+          });
+        }
       }
     });
   };
@@ -124,7 +169,7 @@ const ChatBot2 = () => {
         </span>
         <span className="chat-title">Milo.</span>
         <span className="end-button" onClick={handleEnd}>
-          종료
+          리허설 종료
         </span>
         <span className="header-space" />
       </div>
@@ -144,22 +189,13 @@ const ChatBot2 = () => {
                 </div>
               )}
               <div className={`bubble-wrapper ${msg.sender}`}>
-                {msg.sender === 'user' ? (
+                <div className={`message-bubble ${msg.sender}`}>
+                  {msg.text.split('\n').map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+                {msg.sender === 'bot' ? (
                   <>
-                    <div className="timestamp">{msg.time}</div>
-                    <div className={`message-bubble ${msg.sender}`}>
-                      {msg.text.split('\n').map((line, i) => (
-                        <p key={i}>{line}</p>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={`message-bubble ${msg.sender}`}>
-                      {msg.text.split('\n').map((line, i) => (
-                        <p key={i}>{line}</p>
-                      ))}
-                    </div>
                     <div
                       className="heart-icon"
                       onClick={() => handleSave(actualIdx)}
@@ -172,6 +208,8 @@ const ChatBot2 = () => {
                     </div>
                     <div className="timestamp">{msg.time}</div>
                   </>
+                ) : (
+                  <div className="timestamp">{msg.time}</div>
                 )}
               </div>
             </div>
@@ -192,7 +230,6 @@ const ChatBot2 = () => {
         </button>
       </div>
 
-      {/* 회복 문장 저장 모달*/}
       {showFolderModal && (
         <div className="folder-modal">
           <div className="modal-title">
