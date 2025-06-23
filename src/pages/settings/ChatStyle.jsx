@@ -4,21 +4,37 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useDrawerStore } from '../../stores/useDrawerStore';
 import Swal from 'sweetalert2';
+import api from '../../config/axios';
 
 export default function ChangeStyle() {
   const [selected, setSelected] = useState('공감형');
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
 
-  const handleSaveStyle = () => {
-    Swal.fire({
-      icon: 'success',
-      title: '스타일이 저장되었어요!',
-      confirmButtonText: '확인',
-      confirmButtonColor: '#ff9f4a',
-    }).then(() => {
-      navigate('/main');
-    });
+  const handleSaveStyle = async () => {
+    const promptValue = selected === '공감형' ? 0 : 1;
+
+    try {
+      await api.put('/api/users/prompt', {
+        prompt: promptValue,
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: '스타일이 저장되었어요!',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#ff9f4a',
+      }).then(() => {
+        navigate('/main');
+      });
+    } catch (err) {
+      console.error('스타일 저장 실패:', err);
+      Swal.fire({
+        icon: 'error',
+        title: '저장 실패',
+        text: '다시 시도해주세요.',
+      });
+    }
   };
 
   const styles = [
