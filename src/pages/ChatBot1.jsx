@@ -5,7 +5,8 @@ import Character from '../assets/characters/login-character.png';
 import Drawer from '../assets/icons/drawer.png'; // 폴더 이미지
 import { FiHeart, FiSend } from 'react-icons/fi'; // 빈 하트 아이콘
 import { AiFillHeart } from 'react-icons/ai'; // 채워진 하트 아이콘
-import api from '../config/axios';
+import api from '../config/axios'; // ✅ axios 인스턴스
+import Swal from 'sweetalert2';
 
 const ChatBot1 = () => {
   const [messages, setMessages] = useState([]);
@@ -23,13 +24,14 @@ const ChatBot1 = () => {
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
 
-  // 메시지 추가 시 자동 스크롤
+  // ✅ 메시지 추가 시 자동 스크롤
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // ✅ 메시지 전송 및 응답
   const handleSend = async () => {
     if (input.trim() === '') return;
 
@@ -85,24 +87,58 @@ const ChatBot1 = () => {
     }
   };
 
-  // 회복 문장 저장 모달 열기
-  const handleSave = (actualIdx) => {
-    if (savedMessageIds.includes(actualIdx)) {
-      setSavedMessageIds((prev) => prev.filter((id) => id !== actualIdx));
-      setShowFolderModal(false);
-      return;
+  // ✅ 회복 문장 저장 모달 열기
+  const handleSave = async (actualIdx) => {
+    // 저장 여부 확인
+    const saved = savedMessageIds.find((item) => item.index === actualIdx);
+
+    if (saved) {
+      // 저장된 경우 → 삭제 요청
+      try {
+        await api.delete('/api/recovery/sentence', {
+          data: {
+            content: messages[actualIdx].text,
+          },
+        });
+
+        setSavedMessageIds((prev) =>
+          prev.filter((item) => item.index !== actualIdx)
+        );
+        setShowFolderModal(false); // 혹시 열려 있던 모달 닫기
+        Swal.fire('삭제 완료', '저장된 문장이 삭제되었어요.', 'success');
+      } catch (err) {
+        console.error('삭제 실패:', err);
+        Swal.fire('삭제 실패', '서버에서 문장 삭제에 실패했어요.', 'error');
+      }
+
+      return; // 여기서 반드시 함수 종료
     }
 
+    // 저장 안 된 경우만 모달 열기
     setTempSelectedIdx(actualIdx);
     setSelectedFolders([]);
     setShowFolderModal(true);
   };
 
-  // 회복 문장 저장 확정
-  const handleConfirm = () => {
+  // ✅ 회복 문장 저장 확정
+  const handleConfirm = async () => {
     if (tempSelectedIdx !== null && selectedFolders.length > 0) {
-      if (!savedMessageIds.includes(tempSelectedIdx)) {
-        setSavedMessageIds((prev) => [...prev, tempSelectedIdx]);
+      try {
+        await Promise.all(
+          selectedFolders.map(async (folder) => {
+            await api.post('/api/recovery/sentence', {
+              folderId: folder.folderId,
+              content: messages[tempSelectedIdx].text,
+            });
+          })
+        );
+        setSavedMessageIds((prev) => [
+          ...prev,
+          { index: tempSelectedIdx, folderId: selectedFolders[0].folderId },
+        ]);
+      } catch (err) {
+        console.error('문장 저장 실패:', err);
+        Swal.fire('저장 실패', '문장을 저장하는 데 실패했어요.', 'error');
       }
     }
     setShowFolderModal(false);
@@ -110,26 +146,86 @@ const ChatBot1 = () => {
     setSelectedFolders([]);
   };
 
-  // 회복 문장 폴더 생성
-  const handleAddFolder = () => {
+  // ✅ 회복 문장 폴더 생성
+  const handleAddFolder = async () => {
     const trimmed = newFolderName.trim();
     if (!trimmed) return;
-    if (folders.includes(trimmed)) {
+
+    // 중복 체크 (프론트단)
+    if (folders.find((f) => f.folderName === trimmed)) {
       setFolderError('이미 같은 이름의 서랍장이 있어요!');
       return;
     }
 
-    setFolders((prev) => [...prev, trimmed]);
-    setSelectedFolders((prev) => [...prev, trimmed]);
-    setNewFolderName('');
-    setIsAddingFolder(false);
-    setFolderError('');
+    try {
+      const res = await api.post('/api/recovery/folder/create', {
+        folderName: trimmed,
+      });
+
+      setFolders((prev) => [...prev, res.data]); // 새 폴더 추가
+      setNewFolderName('');
+      setIsAddingFolder(false);
+    } catch (err) {
+      setFolderError(err.response?.data || '폴더 생성 중 오류 발생');
+    }
+  };
+
+  // ✅ 폴더 목록 받아오기
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const res = await api.get('/api/recovery/folders');
+        setFolders(res.data); // 서버에서 받은 폴더 리스트 저장
+      } catch (err) {
+        console.error('폴더 목록 불러오기 실패:', err);
+      }
+    };
+
+    fetchFolders();
+  }, []);
+
+  // ✅ 사용자가 채팅을 종료(뒤로가기)
+  const handleExit = async () => {
+    // 1. 저장 중 알림 표시
+    Swal.fire({
+      title: '저장 중...',
+      text: '오늘의 대화를 정리하고 있어요.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      // 2. FastAPI 호출
+      const res = await api.post('/api/session/end');
+      console.log('✅ 종료 응답:', res.data);
+
+      // 3. 저장 성공 시 알림 변경
+      Swal.fire({
+        icon: 'success',
+        title: '채팅이 종료되었어요',
+        text: '오늘의 대화가 저장되었어요!',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/main');
+      });
+    } catch (err) {
+      console.error('❌ 종료 오류:', err);
+
+      // 4. 실패 시 에러 알림
+      Swal.fire({
+        icon: 'error',
+        title: '종료에 실패했어요',
+        text: '다시 시도해주세요.',
+      });
+    }
   };
 
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <span className="back-button" onClick={() => navigate(-1)}>
+        <span className="back-button" onClick={() => handleExit()}>
           ←
         </span>
         <span className="chat-title">Milo.</span>
@@ -173,7 +269,9 @@ const ChatBot1 = () => {
                       className="heart-icon"
                       onClick={() => handleSave(actualIdx)}
                     >
-                      {savedMessageIds.includes(actualIdx) ? (
+                      {savedMessageIds.find(
+                        (item) => item.index === actualIdx
+                      ) ? (
                         <AiFillHeart size={16} color="#FF9F4A" />
                       ) : (
                         <FiHeart size={16} color="#FF9F4A" />
@@ -229,7 +327,7 @@ const ChatBot1 = () => {
                         );
                       }}
                     />
-                    <span>{folder}</span>
+                    <span>{folder.folderName}</span>
                   </label>
                 </li>
               );
