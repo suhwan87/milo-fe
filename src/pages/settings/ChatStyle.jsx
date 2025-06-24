@@ -11,11 +11,12 @@ export default function ChangeStyle() {
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
 
+  // ✅ 대화 스타일 조회
   useEffect(() => {
     const fetchUserPrompt = async () => {
       try {
         const res = await api.get('/api/prompt');
-        console.log('✅ 응답:', res.data);
+        console.log('응답:', res.data);
 
         if (typeof res.data === 'string') {
           setSelected(res.data === 'emotional' ? '공감형' : '조언형');
@@ -28,6 +29,7 @@ export default function ChangeStyle() {
     fetchUserPrompt();
   }, []);
 
+  // ✅ 대화 스타일 저장
   const handleSaveStyle = async () => {
     const promptValue = selected === '공감형' ? 0 : 1;
 
