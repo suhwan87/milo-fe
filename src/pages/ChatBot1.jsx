@@ -23,6 +23,7 @@ const ChatBot1 = () => {
   const [isAddingFolder, setIsAddingFolder] = useState(false);
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
+  const [initialGreetingText, setInitialGreetingText] = useState('');
 
   // ✅ 메시지 추가 시 자동 스크롤
   useEffect(() => {
@@ -33,27 +34,14 @@ const ChatBot1 = () => {
 
   // ✅ 최초 진입 시
   useEffect(() => {
-    console.log('✅ ChatBot1 mounted');
-
     const fetchInitialGreeting = async () => {
       try {
         const userId = localStorage.getItem('userId');
         const res = await api.get(`/api/chat/init?user_id=${userId}`);
         const message = res.data.output.split('\n')[0];
-        const time = new Date().toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
+        setInitialGreetingText(message); // ✅ 별도로만 저장 (화면용)
 
-        setMessages((prev) => {
-          // 🔒 동일 메시지 방지 조건
-          const isDuplicate = prev.some(
-            (msg) => msg.text === message && msg.sender === 'bot'
-          );
-          if (isDuplicate) return prev;
-
-          return [...prev, { sender: 'bot', text: message, time }];
-        });
+        // ✅ 👇 여기서 메시지 배열엔 추가하지 않음
       } catch (err) {
         console.error('초기 인삿말 로딩 실패:', err);
       }
@@ -61,6 +49,54 @@ const ChatBot1 = () => {
 
     fetchInitialGreeting();
   }, []);
+
+  // ✅ 사용자가 채팅을 종료(뒤로가기)
+  const handleExit = async () => {
+    // 인삿말만 있는 경우엔 저장 X
+    const hasOnlyGreeting =
+      messages.length === 1 && messages[0].text === initialGreetingText;
+
+    if (messages.length === 0 || hasOnlyGreeting) {
+      navigate('/main'); // 👉 바로 뒤로가기
+      return;
+    }
+
+    // 🔽 이하 저장 로직 동일
+    Swal.fire({
+      title: '저장 중...',
+      text: '오늘의 대화를 정리하고 있어요.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      const res = await api.post('/api/session/end');
+      const { status } = res.data;
+
+      if (status === 'no_messages') {
+        Swal.close();
+        navigate('/main');
+        return;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: '채팅이 종료되었어요',
+        text: '오늘의 대화가 저장되었어요!',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/main');
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: '종료에 실패했어요',
+        text: '다시 시도해주세요.',
+      });
+    }
+  };
 
   // ✅ 메시지 전송 및 응답
   const handleSend = async () => {
@@ -215,59 +251,6 @@ const ChatBot1 = () => {
     fetchFolders();
   }, []);
 
-  // ✅ 사용자가 채팅을 종료(뒤로가기)
-  const handleExit = async () => {
-    // 0. 채팅 여부 확인
-    if (messages.length === 0) {
-      navigate('/main'); // 👉 바로 뒤로가기
-      return;
-    }
-
-    // 1. 저장 중 알림 표시
-    Swal.fire({
-      title: '저장 중...',
-      text: '오늘의 대화를 정리하고 있어요.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    try {
-      // 2. API 호출
-      const res = await api.post('/api/session/end');
-      console.log('✅ 종료 응답:', res.data);
-
-      const { status } = res.data;
-
-      // 3. 대화가 없었다는 FastAPI 응답일 경우
-      if (status === 'no_messages') {
-        Swal.close(); // 로딩 창 닫기
-        navigate('/main');
-        return;
-      }
-
-      // 4. 저장 성공 시 알림 표시
-      Swal.fire({
-        icon: 'success',
-        title: '채팅이 종료되었어요',
-        text: '오늘의 대화가 저장되었어요!',
-        confirmButtonText: '확인',
-      }).then(() => {
-        navigate('/main');
-      });
-    } catch (err) {
-      console.error('❌ 종료 오류:', err);
-
-      // 5. 실패 시 에러 알림
-      Swal.fire({
-        icon: 'error',
-        title: '종료에 실패했어요',
-        text: '다시 시도해주세요.',
-      });
-    }
-  };
-
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -330,6 +313,31 @@ const ChatBot1 = () => {
             </div>
           );
         })}
+
+        {initialGreetingText && (
+          <div className="chat-message bot">
+            <div className="bot-avatar">
+              <img
+                src={Character}
+                alt="milo 캐릭터"
+                className="bot-character"
+              />
+            </div>
+            <div className="bubble-wrapper bot">
+              <div className="message-bubble bot">
+                {initialGreetingText.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+              <div className="timestamp">
+                {new Date().toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="chat-input-area">
