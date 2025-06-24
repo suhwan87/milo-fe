@@ -102,7 +102,9 @@ const ChatBot1 = () => {
         return newMessages;
       });
     } catch (err) {
-      console.error('응답 실패:', err);
+      console.error('[❌응답 실패] 메시지:', input);
+      console.error('[❌응답 실패] 전체 에러 객체:', err);
+      console.error('[❌응답 실패] 응답 내용:', err?.response?.data);
     }
   };
 
