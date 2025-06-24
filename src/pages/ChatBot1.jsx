@@ -31,6 +31,37 @@ const ChatBot1 = () => {
     }
   }, [messages]);
 
+  // ✅ 최초 진입 시
+  useEffect(() => {
+    console.log('✅ ChatBot1 mounted');
+
+    const fetchInitialGreeting = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const res = await api.get(`/api/chat/init?user_id=${userId}`);
+        const message = res.data.output.split('\n')[0];
+        const time = new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        setMessages((prev) => {
+          // 🔒 동일 메시지 방지 조건
+          const isDuplicate = prev.some(
+            (msg) => msg.text === message && msg.sender === 'bot'
+          );
+          if (isDuplicate) return prev;
+
+          return [...prev, { sender: 'bot', text: message, time }];
+        });
+      } catch (err) {
+        console.error('초기 인삿말 로딩 실패:', err);
+      }
+    };
+
+    fetchInitialGreeting();
+  }, []);
+
   // ✅ 메시지 전송 및 응답
   const handleSend = async () => {
     if (input.trim() === '') return;
