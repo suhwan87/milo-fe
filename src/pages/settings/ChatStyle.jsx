@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../../styles/ChangeStyle.css';
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
@@ -10,6 +10,20 @@ export default function ChangeStyle() {
   const [selected, setSelected] = useState('공감형');
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
+
+  useEffect(() => {
+    const fetchUserPrompt = async () => {
+      try {
+        const res = await api.get('/api/users/prompt'); // 👈 GET 요청으로 유저 스타일 가져오기
+        const promptValue = res.data.prompt; // 0: 공감형, 1: 조언형
+        setSelected(promptValue === 0 ? '공감형' : '조언형');
+      } catch (err) {
+        console.error('스타일 조회 실패:', err);
+      }
+    };
+
+    fetchUserPrompt();
+  }, []);
 
   const handleSaveStyle = async () => {
     const promptValue = selected === '공감형' ? 0 : 1;
