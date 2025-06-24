@@ -105,3 +105,42 @@
   border-radius: 999px;
   transition: all 0.3s ease;
 }
+
+/* 화살표 버튼 컨테이너 */
+.slide-nav {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+  pointer-events: none; /* 전체 컨테이너는 클릭 막고 내부 버튼은 허용 */
+}
+
+/* Lucide 아이콘 버튼 */
+.slide-arrow-button {
+  pointer-events: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  transition: color 0.2s ease;
+}
+
+.slide-arrow-button:hover {
+  color: #ff8827;
+}
+
+.slide-arrow-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+  color: #333;
+}
