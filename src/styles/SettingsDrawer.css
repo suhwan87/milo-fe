@@ -52,7 +52,8 @@
   background-color: white;
   margin-left: 5px;
   gap: 24px;
-  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .setting-section-title {
