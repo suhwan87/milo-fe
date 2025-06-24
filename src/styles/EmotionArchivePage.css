@@ -265,7 +265,9 @@
   line-height: 1.6;
   color: #333;
   white-space: pre-line;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.3s ease;
   overflow: hidden;
 }
 
@@ -315,5 +317,3 @@
   border-radius: 8px;
   z-index: 10;
 }
-
-
