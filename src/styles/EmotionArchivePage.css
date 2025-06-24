@@ -1,5 +1,8 @@
 /* EmotionArchivePage.css */
 
+/* ─────────────────────────────────────
+   0. 공통 레이아웃
+───────────────────────────────────── */
 .archive-page-container {
   max-width: 598px;
   margin: 0 auto;
@@ -8,9 +11,11 @@
   background-color: #fffefc;
 }
 
-/* 헤더 */
+/* ─────────────────────────────────────
+   1. 헤더
+───────────────────────────────────── */
 .archive-page-header {
-  position: relative; /* 기준 박스 */
+  position: relative;
   display: flex;
   align-items: center;
   padding-bottom: 20px;
@@ -25,7 +30,7 @@
   border: none;
   margin-left: 20px;
   cursor: pointer;
-  z-index: 1; /* 겹침 방지 */
+  z-index: 1;
 }
 
 .archive-page-header h2 {
@@ -37,15 +42,16 @@
   margin: 0;
 }
 
-/* 월 선택 */
+/* ─────────────────────────────────────
+   2. 월 선택
+───────────────────────────────────── */
 .archive-page-month-selector {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
   font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin: 10px 0 20px;
   color: #333;
 }
 
@@ -60,13 +66,9 @@
   pointer-events: none;
 }
 
-.archive-page-emotion-calendar,
-.archive-page-emotion-chart,
-.archive-page-summary {
-  transition: all 0.3s ease;
-}
-
-/* 감정 기록 줄 */
+/* ─────────────────────────────────────
+   3. 감정 기록(라인·아이콘·총개)
+───────────────────────────────────── */
 .archive-page-record-section {
   margin: 10px 0;
 }
@@ -75,7 +77,7 @@
   margin-bottom: 12px;
   display: flex;
   align-items: center;
-  gap: 12px; /* 👈 텍스트 간격만 살짝 조정 */
+  gap: 12px;
 }
 
 .record-title {
@@ -94,36 +96,64 @@
   font-weight: bold;
 }
 
-.archive-page-record-line {
+/* ▶▶ 새 레이아웃 */
+.record-track {
   position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px; /* ✅ 이모지 간격 좁히기 */
-  padding-top: 20px;
-  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto; /* 왼쪽(라인+아이콘) / 오른쪽(총개) */
+  align-items: center;
+  margin-top: 24px;
+  height: 100px;
 }
 
-.archive-page-record-line::before {
-  content: '';
+.track-line {
   position: absolute;
-  top: 24px;
+  top: 28%;
   left: 0;
-  right: calc(36px + 24px + 60px); /* 👈 총합 박스 너비 + margin-right 추정 */
+  right: 0;
   height: 2px;
-  background-color: #ccc;
+  background: #ccc;
+  transform: translateY(-50%);
   z-index: 0;
+}
+
+.icon-track {
+  grid-column: 1 / 2;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 56px 0 24px; /* 말풍선 공간 확보 */
+  z-index: 1;
+}
+
+/* 가로 스크롤 영역 */
+.icon-scroll {
+  grid-column: 1 / 2;
+  display: flex;
+  gap: 32px;
+  padding: 0 56px 0 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  cursor: grab;
+  min-height: 100px; /* .record-track 높이와 동일값 */
+}
+.icon-scroll.dragging {
+  cursor: grabbing;
+} /* 드래그 중 */
+
+/* Chrome/Edge 스크롤바 숨기기 */
+.icon-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .record-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 20px;
-  color: #444;
-  position: relative;
-  margin-left: 24px;
-  top: -18px;
+  gap: 2px;
   z-index: 1;
+  -webkit-user-drag: none; /* Safari */
+  user-select: none; /* 텍스트 선택 방지 */
 }
 
 .record-item img {
@@ -131,25 +161,32 @@
   height: 50px;
   object-fit: contain;
   border-radius: 50%;
-  margin-bottom: 4px;
+  -webkit-user-drag: none; /* Safari */
+  user-select: none; /* 텍스트 선택 방지 */
 }
 
-/* ✅ 총합 박스도 간격 안에서 정렬되도록 */
 .record-total {
-  padding: 6px 30px;
-  background-color: #fff4e9;
+  grid-column: 2 / 3;
+  background: #fff4e9;
   border: 2px solid #ccc;
   border-radius: 20px;
+  padding: 6px 30px;
   font-size: 20px;
   font-weight: bold;
   color: #333;
-  position: relative;
-  margin-left: 24px;
-  top: -18px;
   z-index: 1;
+  transform: translateY(-23px); /* 음수로 위로 이동 */
 }
 
-/* 감정 분포 */
+.record-item span {
+  margin-top: 2px; /* 값이 작을수록 위로 붙음 (0~2px 추천) */
+  margin-left: -4px;
+  font-size: 16px;
+}
+
+/* ─────────────────────────────────────
+   4. 감정 분포 (기존 그대로)
+───────────────────────────────────── */
 .radar-chart-container {
   position: relative;
   width: 320px;
@@ -180,9 +217,8 @@
   margin: 0 0 32px;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  background-color: transparent;
-  box-shadow: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-color: transparent;
 }
 
 .emotion-archive-title {
@@ -199,7 +235,9 @@
   align-items: center;
 }
 
-/* 총평 */
+/* ─────────────────────────────────────
+   5. 총평 (기존 그대로)
+───────────────────────────────────── */
 .archive-page-summary {
   display: flex;
   align-items: center;
@@ -220,3 +258,62 @@
   line-height: 1.5;
   color: #444;
 }
+
+/* 총평 텍스트 기본 스타일 */
+.summary-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-line;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+/* 총평 접힘 효과 */
+.summary-text-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 60px;
+  transition: max-height 0.5s ease;
+}
+
+.summary-text-expanded {
+  max-height: 1000px;
+  transition: max-height 0.5s ease;
+}
+
+/* 토글 버튼 */
+.summary-toggle-button {
+  align-self: flex-end;
+  margin-top: 4px;
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 🔹 데이터 없을 때 흐림 효과 */
+.dimmed {
+  opacity: 0.4;
+  position: relative;
+}
+
+.dimmed-text {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #555;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+
