@@ -16,11 +16,40 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
 
   // ✅ 회복 문장 조회
   useEffect(() => {
-    const fetchSentences = async () => {
+    const fetchSentencesWithEmotion = async () => {
       try {
         setIsLoading(true);
         const res = await api.get(`/api/recovery/sentence/${folder.folderId}`);
-        setSentences(res.data);
+        const token = localStorage.getItem('accessToken');
+
+        const enriched = await Promise.all(
+          res.data.map(async (s) => {
+            const date = s.createdAt.split('T')[0]; // 날짜 추출
+
+            try {
+              const emotionRes = await api.get('/api/report/daily', {
+                headers: { Authorization: `Bearer ${token}` },
+                params: { date },
+              });
+
+              return {
+                ...s,
+                emotion: emotionRes.data.mainEmotion,
+              };
+            } catch (e) {
+              console.warn('해당 날짜 리포트 없음:', date);
+              return { ...s, emotion: null };
+            }
+          })
+        );
+
+        // 🔽 최신순 정렬 후 상태 설정
+        setSentences(
+          enriched.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+        );
       } catch (err) {
         console.error(err);
       } finally {
@@ -28,7 +57,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
       }
     };
 
-    fetchSentences();
+    fetchSentencesWithEmotion();
   }, [folder.folderId]);
 
   // ✅ 문장 삭제 처리
@@ -183,7 +212,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
                     {sentence.content}
                   </div>
                   <div className="folder-sentence-tags">
-                    #{sentence.tag || '감정'}
+                    #{sentence.emotion || '감정'}
                   </div>
                 </div>
               ))}

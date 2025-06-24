@@ -101,6 +101,7 @@
   padding: 0px 20px;
 }
 
+/* 폴더 메뉴 */
 .folder-menu-wrapper {
   font-size: 30px;
   position: relative;
@@ -109,25 +110,62 @@
   gap: 8px;
 }
 
-.folder-menu-wrapper > button {
+.folder-menu-buttons {
   position: absolute;
-  top: 30px;
-  left: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 10px 20px;
-  font-size: 18px;
-  color: #444;
-  z-index: 10;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-  transition: all 0.2s ease;
+  top: 50px;
+  left: -50px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  animation: fadeIn 0.15s ease-in-out;
 }
 
-.folder-menu-wrapper > button:hover {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.folder-menu-buttons > button {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 10px 35px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* 수정 버튼 */
+.folder-menu-buttons-delete {
+  color: #333;
+}
+
+.folder-menu-buttons-delete:hover {
   background-color: #f8f8f8;
+}
+
+/* 삭제 버튼 */
+.folder-menu-buttons-update {
+  color: #d9534f;
+}
+
+.folder-menu-buttons-update:hover {
+  background-color: #fdf2f2;
 }
 
 /* 폴더 클릭시 열리는 회복 문장 목록 영역 */

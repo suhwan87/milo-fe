@@ -17,6 +17,10 @@ const generateColorClasses = (length) => {
   return result;
 };
 
+const sortFoldersByLatest = (folders) => {
+  return [...folders].sort((a, b) => b.folderId - a.folderId);
+};
+
 const MindDrawerPage = () => {
   const [drawerList, setDrawerList] = useState([]);
   const [colorClasses, setColorClasses] = useState([]);
@@ -32,6 +36,10 @@ const MindDrawerPage = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editFolderName, setEditFolderName] = useState('');
+  const [editTargetIndex, setEditTargetIndex] = useState(null);
+
   const menuRef = useRef(null);
 
   // ✅ 폴더 목록 불러오기
@@ -43,11 +51,12 @@ const MindDrawerPage = () => {
         folderId: folder.folderId,
         count: folder.sentenceCount || 0,
       }));
-      const colors = generateColorClasses(folders.length);
+      const sorted = sortFoldersByLatest(folders);
+      const colors = generateColorClasses(sorted.length);
 
-      setAllFolders(folders);
+      setAllFolders(sorted);
       setAllColors(colors);
-      setDrawerList(folders);
+      setDrawerList(sorted);
       setColorClasses(colors);
     } catch (err) {
       console.error('서버에서 폴더 목록 조회 실패:', err);
@@ -88,6 +97,7 @@ const MindDrawerPage = () => {
 
   const handleAddFolder = () => setShowModal(true);
 
+  // ✅ 폴더 생성
   const handleConfirm = async () => {
     if (!newFolderName.trim()) return;
 
@@ -103,17 +113,59 @@ const MindDrawerPage = () => {
       };
       const newColor = `color-${Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1}`;
 
-      const updatedFolders = [...allFolders, newFolder];
-      const updatedColors = [...allColors, newColor];
+      const updatedFolders = sortFoldersByLatest([...allFolders, newFolder]);
+      const updatedColors = [newColor, ...allColors];
 
       setAllFolders(updatedFolders);
       setAllColors(updatedColors);
-      setSearchTerm('');
+      setDrawerList(updatedFolders);
       setShowModal(false);
       setNewFolderName('');
     } catch (error) {
-      console.error('폴더 생성 실패:', error);
-      Swal.fire('생성 실패', '새 폴더를 만드는 데 실패했어요.', 'error');
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.includes('이미 존재')
+      ) {
+        Swal.fire('중복된 이름', '이미 존재하는 폴더 이름이에요.', 'warning');
+      } else {
+        console.error('폴더 생성 실패:', error);
+        Swal.fire('생성 실패', '새 폴더를 만드는 데 실패했어요.', 'error');
+      }
+    }
+  };
+
+  // ✅ 폴더 수정
+  const handleEditConfirm = async () => {
+    if (!editFolderName.trim()) return;
+
+    try {
+      await api.put('/api/recovery/folder/update', {
+        folderId: drawerList[editTargetIndex].folderId,
+        updatedName: editFolderName.trim(),
+      });
+
+      const updatedFolders = allFolders.map((folder) =>
+        folder.folderId === drawerList[editTargetIndex].folderId
+          ? { ...folder, title: editFolderName.trim() }
+          : folder
+      );
+
+      setAllFolders(updatedFolders);
+      setDrawerList(updatedFolders);
+      setShowEditModal(false);
+      setEditTargetIndex(null);
+
+      // ✅ 수정 완료 알림
+      Swal.fire('수정 완료', '폴더 이름이 성공적으로 수정되었어요.', 'success');
+    } catch (error) {
+      if (
+        error.response?.status === 400 &&
+        error.response?.data?.includes('이미 존재')
+      ) {
+        Swal.fire('중복된 이름', '이미 존재하는 폴더 이름이에요.', 'warning');
+      } else {
+        Swal.fire('수정 실패', '폴더 이름 수정 중 문제가 발생했어요.', 'error');
+      }
     }
   };
 
@@ -140,6 +192,9 @@ const MindDrawerPage = () => {
       setActiveMenuIndex(null);
       setDeleteTargetIndex(null);
       setShowDeleteModal(false);
+
+      // ✅ 삭제 완료 알림
+      Swal.fire('삭제 완료', '폴더가 성공적으로 삭제되었어요.', 'success');
     } catch (err) {
       console.error('❌ 폴더 삭제 실패:', err);
       Swal.fire('삭제 실패', '폴더를 삭제하는 데 실패했어요.', 'error');
@@ -251,15 +306,31 @@ const MindDrawerPage = () => {
                       ⋮
                     </span>
                     {activeMenuIndex === idx && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setDeleteTargetIndex(idx);
-                          setShowDeleteModal(true);
-                        }}
-                      >
-                        🗑 삭제
-                      </button>
+                      <div className="folder-menu-buttons">
+                        <button
+                          className="folder-menu-buttons-delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditTargetIndex(idx);
+                            setEditFolderName(item.title);
+                            setShowEditModal(true);
+                            setActiveMenuIndex(null); // 닫기
+                          }}
+                        >
+                          수정
+                        </button>
+                        <button
+                          className="folder-menu-buttons-update"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteTargetIndex(idx);
+                            setShowDeleteModal(true);
+                            setActiveMenuIndex(null); // 닫기
+                          }}
+                        >
+                          삭제
+                        </button>
+                      </div>
                     )}
                   </div>
                   <span className="folder-icon">
@@ -285,6 +356,33 @@ const MindDrawerPage = () => {
           ))
         )}
       </div>
+
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>폴더 이름 수정</h3>
+            <input
+              type="text"
+              value={editFolderName}
+              onChange={(e) => setEditFolderName(e.target.value)}
+            />
+            <div className="modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowEditModal(false);
+                  setEditTargetIndex(null);
+                }}
+              >
+                취소
+              </button>
+              <button className="confirm-btn" onClick={handleEditConfirm}>
+                저장
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showDeleteModal && (
         <div className="modal-overlay">
