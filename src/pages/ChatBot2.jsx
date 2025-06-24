@@ -101,37 +101,110 @@ const ChatBot2 = () => {
     }
   };
 
-  const handleSave = (idx) => {
-    if (savedMessageIds.includes(idx)) {
-      setSavedMessageIds((prev) => prev.filter((id) => id !== idx));
-      setShowFolderModal(false);
+  // ✅ 회복 문장 저장 또는 삭제
+  const handleSave = async (actualIdx) => {
+    const targetMessage = messages[actualIdx]?.text;
+    const alreadySaved = savedMessageIds.some(
+      (item) => item.index === actualIdx
+    );
+
+    if (!targetMessage) return;
+
+    if (alreadySaved) {
+      // 삭제 요청
+      try {
+        await api.delete('/api/recovery/sentence', {
+          data: { content: targetMessage },
+        });
+
+        setSavedMessageIds((prev) =>
+          prev.filter((item) => item.index !== actualIdx)
+        );
+        setShowFolderModal(false);
+        Swal.fire('삭제 완료', '저장된 문장이 삭제되었어요.', 'success');
+      } catch (err) {
+        console.error('[handleSave] 삭제 실패:', err);
+        Swal.fire('삭제 실패', '서버에서 문장 삭제에 실패했어요.', 'error');
+      }
       return;
     }
-    setTempSelectedIdx(idx);
+
+    // 저장 모달 열기
+    setTempSelectedIdx(actualIdx);
     setSelectedFolders([]);
     setShowFolderModal(true);
   };
 
-  const handleConfirm = () => {
-    if (tempSelectedIdx !== null && selectedFolders.length > 0) {
-      setSavedMessageIds((prev) => [...new Set([...prev, tempSelectedIdx])]);
+  // ✅ 회복 문장 저장 확정
+  const handleConfirm = async () => {
+    if (tempSelectedIdx === null || selectedFolders.length === 0) return;
+
+    const targetMessage = messages[tempSelectedIdx]?.text;
+    if (!targetMessage) return;
+
+    try {
+      await Promise.all(
+        selectedFolders.map((folder) =>
+          api.post('/api/recovery/sentence', {
+            folderId: folder.folderId,
+            content: targetMessage,
+          })
+        )
+      );
+
+      setSavedMessageIds((prev) => [
+        ...prev,
+        { index: tempSelectedIdx, folderId: selectedFolders[0].folderId },
+      ]);
+      Swal.fire('저장 완료', '문장이 저장되었어요.', 'success');
+    } catch (err) {
+      console.error('[handleConfirm] 문장 저장 실패:', err);
+      Swal.fire('저장 실패', '문장을 저장하는 데 실패했어요.', 'error');
     }
+
+    // 모달 상태 초기화
     setShowFolderModal(false);
     setTempSelectedIdx(null);
     setSelectedFolders([]);
   };
 
-  const handleAddFolder = () => {
-    const trimmed = newFolderName.trim();
-    if (!trimmed || folders.includes(trimmed)) {
+  // ✅ 회복 문장 폴더 목록 불러오기
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const res = await api.get('/api/recovery/folders');
+        setFolders(res.data); // 서버에서 받은 폴더 리스트 저장
+      } catch (err) {
+        console.error('폴더 목록 불러오기 실패:', err);
+      }
+    };
+
+    fetchFolders();
+  }, []);
+
+  // ✅ 회복 문장 폴더 생성
+  const handleAddFolder = async () => {
+    const trimmedName = newFolderName.trim();
+    if (!trimmedName) return;
+
+    if (folders.some((f) => f.folderName === trimmedName)) {
       setFolderError('이미 같은 이름의 서랍장이 있어요!');
       return;
     }
-    setFolders((prev) => [...prev, trimmed]);
-    setSelectedFolders((prev) => [...prev, trimmed]);
-    setNewFolderName('');
-    setIsAddingFolder(false);
-    setFolderError('');
+
+    try {
+      const res = await api.post('/api/recovery/folder/create', {
+        folderName: trimmedName,
+      });
+
+      setFolders((prev) => [...prev, res.data]);
+      setNewFolderName('');
+      setIsAddingFolder(false);
+      setFolderError('');
+    } catch (err) {
+      console.error('[handleAddFolder] 폴더 생성 실패:', err);
+      setFolderError(err.response?.data || '폴더 생성 중 오류 발생');
+    }
   };
 
   const handleEnd = () => {
@@ -200,7 +273,9 @@ const ChatBot2 = () => {
                       className="heart-icon"
                       onClick={() => handleSave(actualIdx)}
                     >
-                      {savedMessageIds.includes(actualIdx) ? (
+                      {savedMessageIds.find(
+                        (item) => item.index === actualIdx
+                      ) ? (
                         <AiFillHeart size={16} color="#FF9F4A" />
                       ) : (
                         <FiHeart size={16} color="#FF9F4A" />
@@ -230,31 +305,38 @@ const ChatBot2 = () => {
         </button>
       </div>
 
+      {/* 회복 문장 저장 모달*/}
       {showFolderModal && (
         <div className="folder-modal">
           <div className="modal-title">
             <img src={Drawer} alt="drawer icon" className="drawer-icon" />
             문장을 저장할 폴더 선택
           </div>
+
           <ul className="folder-list">
-            {folders.map((folder, index) => (
-              <li key={index}>
-                <label className="folder-option">
-                  <input
-                    type="checkbox"
-                    checked={selectedFolders.includes(folder)}
-                    onChange={() =>
-                      setSelectedFolders((prev) =>
-                        prev.includes(folder)
-                          ? prev.filter((f) => f !== folder)
-                          : [...prev, folder]
-                      )
-                    }
-                  />
-                  <span>{folder}</span>
-                </label>
-              </li>
-            ))}
+            {folders.map((folder, index) => {
+              const inputId = `folder-${index}`;
+              return (
+                <li key={index}>
+                  <label htmlFor={inputId} className="folder-option">
+                    <input
+                      type="checkbox"
+                      id={inputId}
+                      checked={selectedFolders.includes(folder)}
+                      onChange={() => {
+                        setSelectedFolders((prev) =>
+                          prev.includes(folder)
+                            ? prev.filter((f) => f !== folder)
+                            : [...prev, folder]
+                        );
+                      }}
+                    />
+                    <span>{folder.folderName}</span>
+                  </label>
+                </li>
+              );
+            })}
+
             {isAddingFolder ? (
               <li className="new-folder">
                 <input
@@ -264,7 +346,9 @@ const ChatBot2 = () => {
                     setNewFolderName(e.target.value);
                     setFolderError('');
                   }}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddFolder()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleAddFolder();
+                  }}
                   placeholder="폴더 이름 입력"
                 />
                 <button
@@ -281,6 +365,7 @@ const ChatBot2 = () => {
               <li onClick={() => setIsAddingFolder(true)}>➕ 새 폴더 만들기</li>
             )}
           </ul>
+
           <div className="modal-buttons">
             <button onClick={() => setShowFolderModal(false)}>취소</button>
             <button onClick={handleConfirm}>저장</button>
