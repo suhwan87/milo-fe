@@ -23,6 +23,7 @@ const ChatBot1 = () => {
   const [isAddingFolder, setIsAddingFolder] = useState(false);
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
+  const [initialGreetingText, setInitialGreetingText] = useState('');
 
   // ✅ 메시지 추가 시 자동 스크롤
   useEffect(() => {
@@ -33,27 +34,14 @@ const ChatBot1 = () => {
 
   // ✅ 최초 진입 시
   useEffect(() => {
-    console.log('✅ ChatBot1 mounted');
-
     const fetchInitialGreeting = async () => {
       try {
         const userId = localStorage.getItem('userId');
         const res = await api.get(`/api/chat/init?user_id=${userId}`);
         const message = res.data.output.split('\n')[0];
-        const time = new Date().toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
+        setInitialGreetingText(message); // ✅ 별도로만 저장 (화면용)
 
-        setMessages((prev) => {
-          // 🔒 동일 메시지 방지 조건
-          const isDuplicate = prev.some(
-            (msg) => msg.text === message && msg.sender === 'bot'
-          );
-          if (isDuplicate) return prev;
-
-          return [...prev, { sender: 'bot', text: message, time }];
-        });
+        // ✅ 👇 여기서 메시지 배열엔 추가하지 않음
       } catch (err) {
         console.error('초기 인삿말 로딩 실패:', err);
       }
@@ -118,34 +106,83 @@ const ChatBot1 = () => {
     }
   };
 
-  // ✅ 회복 문장 저장 모달 열기
-  const handleSave = async (actualIdx) => {
-    // 저장 여부 확인
-    const saved = savedMessageIds.find((item) => item.index === actualIdx);
+  // ✅ 사용자가 채팅을 종료(뒤로가기)
+  const handleExit = async () => {
+    // 인삿말만 있는 경우엔 저장 X
+    const hasOnlyGreeting =
+      messages.length === 1 && messages[0].text === initialGreetingText;
 
-    if (saved) {
-      // 저장된 경우 → 삭제 요청
+    if (messages.length === 0 || hasOnlyGreeting) {
+      navigate('/main'); // 👉 바로 뒤로가기
+      return;
+    }
+
+    // 🔽 이하 저장 로직 동일
+    Swal.fire({
+      title: '저장 중...',
+      text: '오늘의 대화를 정리하고 있어요.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      const res = await api.post('/api/session/end');
+      const { status } = res.data;
+
+      if (status === 'no_messages') {
+        Swal.close();
+        navigate('/main');
+        return;
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: '채팅이 종료되었어요',
+        text: '오늘의 대화가 저장되었어요!',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/main');
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: '종료에 실패했어요',
+        text: '다시 시도해주세요.',
+      });
+    }
+  };
+
+  // ✅ 회복 문장 저장 또는 삭제
+  const handleSave = async (actualIdx) => {
+    const targetMessage = messages[actualIdx]?.text;
+    const alreadySaved = savedMessageIds.some(
+      (item) => item.index === actualIdx
+    );
+
+    if (!targetMessage) return;
+
+    if (alreadySaved) {
+      // 삭제 요청
       try {
         await api.delete('/api/recovery/sentence', {
-          data: {
-            content: messages[actualIdx].text,
-          },
+          data: { content: targetMessage },
         });
 
         setSavedMessageIds((prev) =>
           prev.filter((item) => item.index !== actualIdx)
         );
-        setShowFolderModal(false); // 혹시 열려 있던 모달 닫기
+        setShowFolderModal(false);
         Swal.fire('삭제 완료', '저장된 문장이 삭제되었어요.', 'success');
       } catch (err) {
-        console.error('삭제 실패:', err);
+        console.error('[handleSave] 삭제 실패:', err);
         Swal.fire('삭제 실패', '서버에서 문장 삭제에 실패했어요.', 'error');
       }
-
-      return; // 여기서 반드시 함수 종료
+      return;
     }
 
-    // 저장 안 된 경우만 모달 열기
+    // 저장 모달 열기
     setTempSelectedIdx(actualIdx);
     setSelectedFolders([]);
     setShowFolderModal(true);
@@ -153,55 +190,38 @@ const ChatBot1 = () => {
 
   // ✅ 회복 문장 저장 확정
   const handleConfirm = async () => {
-    if (tempSelectedIdx !== null && selectedFolders.length > 0) {
-      try {
-        await Promise.all(
-          selectedFolders.map(async (folder) => {
-            await api.post('/api/recovery/sentence', {
-              folderId: folder.folderId,
-              content: messages[tempSelectedIdx].text,
-            });
+    if (tempSelectedIdx === null || selectedFolders.length === 0) return;
+
+    const targetMessage = messages[tempSelectedIdx]?.text;
+    if (!targetMessage) return;
+
+    try {
+      await Promise.all(
+        selectedFolders.map((folder) =>
+          api.post('/api/recovery/sentence', {
+            folderId: folder.folderId,
+            content: targetMessage,
           })
-        );
-        setSavedMessageIds((prev) => [
-          ...prev,
-          { index: tempSelectedIdx, folderId: selectedFolders[0].folderId },
-        ]);
-      } catch (err) {
-        console.error('문장 저장 실패:', err);
-        Swal.fire('저장 실패', '문장을 저장하는 데 실패했어요.', 'error');
-      }
+        )
+      );
+
+      setSavedMessageIds((prev) => [
+        ...prev,
+        { index: tempSelectedIdx, folderId: selectedFolders[0].folderId },
+      ]);
+      Swal.fire('저장 완료', '문장이 저장되었어요.', 'success');
+    } catch (err) {
+      console.error('[handleConfirm] 문장 저장 실패:', err);
+      Swal.fire('저장 실패', '문장을 저장하는 데 실패했어요.', 'error');
     }
+
+    // 모달 상태 초기화
     setShowFolderModal(false);
     setTempSelectedIdx(null);
     setSelectedFolders([]);
   };
 
-  // ✅ 회복 문장 폴더 생성
-  const handleAddFolder = async () => {
-    const trimmed = newFolderName.trim();
-    if (!trimmed) return;
-
-    // 중복 체크 (프론트단)
-    if (folders.find((f) => f.folderName === trimmed)) {
-      setFolderError('이미 같은 이름의 서랍장이 있어요!');
-      return;
-    }
-
-    try {
-      const res = await api.post('/api/recovery/folder/create', {
-        folderName: trimmed,
-      });
-
-      setFolders((prev) => [...prev, res.data]); // 새 폴더 추가
-      setNewFolderName('');
-      setIsAddingFolder(false);
-    } catch (err) {
-      setFolderError(err.response?.data || '폴더 생성 중 오류 발생');
-    }
-  };
-
-  // ✅ 폴더 목록 받아오기
+  // ✅ 회복 문장 폴더 목록 불러오기
   useEffect(() => {
     const fetchFolders = async () => {
       try {
@@ -215,56 +235,28 @@ const ChatBot1 = () => {
     fetchFolders();
   }, []);
 
-  // ✅ 사용자가 채팅을 종료(뒤로가기)
-  const handleExit = async () => {
-    // 0. 채팅 여부 확인
-    if (messages.length === 0) {
-      navigate('/main'); // 👉 바로 뒤로가기
+  // ✅ 회복 문장 폴더 생성
+  const handleAddFolder = async () => {
+    const trimmedName = newFolderName.trim();
+    if (!trimmedName) return;
+
+    if (folders.some((f) => f.folderName === trimmedName)) {
+      setFolderError('이미 같은 이름의 서랍장이 있어요!');
       return;
     }
 
-    // 1. 저장 중 알림 표시
-    Swal.fire({
-      title: '저장 중...',
-      text: '오늘의 대화를 정리하고 있어요.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
     try {
-      // 2. API 호출
-      const res = await api.post('/api/session/end');
-      console.log('✅ 종료 응답:', res.data);
-
-      const { status } = res.data;
-
-      // 3. 대화가 없었다는 FastAPI 응답일 경우
-      if (status === 'no_messages') {
-        Swal.close(); // 로딩 창 닫기
-        navigate('/main');
-        return;
-      }
-
-      // 4. 저장 성공 시 알림 표시
-      Swal.fire({
-        icon: 'success',
-        title: '채팅이 종료되었어요',
-        text: '오늘의 대화가 저장되었어요!',
-        confirmButtonText: '확인',
-      }).then(() => {
-        navigate('/main');
+      const res = await api.post('/api/recovery/folder/create', {
+        folderName: trimmedName,
       });
+
+      setFolders((prev) => [...prev, res.data]);
+      setNewFolderName('');
+      setIsAddingFolder(false);
+      setFolderError('');
     } catch (err) {
-      console.error('❌ 종료 오류:', err);
-
-      // 5. 실패 시 에러 알림
-      Swal.fire({
-        icon: 'error',
-        title: '종료에 실패했어요',
-        text: '다시 시도해주세요.',
-      });
+      console.error('[handleAddFolder] 폴더 생성 실패:', err);
+      setFolderError(err.response?.data || '폴더 생성 중 오류 발생');
     }
   };
 
@@ -330,6 +322,31 @@ const ChatBot1 = () => {
             </div>
           );
         })}
+
+        {initialGreetingText && (
+          <div className="chat-message bot">
+            <div className="bot-avatar">
+              <img
+                src={Character}
+                alt="milo 캐릭터"
+                className="bot-character"
+              />
+            </div>
+            <div className="bubble-wrapper bot">
+              <div className="message-bubble bot">
+                {initialGreetingText.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+              <div className="timestamp">
+                {new Date().toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="chat-input-area">
