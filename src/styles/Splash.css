@@ -73,6 +73,7 @@ html, body {
 .splash-text {
   text-align: center;
   padding: 1rem 1.5rem;
+  z-index: 1;
 }
 
 .splash-text p {
@@ -118,15 +119,18 @@ html, body {
 
 /* 🐾 너구리 캐릭터 이미지 */
 .character {
-  width: 100%;
-  max-width: 400px;
   position: absolute;
-  bottom: -10px;
-  right: -20px;
+  bottom: 0;
+  right: 0;
+  width: 60vw;              /* ✅ 상대 크기로 조정 (화면 비율 기준) */
+  max-width: 360px;         /* ✅ 최대 너비 제한 */
+  z-index: 0;
+  pointer-events: none;
   animation: tilt 3s ease-in-out 1 forwards;
   transform-origin: bottom center;
   animation-delay: 1.8s;
 }
+
 
 /* 🌀 캐릭터 흔들림 효과 */
 @keyframes tilt {
