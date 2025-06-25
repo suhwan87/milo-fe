@@ -17,19 +17,26 @@ html,
 body {
   background-color: #fffaf5;
   font-family: 'Tadak', sans-serif;
+  height: 100%;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
   color: #222;
+  margin: 0;
+  padding: 0;
 }
 
-/* ✅ 3. 전체 앱 컨테이너 - 모바일 앱처럼 가운데 정렬 */
 #root {
   max-width: 598px;
   margin: 0 auto;
+  min-height: 100vh;
   background-color: #fffefc;
+  overflow-x: hidden;
 }
+
 
 /* ✅ 4. 기본 태그 정리 */
 button {
