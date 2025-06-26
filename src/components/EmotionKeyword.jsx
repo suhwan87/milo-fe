@@ -59,12 +59,14 @@ const EmotionKeyword = () => {
           <span>오늘의 감정 키워드</span>
         </div>
 
-        <div className="keyword-list">
+        <div className="keyword-list" style={{ minHeight: '30px' }}>
           {loading ? (
-            <span className="keyword-badge">불러오는 중...</span>
-          ) : notFound ? (
             <span className="keyword-badge">
-              감정을 찾는 중... 로딩이 조금 긴가 봐요 🙃
+              {loading
+                ? '불러오는 중...'
+                : notFound
+                  ? '감정을 찾는 중... 로딩이 조금 긴가 봐요 🙃'
+                  : keywords[0]}
             </span>
           ) : (
             keywords.map((word, idx) => (

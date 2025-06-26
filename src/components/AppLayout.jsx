@@ -35,12 +35,15 @@ const AppLayout = ({ children }) => {
   }, [location.pathname]);
 
   return (
-    <div className="app-frame">
-      {isDrawerAllowed && <Header onDrawerToggle={openDrawer} />}
-      {isDrawerAllowed && (
-        <SettingsDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
-      )}
-      {children}
+    // ✅ scrollable-container를 AppLayout에서 관리
+    <div className="scrollable-container">
+      <div className="app-frame">
+        {isDrawerAllowed && <Header onDrawerToggle={openDrawer} />}
+        {isDrawerAllowed && (
+          <SettingsDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
+        )}
+        {children}
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import './fonts/TDTDTadakTadak.ttf';
 import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './config/chartConfig'; // 차트 등록
+import './config/chartConfig';
 
 // 인증 관련
 import PrivateRoute from './components/PrivateRoute';
@@ -36,6 +36,7 @@ import Withdraw from './pages/settings/Withdraw';
 
 function App() {
   return (
+    // ✅ scrollable-container 제거하고 Router를 직접 렌더링
     <Router>
       <Routes>
         {/* ✅ 누구나 접근 가능한 경로 */}
@@ -115,7 +116,7 @@ function App() {
           }
         />
 
-        {/* 챗봇도 보호 */}
+        {/* 챗봇 */}
         <Route
           path="/chat"
           element={
@@ -141,7 +142,7 @@ function App() {
           }
         />
 
-        {/* 설정도 보호 */}
+        {/* 설정 */}
         <Route
           path="/settings/nickname"
           element={

@@ -136,6 +136,7 @@ const EmotionSlider = () => {
         </button>
       </div>
 
+      {!isReady && <div style={{ height: '280px' }} />}
       {isReady && (
         <Swiper
           slidesPerView={1.1}

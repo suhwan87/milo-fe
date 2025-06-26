@@ -3,7 +3,7 @@
   border-top: 3px solid #ffb26f;
   border-bottom: 3px solid #ffb26f;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  height: 196px;
+  min-height: 196px;
   padding: 16px;
   margin: 24px 0 48px;
   cursor: pointer;
@@ -48,6 +48,7 @@
 }
 
 .archive-texts {
+  min-height: 40px;
   display: flex;
   flex-direction: column;
 }

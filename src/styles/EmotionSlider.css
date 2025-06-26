@@ -3,6 +3,7 @@
   position: relative;
   padding: 32px 0 16px;
   overflow: hidden; /* 카드 밖으로 삐져나오지 않도록 */
+  min-height: 280px;
 }
 
 /* ✅ Swiper 내부 구조에서 잘림 방지 */
