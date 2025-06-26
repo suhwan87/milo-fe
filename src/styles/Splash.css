@@ -1,5 +1,6 @@
 /* 🌐 전체 화면 및 글로벌 세팅 */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -13,12 +14,11 @@ html, body {
 .splash {
   position: relative;
   width: 100%;
-  min-height: 100vh;     /* iOS 대응 */
+  min-height: 100vh; /* iOS 대응 */
   background-color: #ffffff;
-  overflow: hidden;      /* ✅ 스크롤 완전 제거 */
+  overflow: hidden; /* ✅ 스크롤 완전 제거 */
   overscroll-behavior: none;
 }
-
 
 /* 🎨 상단 주황 영역 */
 .splash-header {
@@ -123,8 +123,8 @@ html, body {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 60vw;              /* ✅ 상대 크기로 조정 (화면 비율 기준) */
-  max-width: 360px;         /* ✅ 최대 너비 제한 */
+  width: 60vw; /* ✅ 상대 크기로 조정 (화면 비율 기준) */
+  max-width: 360px; /* ✅ 최대 너비 제한 */
   z-index: 0;
   pointer-events: none;
   animation: tilt 3s ease-in-out 1 forwards;
@@ -132,7 +132,6 @@ html, body {
   animation-delay: 1.8s;
   will-change: transform;
 }
-
 
 /* 🌀 캐릭터 흔들림 효과 */
 @keyframes tilt {

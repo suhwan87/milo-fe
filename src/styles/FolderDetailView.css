@@ -118,16 +118,35 @@
 .folder-sentence-date {
   font-size: 15px;
   color: #888;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .folder-sentence-content {
-  padding: 10px;
+  padding: 5px;
   line-height: 1.7;
   font-size: 15px;
   color: #444;
+  margin-bottom: 30px;
+}
+
+.folder-sentence-content.scrollable {
+  max-height: 200px; /* 표시할 최대 높이 */
+  overflow-y: auto;
+  padding-right: 8px; /* 스크롤바 여유 */
   white-space: pre-line;
-  margin-bottom: 20px;
+}
+
+.folder-sentence-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.folder-sentence-content::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 120, 0.3);
+  border-radius: 4px;
+}
+
+.folder-sentence-content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .folder-sentence-tags {

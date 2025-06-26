@@ -54,6 +54,17 @@ const ChatBot1 = () => {
   const handleSend = async () => {
     if (input.trim() === '') return;
 
+    // ✅ 응답 대기 중인 메시지가 있다면 전송 차단
+    const isWaiting = messages.some((msg) => msg.waiting);
+    if (isWaiting) {
+      Swal.fire({
+        icon: 'info',
+        title: '마일로가 응답 중이에요',
+        text: '응답이 끝난 후에 메시지를 보낼 수 있어요.',
+      });
+      return;
+    }
+
     const now = new Date();
     const time = now.toLocaleTimeString([], {
       hour: '2-digit',
@@ -69,7 +80,7 @@ const ChatBot1 = () => {
     // 3. GPT 응답 대기 메시지 추가
     const waitingMessage = {
       sender: 'bot',
-      text: '마일로가 응답을 작성 중입니다...',
+      text: '마일로 응답중',
       time,
       waiting: true, // 구분용
     };
@@ -110,6 +121,16 @@ const ChatBot1 = () => {
 
   // ✅ 사용자가 채팅을 종료(뒤로가기)
   const handleExit = async () => {
+    // 🔐 응답 대기 중일 경우 종료 차단
+    const isWaiting = messages.some((msg) => msg.waiting);
+    if (isWaiting) {
+      Swal.fire({
+        icon: 'info',
+        title: '마일로가 아직 응답 중이에요!',
+        text: '응답이 완료되면 종료할 수 있어요.',
+      });
+      return;
+    }
     // 인삿말만 있는 경우엔 저장 X
     const hasOnlyGreeting =
       messages.length === 1 && messages[0].text === initialGreetingText;
@@ -145,6 +166,10 @@ const ChatBot1 = () => {
         text: '오늘의 대화가 저장되었어요!',
         confirmButtonText: '확인',
       }).then(() => {
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+          localStorage.setItem(`lastChatEnd_${userId}`, Date.now().toString()); // ✅ 사용자별 저장
+        }
         navigate('/main');
       });
     } catch (err) {
@@ -302,21 +327,33 @@ const ChatBot1 = () => {
                   <>
                     <div className={`message-bubble ${msg.sender}`}>
                       {(msg.text ?? '').split('\n').map((line, i) => (
-                        <p key={i}>{line}</p>
+                        <p key={i}>
+                          {line}
+                          {msg.waiting && (
+                            <span className="typing-dots">
+                              <span className="typing-dot">.</span>
+                              <span className="typing-dot">.</span>
+                              <span className="typing-dot">.</span>
+                            </span>
+                          )}
+                        </p>
                       ))}
                     </div>
-                    <div
-                      className="heart-icon"
-                      onClick={() => handleSave(actualIdx)}
-                    >
-                      {savedMessageIds.find(
-                        (item) => item.index === actualIdx
-                      ) ? (
-                        <AiFillHeart size={16} color="#FF9F4A" />
-                      ) : (
-                        <FiHeart size={16} color="#FF9F4A" />
-                      )}
-                    </div>
+
+                    {!msg.waiting && (
+                      <div
+                        className="heart-icon"
+                        onClick={() => handleSave(actualIdx)}
+                      >
+                        {savedMessageIds.find(
+                          (item) => item.index === actualIdx
+                        ) ? (
+                          <AiFillHeart size={16} color="#FF9F4A" />
+                        ) : (
+                          <FiHeart size={16} color="#FF9F4A" />
+                        )}
+                      </div>
+                    )}
                     <div className="timestamp">{msg.time}</div>
                   </>
                 )}
@@ -356,12 +393,21 @@ const ChatBot1 = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="상담 메시지 입력"
+          placeholder={
+            messages.some((msg) => msg.waiting)
+              ? '응답 대기 중입니다...'
+              : '상담 메시지 입력'
+          }
+          disabled={messages.some((msg) => msg.waiting)} // 응답 중이면 입력 막기
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSend();
           }}
         />
-        <button className="send-button" onClick={handleSend}>
+        <button
+          className="send-button"
+          onClick={handleSend}
+          disabled={messages.some((msg) => msg.waiting)} // 버튼도 비활성화
+        >
           <FiSend size={22} color="#000" />
         </button>
       </div>

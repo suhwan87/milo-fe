@@ -49,7 +49,9 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       cancelButtonColor: '#dcdcdc',
     }).then((result) => {
       if (result.isConfirmed) {
+        const userId = localStorage.getItem('userId');
         localStorage.removeItem('token'); // ✅ 토큰만 제거
+        localStorage.removeItem(`lastChatEnd_${userId}`);
         navigate('/login', { replace: true }); // ✅ replace로 뒤로가기 차단
       }
     });

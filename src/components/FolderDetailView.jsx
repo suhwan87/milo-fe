@@ -20,7 +20,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
       try {
         setIsLoading(true);
         const res = await api.get(`/api/recovery/sentence/${folder.folderId}`);
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem('token');
 
         const enriched = await Promise.all(
           res.data.map(async (s) => {
@@ -63,7 +63,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
   // ✅ 문장 삭제 처리
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('token');
       await api.delete('/api/recovery/sentence/folder', {
         headers: { Authorization: `Bearer ${token}` },
         data: {
@@ -98,7 +98,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
   // ✅ 문장 수정 처리
   const handleEditSave = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('token');
       await api.put(
         '/api/recovery/sentence/update',
         {
@@ -208,7 +208,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
                   <div className="folder-sentence-date">
                     {new Date(sentence.createdAt).toLocaleDateString('ko-KR')}
                   </div>
-                  <div className="folder-sentence-content">
+                  <div className="folder-sentence-content scrollable">
                     {sentence.content}
                   </div>
                   <div className="folder-sentence-tags">
