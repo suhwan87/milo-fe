@@ -7,15 +7,16 @@ import { RiChatSmile3Line } from 'react-icons/ri';
 import { RxReset } from 'react-icons/rx';
 import { FiInfo, FiLogOut, FiTrash2 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
+import api from '../config/axios'; // ✅ axios 인스턴스
 
 const SettingsDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   // ✅ 앱 초기화: localStorage 전체 삭제
-  const handleResetApp = () => {
-    Swal.fire({
-      title: '앱초기화',
-      text: '기기에 저장된 모든 기록이 삭제돼요',
+  const handleResetApp = async () => {
+    const result = await Swal.fire({
+      title: '앱 초기화',
+      text: '기기에 저장된 기록과 서버에 저장된 모든 감정 리포트, 회복 문장이 삭제돼요. 정말 초기화할까요?',
       showCancelButton: true,
       confirmButtonText: '확인',
       cancelButtonText: '취소',
@@ -28,12 +29,40 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         confirmButton: 'reset-confirm',
         cancelButton: 'reset-cancel',
       },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.clear();
-        window.location.reload();
-      }
     });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      await api.delete('/api/users/reset', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ 전체 초기화 후 필요한 정보 복원
+      localStorage.clear();
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+
+      await Swal.fire({
+        icon: 'success',
+        title: '초기화 완료',
+        text: '앱이 초기화되었어요!',
+        confirmButtonText: '확인',
+      });
+
+      window.location.reload(); // 앱 리로드
+    } catch (err) {
+      console.error('[앱초기화 오류]', err);
+      Swal.fire({
+        icon: 'error',
+        title: '초기화 실패',
+        text: '앱 초기화 중 문제가 발생했어요. 다시 시도해 주세요.',
+      });
+    }
   };
 
   // ✅ 로그아웃: 토큰만 삭제 + 로그인 이동
