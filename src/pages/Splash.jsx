@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Splash.css'; // CSS 따로 분리
+import '../styles/Splash.css';
 import splashCharacter from '../assets/characters/splash-character.png';
 
 function Splash() {
   const navigate = useNavigate();
   const [fadeOut, setFadeOut] = useState(false);
 
+  // ✅ Splash가 보여질 때 body 스크롤 잠금
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'; // 스크롤 제거
+    return () => {
+      document.body.style.overflow = ''; // 스크롤 원상 복구
+    };
+  }, []);
+
   const handleStart = () => {
-    setFadeOut(true); // 페이드아웃 트리거
+    setFadeOut(true);
     setTimeout(() => {
-      navigate('/login'); // 500ms 뒤 페이지 이동
+      navigate('/login');
     }, 500);
   };
+
   return (
     <div className={`splash ${fadeOut ? 'fade-out' : ''}`}>
       <div className="splash-header">

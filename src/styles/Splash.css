@@ -17,6 +17,7 @@ body {
   min-height: 100vh; /* iOS 대응 */
   background-color: #ffffff;
   overflow: hidden; /* ✅ 스크롤 완전 제거 */
+  overscroll-behavior: none;
 }
 
 /* 🎨 상단 주황 영역 */
@@ -129,6 +130,7 @@ body {
   animation: tilt 3s ease-in-out 1 forwards;
   transform-origin: bottom center;
   animation-delay: 1.8s;
+  will-change: transform;
 }
 
 /* 🌀 캐릭터 흔들림 효과 */
@@ -153,6 +155,7 @@ body {
 /* 🎬 페이드아웃 효과 */
 .fade-out {
   animation: fadeOut 0.5s ease forwards;
+  overflow: hidden;
 }
 
 @keyframes fadeOut {
@@ -162,6 +165,6 @@ body {
   }
   100% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(10);
   }
 }
