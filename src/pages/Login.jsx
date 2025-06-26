@@ -1,16 +1,26 @@
-// src/components/Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import loginCharacter from '../assets/characters/login-character.png';
 import Swal from 'sweetalert2';
-import api from '../config/axios'; // ✅ axios 인스턴스 사용
+import api from '../config/axios';
 
 function Login() {
   const navigate = useNavigate();
   const [fadeOut, setFadeOut] = useState(false);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
+  // ✅ fadeOut이 true일 때 body overflow를 잠시 제거
+  useEffect(() => {
+    if (fadeOut) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.body.style.overflow = ''; // 복구
+    };
+  }, [fadeOut]);
 
   const handleNavigate = (path) => {
     setFadeOut(true);
@@ -28,7 +38,7 @@ function Login() {
 
       const { token, userId } = response.data;
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId); // ✅ userId도 저장
+      localStorage.setItem('userId', userId);
 
       Swal.fire({
         title: '로그인 완료!',
@@ -36,13 +46,19 @@ function Login() {
         icon: 'success',
         confirmButtonColor: '#ffa158',
         confirmButtonText: '확인',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
       }).then(() => {
+        // ✅ 전환 직전에 스크롤바 제거
+        document.body.style.overflow = 'hidden';
         setFadeOut(true);
-        setTimeout(() => navigate('/main'), 300);
+
+        setTimeout(() => {
+          document.body.style.overflow = ''; // 메인 진입 후 복구
+          navigate('/main');
+        }, 300);
       });
     } catch (error) {
-      console.error('로그인 실패:', error);
-
       Swal.fire({
         title: '로그인 실패!',
         text:

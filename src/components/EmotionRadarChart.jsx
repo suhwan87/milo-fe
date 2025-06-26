@@ -15,26 +15,25 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
   const [emotionValues, setEmotionValues] = useState([0, 0, 0, 0, 0]);
 
   useEffect(() => {
-    setEmotionValues([0, 0, 0, 0, 0]);
+    setEmotionValues([0, 0, 0, 0, 0]); // 초기화
 
     const fetchEmotionSummary = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await api.get(`/api/emotion/monthly-summary`, {
+        const response = await api.get('/api/emotion/monthly-summary', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          params: {
-            yearMonth,
-          },
+          params: { yearMonth },
         });
 
         const { avgJoy, avgStable, avgAnxiety, avgSadness, avgAnger } =
           response.data;
 
-        // ✅ 총합 정규화 방식
+        // ✅ 총합 기준 정규화
         const sum =
           avgJoy + avgStable + avgAnxiety + avgSadness + avgAnger || 1;
+
         const values = [
           (avgJoy / sum) * 100,
           (avgStable / sum) * 100,
@@ -90,7 +89,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     scales: {
       r: {
         min: 0,
-        max: 40, // ✅ 감정 값 강조를 위한 축 최대값 조정
+        max: 40, // 최대값 고정 (시각 강조)
         ticks: { display: false },
         pointLabels: { display: false },
         grid: { color: '#ccc' },

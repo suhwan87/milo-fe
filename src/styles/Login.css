@@ -14,12 +14,10 @@
   color: #444;
 }
 
-/* 너구리 + 로고*/
+/* 캐릭터 및 로고 */
 .character-logo {
   position: relative;
 }
-
-/* 너구리 */
 .character1 {
   position: absolute;
   top: -120px;
@@ -28,8 +26,6 @@
   width: 130px;
   z-index: 1;
 }
-
-/* 로고 */
 .logo1 {
   font-size: 70px;
   font-weight: normal;
@@ -38,15 +34,13 @@
   font-family: 'Tadak', sans-serif;
 }
 
-/* 로그인 폼 구조 */
+/* 폼 스타일 */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 5px;
   font-size: 15px;
 }
-
-/* 로그인 input 박스 */
 .login-form input {
   padding: 20px 15px;
   border: 1.5px solid #ffb680;
@@ -55,7 +49,6 @@
   outline: none;
   box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
 }
-
 .login-form button {
   padding: 20px;
   background-color: #ff9f4a;
@@ -67,61 +60,53 @@
   cursor: pointer;
   box-shadow: 0 0 0 1px rgba(255, 182, 128, 0.3);
 }
-
 .login-form button:hover {
   background-color: #ff8b26;
 }
-
 .login-form button:active {
   transform: scale(0.99);
   box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
-/* 아이디/비번 찾기 */
+/* 링크 및 푸터 */
 .find-info {
   margin: 20px 0px 5px 0px;
   text-align: right;
   font-size: 13px;
-  color: #555555;
+  color: #555;
   font-weight: bold;
 }
-
 .find-info span {
   cursor: pointer;
   font-weight: normal;
   margin: 0px 5px;
 }
-
-/* 회원가입 */
 .login-footer {
   margin-top: 25px;
   text-align: center;
   font-size: 13px;
-  color: #555555;
+  color: #555;
 }
-
 .login-footer span {
   color: #ff9f4a;
   margin-left: 5px;
   font-weight: bold;
   cursor: pointer;
 }
-
 .login-footer span:hover {
   color: #ff7a1a;
-  /* 좀 더 진한 오렌지 색상 */
 }
 
-/* 페이드 아웃 효과 */
+/* ✅ 페이드 아웃 + 스크롤 방지 */
 .fade-out {
-  animation: fadeOut 0.5s ease forwards;
+  animation: fadeOut 0.3s ease forwards;
+  overflow: hidden;
 }
 
 @keyframes fadeOut {
   0% {
     opacity: 1;
   }
-
   100% {
     opacity: 0;
   }
