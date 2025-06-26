@@ -54,6 +54,17 @@ const ChatBot1 = () => {
   const handleSend = async () => {
     if (input.trim() === '') return;
 
+    // ✅ 응답 대기 중인 메시지가 있다면 전송 차단
+    const isWaiting = messages.some((msg) => msg.waiting);
+    if (isWaiting) {
+      Swal.fire({
+        icon: 'info',
+        title: '마일로가 응답 중이에요',
+        text: '응답이 끝난 후에 메시지를 보낼 수 있어요.',
+      });
+      return;
+    }
+
     const now = new Date();
     const time = now.toLocaleTimeString([], {
       hour: '2-digit',
@@ -382,12 +393,21 @@ const ChatBot1 = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="상담 메시지 입력"
+          placeholder={
+            messages.some((msg) => msg.waiting)
+              ? '응답 대기 중입니다...'
+              : '상담 메시지 입력'
+          }
+          disabled={messages.some((msg) => msg.waiting)} // 응답 중이면 입력 막기
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSend();
           }}
         />
-        <button className="send-button" onClick={handleSend}>
+        <button
+          className="send-button"
+          onClick={handleSend}
+          disabled={messages.some((msg) => msg.waiting)} // 버튼도 비활성화
+        >
           <FiSend size={22} color="#000" />
         </button>
       </div>
