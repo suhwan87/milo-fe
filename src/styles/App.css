@@ -19,6 +19,7 @@ body {
   font-family: 'Tadak', sans-serif;
   height: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -34,7 +35,7 @@ body {
   margin: 0 auto;
   min-height: 100vh;
   background-color: #fffefc;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 
@@ -66,4 +67,5 @@ p {
   /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);*/
   position: relative;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
