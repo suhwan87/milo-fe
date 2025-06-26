@@ -1,4 +1,6 @@
 /* App.css */
+
+/* ✅ 1. 커스텀 폰트 등록 */
 @font-face {
   font-family: 'Tadak';
   src: url('../fonts/TDTDTadakTadak.ttf') format('truetype');
@@ -6,39 +8,103 @@
   font-style: normal;
 }
 
-/* ✅ 2. 기본 리셋 및 앱 전체 스타일 */
+/* ✅ 2. 기본 리셋 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body {
+/* ✅ 3. 전체 페이지 설정 - 스크롤바 완전 제거 */
+html {
   background-color: #fffaf5;
   font-family: 'Tadak', sans-serif;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden; /* 전역 스크롤 완전 비활성화 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 body {
+  background-color: #fffaf5;
   font-family: 'Noto Sans KR', sans-serif;
   color: #222;
+  height: 100%;
+  overflow: hidden; /* body도 스크롤 비활성화 */
   margin: 0;
   padding: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  -webkit-overflow-scrolling: touch;
 }
 
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* ✅ 4. React 루트 요소 */
 #root {
   max-width: 598px;
   margin: 0 auto;
   min-height: 100vh;
+  height: 100vh;
   background-color: #fffefc;
-  overflow: hidden;
+  overflow: hidden; /* root도 스크롤 비활성화 */
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
-/* ✅ 4. 기본 태그 정리 */
+#root::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* ✅ 5. 스크롤 가능한 실제 컨테이너 - 이제 AppLayout에서만 사용 */
+.scrollable-container {
+  max-width: 598px;
+  margin: 0 auto;
+  min-height: 100vh;
+  height: 100vh;
+  
+  overflow-y: auto; /* 세로 스크롤만 허용 */
+  overflow-x: hidden; /* 가로 스크롤 완전 차단 */
+  
+  background-color: #fffefc;
+  
+  /* 모든 브라우저에서 스크롤바 숨김 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-gutter: stable; /* Chrome/Safari - 스크롤바 공간 예약하되 보이지 않게 */
+}
+
+/* ✅ 6. Webkit 브라우저에서 스크롤바 완전 숨김 */
+.scrollable-container::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+  display: none;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: transparent;
+  display: none;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: transparent;
+  display: none;
+}
+
+.scrollable-container::-webkit-scrollbar-corner {
+  background: transparent;
+  display: none;
+}
+
+/* ✅ 7. 버튼 및 기본 태그 정리 */
 button {
   font-family: inherit;
   cursor: pointer;
@@ -53,18 +119,19 @@ p {
   margin: 0;
 }
 
-/* ✅ 5. Milo 로고 폰트 적용용 클래스 */
+/* ✅ 8. Milo 로고용 폰트 */
 .tadak-font {
   font-family: 'Tadak', sans-serif;
 }
 
+/* ✅ 9. 앱 프레임 (Layout 내부 콘텐츠 wrapper) */
 .app-frame {
   max-width: 598px;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 90vh;
   background-color: #fffefc;
-  /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);*/
   position: relative;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: visible;
+  padding-bottom: 20px; /* 하단 여백 추가 */
 }

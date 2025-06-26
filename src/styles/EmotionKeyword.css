@@ -3,6 +3,7 @@
   padding: 15px;
   margin-bottom: 10px;
   cursor: pointer;
+  min-height: 160px;
 }
 .card-section {
   background-color: #ffffff;
