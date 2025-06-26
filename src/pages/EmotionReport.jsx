@@ -100,7 +100,7 @@ const EmotionReport = () => {
     let controller; // 🔄 요청 취소용 AbortController
     return async (dateObj) => {
       const ym = getMonthKey(dateObj); // 🔄 로컬 기준 YYYY-MM
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('token');
 
       controller?.abort(); // 이전 요청 취소
       controller = new AbortController();
