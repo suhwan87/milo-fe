@@ -9,8 +9,11 @@ RUN npm run build
 # Step 2: Nginx로 정적 파일 서비스
 FROM nginx:alpine
 
+# ✅ React 빌드 파일 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
-EXPOSE 80
+# ✅ 커스텀 Nginx 설정 복사
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
