@@ -1,7 +1,8 @@
 /* SignUp.css */
 .signup {
   width: 100%;
-  height: auto;
+  height: 100vh;
+  overflow: hidden;
   padding: 25px;
   padding-top: 40px;
   font-family: 'Noto Sans KR', sans-serif;

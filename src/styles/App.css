@@ -67,8 +67,9 @@ body::-webkit-scrollbar {
 .scrollable-container {
   max-width: 598px;
   margin: 0 auto;
-  min-height: 100vh;
-  height: 100vh;
+  height: 100vh;   /* fallback */
+  height: 100dvh;  /* ✅ 동적 높이 - 모바일 대응 */
+  padding-right: 10px;
   
   overflow-y: auto; /* 세로 스크롤만 허용 */
   overflow-x: hidden; /* 가로 스크롤 완전 차단 */
@@ -133,5 +134,5 @@ p {
   position: relative;
   overflow-x: hidden;
   overflow-y: visible;
-  padding-bottom: 20px; /* 하단 여백 추가 */
+  padding-bottom: 0px; /* 하단 여백 추가 */
 }
