@@ -67,15 +67,15 @@ body::-webkit-scrollbar {
 .scrollable-container {
   max-width: 598px;
   margin: 0 auto;
-  height: 100vh;   /* fallback */
-  height: 100dvh;  /* ✅ 동적 높이 - 모바일 대응 */
+  height: 100vh; /* fallback */
+  height: 100dvh; /* ✅ 동적 높이 - 모바일 대응 */
   padding-right: 10px;
-  
+
   overflow-y: auto; /* 세로 스크롤만 허용 */
   overflow-x: hidden; /* 가로 스크롤 완전 차단 */
-  
+
   background-color: #fffefc;
-  
+
   /* 모든 브라우저에서 스크롤바 숨김 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */

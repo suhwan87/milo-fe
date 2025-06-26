@@ -45,7 +45,7 @@
 .mind-drawer-top-buttons {
   display: flex;
   justify-content: flex-end;
-  align-items: center;  /* 👈 세로 정렬 */
+  align-items: center; /* 👈 세로 정렬 */
   gap: 8px;
   margin: 8px 0 30px;
   padding-right: 4px;
@@ -98,15 +98,6 @@
   padding: 20px 0;
   font-size: 16px;
 }
-
-
-
-
-
-
-
-
-
 
 /* ✅ 폴더 리스트 */
 .mind-drawer-list {
@@ -326,8 +317,6 @@
     transform: translateY(0);
   }
 }
-
-
 
 /* 색상 클래스 정의 */
 .color-1 {
