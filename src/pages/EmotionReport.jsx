@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReportHeader from '../components/ReportHeader';
 import EmotionTag from '../components/EmotionTag';
 import ReportCard from '../components/ReportCard';
@@ -24,51 +24,45 @@ const EmotionReport = () => {
 
   const [loading, setLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [pollingToken, setPollingToken] = useState(0); // ✅ 새 토큰
+  const pollingTokenRef = useRef(0);
 
   const MAX_RETRY = 5;
   const RETRY_INTERVAL = 1000; // 1초
 
   /** ✅ 특정 날짜의 리포트 조회 */
-  const fetchReport = async (dateObj) => {
-    const date = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD
-    const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
+  const fetchReport = async (dateObj, token) => {
+    const date = dateObj.toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
     const isToday = date === today;
 
-    const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     const lastChatEnd = localStorage.getItem(`lastChatEnd_${userId}`);
     const lastEnd = parseInt(lastChatEnd, 10);
+    const accessToken = localStorage.getItem('token');
 
     try {
       const res = await api.get(`/api/report/daily?date=${date}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
 
-      // ✅ 1. 리포트가 존재할 경우
       const reportData = res.data;
       const createdAt = new Date(reportData.createdAt).getTime();
 
-      console.log('📌 [createdAt]', createdAt);
-      console.log('📌 [lastChatEnd]', lastEnd);
-      console.log('📌 [isToday]', isToday);
+      if (pollingTokenRef.current !== token) return; // ✅ 토큰이 다르면 무시
 
-      if (isToday) {
-        // ✅ 오늘 날짜일 경우
-        if (lastChatEnd && createdAt <= lastEnd && retryCount < MAX_RETRY) {
-          // 1. 생성 안 된 상태 → 로딩 중 + polling
-          setLoading(true);
-          setTimeout(() => {
-            setRetryCount((prev) => prev + 1);
-            fetchReport(dateObj);
-          }, RETRY_INTERVAL);
-        } else {
-          // 2. 생성 완료됨 → 바로 표시
-          setReport(reportData);
-          setNotFound(false);
-          setLoading(false);
-        }
+      if (
+        isToday &&
+        lastChatEnd &&
+        createdAt <= lastEnd &&
+        retryCount < MAX_RETRY
+      ) {
+        setLoading(true);
+        setTimeout(() => {
+          setRetryCount((prev) => prev + 1);
+          fetchReport(dateObj, token);
+        }, RETRY_INTERVAL);
       } else {
-        // ✅ 과거 날짜는 바로 표시
         setReport(reportData);
         setNotFound(false);
         setLoading(false);
@@ -76,21 +70,18 @@ const EmotionReport = () => {
     } catch (err) {
       if ([400, 404].includes(err.response?.status)) {
         if (isToday && lastChatEnd && retryCount < MAX_RETRY) {
-          // ✅ 오늘이고, 아직 생성되지 않았으므로 polling 시도
+          // ✅ 오늘이고, 리포트는 아직 없음 (예: 채팅 직후)
           setLoading(true);
           setTimeout(() => {
             setRetryCount((prev) => prev + 1);
-            fetchReport(dateObj);
+            fetchReport(dateObj, token); // 🔥 token 포함 중요
           }, RETRY_INTERVAL);
         } else {
-          // ✅ 진짜로 없는 상태
+          // ✅ 과거나 retry 초과 → 진짜 리포트 없음
           setNotFound(true);
           setReport(null);
           setLoading(false);
         }
-      } else {
-        console.error('리포트 요청 실패:', err);
-        setLoading(false);
       }
     }
   };
@@ -125,7 +116,13 @@ const EmotionReport = () => {
 
   /* 날짜 선택 → 일일 리포트 요청 */
   useEffect(() => {
-    fetchReport(selectedDate);
+    setNotFound(false);
+    setLoading(false); // 즉시 로딩 종료
+    const newToken = pollingToken + 1;
+    setPollingToken(newToken);
+    pollingTokenRef.current = newToken;
+    setRetryCount(0);
+    fetchReport(selectedDate, newToken);
   }, [selectedDate]);
 
   /* 월 전환 → 월간 리포트 일자 요청 */
