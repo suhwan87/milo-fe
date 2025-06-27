@@ -32,7 +32,7 @@ function FindId() {
       <form onSubmit={handleFindId} className="findid-form">
         <input
           type="text"
-          placeholder="이름을 입력하세요"
+          placeholder="닉네임을 입력하세요"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
