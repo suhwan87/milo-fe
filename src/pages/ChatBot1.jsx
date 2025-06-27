@@ -25,6 +25,8 @@ const ChatBot1 = () => {
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
   const [initialGreetingText, setInitialGreetingText] = useState('');
 
+  const inputRef = useRef(null);
+
   // ✅ 메시지 추가 시 자동 스크롤
   useEffect(() => {
     if (chatBodyRef.current) {
@@ -45,10 +47,20 @@ const ChatBot1 = () => {
       } catch (err) {
         console.error('초기 인삿말 로딩 실패:', err);
       }
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     };
 
     fetchInitialGreeting();
   }, []);
+
+  useEffect(() => {
+    const isBotWaiting = messages.some((msg) => msg.waiting);
+    if (!isBotWaiting && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [messages]);
 
   // ✅ 메시지 전송 및 응답
   const handleSend = async () => {
@@ -390,6 +402,7 @@ const ChatBot1 = () => {
 
       <div className="chat-input-area">
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
