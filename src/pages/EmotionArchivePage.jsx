@@ -206,7 +206,8 @@ const EmotionArchivePage = () => {
         </div>
         {!hasEmotionData && (
           <p className="dimmed-text">
-            이번 달의 감정 기록이 없어 분석을 제공할 수 없습니다.
+            아직 이번 달 감정 기록이 충분하지 않아요. 감정 분석은 최소 3일 이상
+            기록해야 확인할 수 있어요.
           </p>
         )}
       </div>

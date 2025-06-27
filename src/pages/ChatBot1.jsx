@@ -2,15 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ChatBot.css';
 import Character from '../assets/characters/login-character.png';
-import Drawer from '../assets/icons/drawer.png'; // 폴더 이미지
-import { FiHeart, FiSend } from 'react-icons/fi'; // 빈 하트 아이콘
-import { AiFillHeart } from 'react-icons/ai'; // 채워진 하트 아이콘
-import api from '../config/axios'; // ✅ axios 인스턴스
+import Drawer from '../assets/icons/drawer.png';
+import { FiHeart, FiSend } from 'react-icons/fi';
+import { AiFillHeart } from 'react-icons/ai';
+import api from '../config/axios';
 import Swal from 'sweetalert2';
 
 const ChatBot1 = () => {
   const [messages, setMessages] = useState([]);
-
   const navigate = useNavigate();
   const [input, setInput] = useState('');
   const chatBodyRef = useRef(null);
@@ -24,37 +23,110 @@ const ChatBot1 = () => {
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
   const [initialGreetingText, setInitialGreetingText] = useState('');
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
-  // ✅ 메시지 추가 시 자동 스크롤
+  const inputRef = useRef(null);
+
+  // 현재 세션의 고유 키 생성
+  const getSessionKey = () => {
+    const userId = localStorage.getItem('userId');
+    return `chatMessages_${userId}`;
+  };
+
+  // 메시지를 localStorage에 저장
+  const saveMessagesToStorage = (messagesToSave) => {
+    try {
+      const sessionKey = getSessionKey();
+      localStorage.setItem(sessionKey, JSON.stringify(messagesToSave));
+    } catch (error) {
+      console.error('메시지 저장 실패:', error);
+    }
+  };
+
+  // localStorage에서 메시지 불러오기
+  const loadMessagesFromStorage = () => {
+    try {
+      const sessionKey = getSessionKey();
+      const stored = localStorage.getItem(sessionKey);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('메시지 불러오기 실패:', error);
+      return [];
+    }
+  };
+
+  // 메시지 추가 시 자동 스크롤
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // ✅ 최초 진입 시
+  // 메시지 변경 시 localStorage에 저장
   useEffect(() => {
-    const fetchInitialGreeting = async () => {
-      try {
-        const userId = localStorage.getItem('userId');
-        const res = await api.get(`/api/chat/init?user_id=${userId}`);
-        const message = res.data.output.split('\n')[0];
-        setInitialGreetingText(message); // ✅ 별도로만 저장 (화면용)
+    if (messages.length > 0) {
+      saveMessagesToStorage(messages);
+    }
+  }, [messages]);
 
-        // ✅ 👇 여기서 메시지 배열엔 추가하지 않음
+  // 컴포넌트 마운트 시 초기화
+  useEffect(() => {
+    const initializeChat = async () => {
+      setIsLoading(true);
+
+      try {
+        // 1. 기존 메시지 불러오기
+        const savedMessages = loadMessagesFromStorage();
+
+        if (savedMessages.length > 0) {
+          // 기존 메시지가 있으면 복원
+          setMessages(savedMessages);
+          setIsLoading(false);
+        } else {
+          // 기존 메시지가 없으면 초기 인사말 가져오기 및 메시지 배열에 추가
+          const userId = localStorage.getItem('userId');
+          const res = await api.get(`/api/chat/init?user_id=${userId}`);
+          const greetingMessage = res.data.output.split('\n')[0];
+
+          // 초기 인사말을 메시지 배열에 추가
+          const initialMessage = {
+            sender: 'bot',
+            text: greetingMessage,
+            time: new Date().toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            isGreeting: true, // 인사말 구분용 플래그
+          };
+
+          setMessages([initialMessage]);
+          setIsLoading(false);
+        }
       } catch (err) {
-        console.error('초기 인삿말 로딩 실패:', err);
+        console.error('채팅 초기화 실패:', err);
+        setIsLoading(false);
+      }
+
+      // 입력창에 포커스
+      if (inputRef.current) {
+        inputRef.current.focus();
       }
     };
 
-    fetchInitialGreeting();
+    initializeChat();
   }, []);
 
-  // ✅ 메시지 전송 및 응답
+  useEffect(() => {
+    const isBotWaiting = messages.some((msg) => msg.waiting);
+    if (!isBotWaiting && inputRef.current && !isLoading) {
+      inputRef.current.focus();
+    }
+  }, [messages, isLoading]);
+
+  // 메시지 전송 및 응답
   const handleSend = async () => {
     if (input.trim() === '') return;
 
-    // ✅ 응답 대기 중인 메시지가 있다면 전송 차단
     const isWaiting = messages.some((msg) => msg.waiting);
     if (isWaiting) {
       Swal.fire({
@@ -82,24 +154,21 @@ const ChatBot1 = () => {
       sender: 'bot',
       text: '마일로 응답중',
       time,
-      waiting: true, // 구분용
+      waiting: true,
     };
     setMessages((prev) => [...prev, waitingMessage]);
 
     try {
-      // 4. 토큰 등 정보 설정
-      // 5. 백엔드로 메시지 전송
       const response = await api.post('/api/chat/send', {
         message: input,
       });
 
-      // 6. GPT 응답 수신 및 메시지 추가
       const replyTime = new Date().toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
       });
 
-      // 6. GPT 응답 수신 후 "대기 메시지"를 실제 응답으로 대체
+      // GPT 응답 수신 후 "대기 메시지"를 실제 응답으로 대체
       setMessages((prev) => {
         const newMessages = [...prev];
         const index = newMessages.findIndex((msg) => msg.waiting);
@@ -119,9 +188,18 @@ const ChatBot1 = () => {
     }
   };
 
-  // ✅ 사용자가 채팅을 종료(뒤로가기)
+  // 채팅 종료 시 localStorage 정리
+  const clearStoredMessages = () => {
+    try {
+      const sessionKey = getSessionKey();
+      localStorage.removeItem(sessionKey);
+    } catch (error) {
+      console.error('저장된 메시지 삭제 실패:', error);
+    }
+  };
+
+  // 사용자가 채팅을 종료(뒤로가기)
   const handleExit = async () => {
-    // 🔐 응답 대기 중일 경우 종료 차단
     const isWaiting = messages.some((msg) => msg.waiting);
     if (isWaiting) {
       Swal.fire({
@@ -131,16 +209,16 @@ const ChatBot1 = () => {
       });
       return;
     }
-    // 인삿말만 있는 경우엔 저장 X
-    const hasOnlyGreeting =
-      messages.length === 1 && messages[0].text === initialGreetingText;
+
+    // 인사말만 있는 경우엔 저장 X (isGreeting 플래그로 확인)
+    const hasOnlyGreeting = messages.length === 1 && messages[0].isGreeting;
 
     if (messages.length === 0 || hasOnlyGreeting) {
-      navigate('/main'); // 👉 바로 뒤로가기
+      clearStoredMessages(); // localStorage 정리
+      navigate('/main');
       return;
     }
 
-    // 🔽 이하 저장 로직 동일
     Swal.fire({
       title: '저장 중...',
       text: '오늘의 대화를 정리하고 있어요.',
@@ -156,6 +234,7 @@ const ChatBot1 = () => {
 
       if (status === 'no_messages') {
         Swal.close();
+        clearStoredMessages(); // localStorage 정리
         navigate('/main');
         return;
       }
@@ -168,8 +247,9 @@ const ChatBot1 = () => {
       }).then(() => {
         const userId = localStorage.getItem('userId');
         if (userId) {
-          localStorage.setItem(`lastChatEnd_${userId}`, Date.now().toString()); // ✅ 사용자별 저장
+          localStorage.setItem(`lastChatEnd_${userId}`, Date.now().toString());
         }
+        clearStoredMessages(); // localStorage 정리
         navigate('/main');
       });
     } catch (err) {
@@ -181,7 +261,7 @@ const ChatBot1 = () => {
     }
   };
 
-  // ✅ 회복 문장 저장 또는 삭제
+  // 회복 문장 저장 또는 삭제
   const handleSave = async (actualIdx) => {
     const targetMessage = messages[actualIdx]?.text;
     const alreadySaved = savedMessageIds.some(
@@ -191,7 +271,6 @@ const ChatBot1 = () => {
     if (!targetMessage) return;
 
     if (alreadySaved) {
-      // 삭제 요청
       try {
         await api.delete('/api/recovery/sentence', {
           data: { content: targetMessage },
@@ -209,13 +288,12 @@ const ChatBot1 = () => {
       return;
     }
 
-    // 저장 모달 열기
     setTempSelectedIdx(actualIdx);
     setSelectedFolders([]);
     setShowFolderModal(true);
   };
 
-  // ✅ 회복 문장 저장 확정
+  // 회복 문장 저장 확정
   const handleConfirm = async () => {
     if (tempSelectedIdx === null || selectedFolders.length === 0) return;
 
@@ -242,18 +320,17 @@ const ChatBot1 = () => {
       Swal.fire('저장 실패', '문장을 저장하는 데 실패했어요.', 'error');
     }
 
-    // 모달 상태 초기화
     setShowFolderModal(false);
     setTempSelectedIdx(null);
     setSelectedFolders([]);
   };
 
-  // ✅ 회복 문장 폴더 목록 불러오기
+  // 회복 문장 폴더 목록 불러오기
   useEffect(() => {
     const fetchFolders = async () => {
       try {
         const res = await api.get('/api/recovery/folders');
-        setFolders(res.data); // 서버에서 받은 폴더 리스트 저장
+        setFolders(res.data);
       } catch (err) {
         console.error('폴더 목록 불러오기 실패:', err);
       }
@@ -262,7 +339,7 @@ const ChatBot1 = () => {
     fetchFolders();
   }, []);
 
-  // ✅ 회복 문장 폴더 생성
+  // 회복 문장 폴더 생성
   const handleAddFolder = async () => {
     const trimmedName = newFolderName.trim();
     if (!trimmedName) return;
@@ -286,6 +363,31 @@ const ChatBot1 = () => {
       setFolderError(err.response?.data || '폴더 생성 중 오류 발생');
     }
   };
+
+  // 로딩 중일 때 표시할 컴포넌트
+  if (isLoading) {
+    return (
+      <div className="chat-container">
+        <div className="chat-header">
+          <span className="back-button" onClick={() => navigate('/main')}>
+            ←
+          </span>
+          <span className="chat-title">Milo.</span>
+          <span className="header-space" />
+        </div>
+        <div
+          className="chat-body"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div>채팅을 불러오는 중...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="chat-container">
@@ -340,7 +442,7 @@ const ChatBot1 = () => {
                       ))}
                     </div>
 
-                    {!msg.waiting && (
+                    {!msg.waiting && !msg.isGreeting && (
                       <div
                         className="heart-icon"
                         onClick={() => handleSave(actualIdx)}
@@ -362,34 +464,12 @@ const ChatBot1 = () => {
           );
         })}
 
-        {initialGreetingText && (
-          <div className="chat-message bot">
-            <div className="bot-avatar">
-              <img
-                src={Character}
-                alt="milo 캐릭터"
-                className="bot-character"
-              />
-            </div>
-            <div className="bubble-wrapper bot">
-              <div className="message-bubble bot">
-                {initialGreetingText.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-              <div className="timestamp">
-                {new Date().toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </div>
-            </div>
-          </div>
-        )}
+        {/* 초기 인사말은 더 이상 별도로 렌더링하지 않음 (메시지 배열에 포함됨) */}
       </div>
 
       <div className="chat-input-area">
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -398,7 +478,7 @@ const ChatBot1 = () => {
               ? '응답 대기 중입니다...'
               : '상담 메시지 입력'
           }
-          disabled={messages.some((msg) => msg.waiting)} // 응답 중이면 입력 막기
+          disabled={messages.some((msg) => msg.waiting)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSend();
           }}
@@ -406,13 +486,13 @@ const ChatBot1 = () => {
         <button
           className="send-button"
           onClick={handleSend}
-          disabled={messages.some((msg) => msg.waiting)} // 버튼도 비활성화
+          disabled={messages.some((msg) => msg.waiting)}
         >
           <FiSend size={22} color="#000" />
         </button>
       </div>
 
-      {/* 회복 문장 저장 모달*/}
+      {/* 회복 문장 저장 모달 */}
       {showFolderModal && (
         <div className="folder-modal">
           <div className="modal-title">

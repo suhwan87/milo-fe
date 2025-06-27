@@ -28,6 +28,14 @@
   transform: translateX(-16px);
 }
 
+.role-chat-title {
+  font-family: 'Tadak', sans-serif;
+  font-size: 40px;
+  margin: 0 auto;
+  transform: translateX(-16px);
+  margin-right: 125px;
+}
+
 .back-button {
   font-size: 20px;
   cursor: pointer;
