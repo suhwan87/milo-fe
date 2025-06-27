@@ -31,7 +31,12 @@ function SignUp() {
       setIdMessage('아이디를 입력해주세요.');
       return;
     }
-
+    const idRegex = /^[A-Za-z0-9]{6,20}$/;
+    if (!idRegex.test(id)) {
+      setIdMessage('아이디는 영문+숫자 6~20자만 가능합니다.');
+      setIsIdAvailable(false);
+      return;
+    }
     try {
       const response = await api.get('/api/users/check-id', {
         params: { id },
@@ -57,13 +62,15 @@ function SignUp() {
     setPasswordMatchError('');
     setAgreementError('');
 
+    const idRegex = /^[A-Za-z0-9]{6,20}$/;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,20}$/;
-
+    if (!idRegex.test(id)) {
+      setIdMessage('아이디는 영문+숫자 6~20자만 가능합니다.');
+      return;
+    }
     if (!passwordRegex.test(password)) {
-      setPasswordFormatError(
-        '비밀번호는 8~20자, 문자/숫자/특수문자를 포함해야 합니다.'
-      );
+      setPasswordFormatError('8~20자, 문자/숫자/특수문자를 포함해야 합니다.');
       return;
     }
 
@@ -214,7 +221,14 @@ function SignUp() {
           <div className="modal-overlay">
             <div className="modal">
               <h3>개인정보 수집 및 이용</h3>
-              <p>이곳에 개인정보 수집 약관 내용을 넣어주세요.</p>
+              <p>
+                당신의 정보는 마일로가 소중히 다룰게요!
+                <br />
+                오직 상담을 위한 목적으로만 사용되며, 몰래 팔거나 엿보는 일은
+                절대 없습니다.
+                <br />
+                마일로는 약속을 잘 지키는 너구리에요 헿{' '}
+              </p>
               <button onClick={() => setShowPrivacyModal(false)}>닫기</button>
             </div>
           </div>
@@ -224,7 +238,21 @@ function SignUp() {
           <div className="modal-overlay">
             <div className="modal">
               <h3>서비스 이용약관</h3>
-              <p>이곳에 서비스 이용약관 내용을 넣어주세요.</p>
+              <p>
+                1. 마일로는 여러분의 감정을 진심으로 존중합니다
+                <br />
+                2. 지나치게 심한 말, 부적절한 내용은 자동으로 마일로가 거릅니다
+                <br />
+                3. 마일로는 언제든지 떠날 수 있지만, 되돌아오면 항상 반겨드려요
+                <br />
+                4. 상담 내용은 몰래 저장하거나 공유하지 않아요, 비밀은
+                지켜드립니다
+                <br />
+                5. 간혹 마일로도 답변이 느릴 수 있어요…
+                <br />
+                <br />위 내용에 동의하시면, 마일로와 마음 챙김 여행을
+                떠나볼까요?
+              </p>
               <button onClick={() => setShowServiceModal(false)}>닫기</button>
             </div>
           </div>
