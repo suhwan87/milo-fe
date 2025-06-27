@@ -31,7 +31,12 @@ function SignUp() {
       setIdMessage('아이디를 입력해주세요.');
       return;
     }
-
+    const idRegex = /^[A-Za-z0-9]{6,20}$/;
+    if (!idRegex.test(id)) {
+      setIdMessage('아이디는 영문+숫자 6~20자만 가능합니다.');
+      setIsIdAvailable(false);
+      return;
+    }
     try {
       const response = await api.get('/api/users/check-id', {
         params: { id },
@@ -57,13 +62,15 @@ function SignUp() {
     setPasswordMatchError('');
     setAgreementError('');
 
+    const idRegex = /^[A-Za-z0-9]{6,20}$/;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,20}$/;
-
+    if (!idRegex.test(id)) {
+      setIdMessage('아이디는 영문+숫자 6~20자만 가능합니다.');
+      return;
+    }
     if (!passwordRegex.test(password)) {
-      setPasswordFormatError(
-        '비밀번호는 8~20자, 문자/숫자/특수문자를 포함해야 합니다.'
-      );
+      setPasswordFormatError('8~20자, 문자/숫자/특수문자를 포함해야 합니다.');
       return;
     }
 
