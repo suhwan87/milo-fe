@@ -8,12 +8,22 @@ import Swal from 'sweetalert2';
 
 const COLOR_CLASS_COUNT = 7;
 
-const generateColorClasses = (length) => {
-  const result = [];
-  for (let i = 0; i < length; i++) {
+// ✅ 폴더 배열을 받아 폴더 ID 기준 고정 색상 생성
+const generateColorClasses = (folders) => {
+  const stored = localStorage.getItem('folderColors');
+  const folderColors = stored ? JSON.parse(stored) : {};
+
+  const result = folders.map((folder) => {
+    const id = folder.folderId;
+
+    if (folderColors[id]) return `color-${folderColors[id]}`;
+
     const randomIndex = Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1;
-    result.push(`color-${randomIndex}`);
-  }
+    folderColors[id] = randomIndex;
+    return `color-${randomIndex}`;
+  });
+
+  localStorage.setItem('folderColors', JSON.stringify(folderColors));
   return result;
 };
 
@@ -52,11 +62,11 @@ const MindDrawerPage = () => {
         count: folder.sentenceCount || 0,
       }));
       const sorted = sortFoldersByLatest(folders);
-      const colors = generateColorClasses(sorted.length);
+      const colors = generateColorClasses(sorted);
 
       setAllFolders(sorted);
-      setAllColors(colors);
       setDrawerList(sorted);
+      setAllColors(colors);
       setColorClasses(colors);
     } catch (err) {
       console.error('서버에서 폴더 목록 조회 실패:', err);
@@ -106,12 +116,24 @@ const MindDrawerPage = () => {
         folderName: newFolderName.trim(),
       });
 
+      const folderId = res.data.folderId;
+      const stored = localStorage.getItem('folderColors');
+      const folderColors = stored ? JSON.parse(stored) : {};
+
+      // ✅ 고정 색상 배정
+      const colorIndex =
+        folderColors[folderId] ||
+        Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1;
+      folderColors[folderId] = colorIndex;
+      localStorage.setItem('folderColors', JSON.stringify(folderColors));
+
+      const newColor = `color-${colorIndex}`;
+
       const newFolder = {
         title: res.data.folderName,
-        folderId: res.data.folderId,
+        folderId,
         count: 0,
       };
-      const newColor = `color-${Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1}`;
 
       const updatedFolders = sortFoldersByLatest([...allFolders, newFolder]);
       const updatedColors = [newColor, ...allColors];
@@ -119,6 +141,7 @@ const MindDrawerPage = () => {
       setAllFolders(updatedFolders);
       setAllColors(updatedColors);
       setDrawerList(updatedFolders);
+      setColorClasses(updatedColors);
       setShowModal(false);
       setNewFolderName('');
     } catch (error) {
