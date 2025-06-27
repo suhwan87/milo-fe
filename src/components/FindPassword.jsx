@@ -1,31 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../config/axios';
 import '../styles/FindPassword.css';
 
 function FindPassword() {
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
-
+  const [tempPassword, setTempPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleFindPassword = (e) => {
+  const handleFindPassword = async (e) => {
     e.preventDefault();
-
-    // ✅ 임시 로직: 예시 사용자 정보
-    const fakeDatabase = [
-      { id: 'Ehfl04', email: 'happy4024@naver.com' },
-      // 필요시 추가
-    ];
-
-    const match = fakeDatabase.find(
-      (user) => user.name === name && user.id === id && user.email === email
-    );
-
-    setPasswordResetSuccess(!!match);
-    setSearchAttempted(true);
+    try {
+      const res = await api.post('/api/users/verify-user', {
+        nickname,
+        userId,
+        email,
+      });
+      setTempPassword(res.data.tempPassword); // ✅ 임시 비밀번호 저장
+    } catch (err) {
+      setTempPassword(''); // 실패 시 비워두기
+    } finally {
+      setSearchAttempted(true);
+    }
   };
 
   return (
@@ -34,16 +33,16 @@ function FindPassword() {
       <form onSubmit={handleFindPassword} className="findpw-form">
         <input
           type="text"
-          placeholder="이름을 입력하세요"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="닉네임을 입력하세요"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
           required
         />
         <input
           type="text"
           placeholder="아이디를 입력하세요"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
           required
         />
         <input
@@ -58,9 +57,14 @@ function FindPassword() {
 
       {searchAttempted && (
         <div className="result-box">
-          {passwordResetSuccess ? (
+          {tempPassword ? (
             <div className="success-box">
-              <p>등록된 이메일로 임시 비밀번호를 전송했습니다.</p>
+              <p>
+                아래 임시 비밀번호로 로그인 후, 꼭 비밀번호를 변경해 주세요.
+              </p>
+              <p className="temp-password">
+                <strong>{tempPassword}</strong>
+              </p>
               <div className="button-group">
                 <button onClick={() => navigate('/login')} className="gray-btn">
                   로그인하기

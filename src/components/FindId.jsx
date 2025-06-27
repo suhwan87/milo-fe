@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../config/axios';
 import '../styles/FindId.css';
 
 function FindId() {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [foundId, setFoundId] = useState('');
   const [searchAttempted, setSearchAttempted] = useState(false);
 
-  const handleFindId = (e) => {
+  const handleFindId = async (e) => {
     e.preventDefault();
-
-    // 예시: 고정된 사용자 정보
-    const fakeDatabase = [
-      { name: '이수정', email: 'happy4024@naver.com', id: 'Ehfl04' },
-      // 필요시 여러 데이터 추가 가능
-    ];
-
-    const match = fakeDatabase.find(
-      (user) => user.name === name && user.email === email
-    );
-
-    setFoundId(match ? match.id : '');
-    setSearchAttempted(true);
+    try {
+      const res = await api.post('/api/users/find-id', {
+        nickname,
+        email,
+      });
+      setFoundId(res.data.userId); // 서버에서 userId 반환
+    } catch (err) {
+      setFoundId('');
+    } finally {
+      setSearchAttempted(true);
+    }
   };
 
   return (
@@ -32,9 +31,9 @@ function FindId() {
       <form onSubmit={handleFindId} className="findid-form">
         <input
           type="text"
-          placeholder="이름을 입력하세요"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="닉네임을 입력하세요"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
           required
         />
         <input
