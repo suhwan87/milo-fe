@@ -4,6 +4,7 @@
 .drawer-overlay {
   position: absolute; /* fixed → absolute */
   inset: 0;
+  height: 952px;
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 0;
   pointer-events: none;
@@ -35,6 +36,7 @@
 }
 
 .drawer.open {
+  height: 952px;
   right: 0;
 }
 
@@ -81,10 +83,8 @@
 }
 
 .drawer-footer {
-  position: absolute;
-  margin-top: 40px;
-  bottom: 20px;
-  right: 20px;
+  margin-top: 318px;
+  margin-left: 210px;
   display: flex;
   text-align: center;
   align-items: center;
