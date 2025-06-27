@@ -13,7 +13,7 @@ const EmotionKeyword = () => {
   useEffect(() => {
     const fetchTodayReport = async () => {
       try {
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const today = new Date().toISOString().split('T')[0];
         const token = localStorage.getItem('accessToken');
 
         const res = await api.get(`/api/report/daily?date=${today}`, {
@@ -22,7 +22,7 @@ const EmotionKeyword = () => {
 
         const mainEmotion = res.data?.mainEmotion;
         if (mainEmotion) {
-          setKeywords([mainEmotion]); // ✅ 배열로 변환하여 키워드처럼 사용
+          setKeywords([mainEmotion]);
           setNotFound(false);
         } else {
           setKeywords([]);
@@ -61,12 +61,10 @@ const EmotionKeyword = () => {
 
         <div className="keyword-list" style={{ minHeight: '30px' }}>
           {loading ? (
+            <span className="keyword-badge">불러오는 중...</span>
+          ) : notFound ? (
             <span className="keyword-badge">
-              {loading
-                ? '불러오는 중...'
-                : notFound
-                  ? '감정을 찾는 중... 로딩이 조금 긴가 봐요 🙃'
-                  : keywords[0]}
+              감정을 찾는 중... 로딩이 조금 긴가 봐요 🙃
             </span>
           ) : (
             keywords.map((word, idx) => (

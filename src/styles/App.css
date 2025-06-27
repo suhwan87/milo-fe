@@ -69,7 +69,6 @@ body::-webkit-scrollbar {
   margin: 0 auto;
   height: 100vh; /* fallback */
   height: 100dvh; /* ✅ 동적 높이 - 모바일 대응 */
-  padding-right: 10px;
 
   overflow-y: auto; /* 세로 스크롤만 허용 */
   overflow-x: hidden; /* 가로 스크롤 완전 차단 */
@@ -132,7 +131,6 @@ p {
   min-height: 90vh;
   background-color: #fffefc;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow: unset;
   padding-bottom: 0px; /* 하단 여백 추가 */
 }
