@@ -240,7 +240,7 @@ const ChatBot2 = () => {
         <span className="back-button" onClick={() => navigate('/main')}>
           ←
         </span>
-        <span className="chat-title">Milo.</span>
+        <span className="role-chat-title">Milo.</span>
         <span className="end-button" onClick={handleEnd}>
           리허설 종료
         </span>

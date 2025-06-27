@@ -156,6 +156,12 @@ function RolePlay() {
           className="target-input"
           value={inputValue}
           onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); // 기본 줄바꿈 막기
+              handleNext(); // 다음 질문으로 이동
+            }
+          }}
           placeholder="입력해 주세요"
           rows={1}
           ref={inputRef}
