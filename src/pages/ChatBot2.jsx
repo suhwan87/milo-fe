@@ -11,6 +11,7 @@ import '../styles/ChatBot.css';
 const ChatBot2 = () => {
   const navigate = useNavigate();
   const chatBodyRef = useRef(null);
+  const inputRef = useRef(null); // 입력창 ref 추가
   const userId = localStorage.getItem('userId');
 
   const [messages, setMessages] = useState([]);
@@ -53,6 +54,14 @@ const ChatBot2 = () => {
     }
   }, [messages, userId]);
 
+  // 입력창 포커스 관리 - 응답 대기 중이 아닐 때만 포커스
+  useEffect(() => {
+    const isBotWaiting = messages.some((msg) => msg.waiting);
+    if (!isBotWaiting && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [messages]);
+
   const fetchLogs = async () => {
     try {
       const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
@@ -77,22 +86,71 @@ const ChatBot2 = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    // 응답 대기 중인지 확인
+    const isWaiting = messages.some((msg) => msg.waiting);
+    if (isWaiting) {
+      Swal.fire({
+        icon: 'info',
+        title: '마일로가 응답 중이에요',
+        text: '응답이 끝난 후에 메시지를 보낼 수 있어요.',
+      });
+      return;
+    }
+
     const userTime = formatTime(new Date());
+
+    // 1. 사용자 메시지를 화면에 즉시 렌더링
     setMessages((prev) => [
       ...prev,
       { sender: 'user', text: input, time: userTime },
     ]);
+
+    // 2. 입력창 초기화
     setInput('');
+
+    // 3. GPT 응답 대기 메시지 추가
+    const waitingMessage = {
+      sender: 'bot',
+      text: '마일로 응답중',
+      time: userTime,
+      waiting: true,
+    };
+    setMessages((prev) => [...prev, waitingMessage]);
 
     try {
       const res = await api.post('/api/roleplay', { user_id: userId, input });
       const botReply = res.data.output || '응답을 받아오지 못했습니다.';
       const botTime = formatTime(new Date());
-      setMessages((prev) => [
-        ...prev,
-        { sender: 'bot', text: botReply, time: botTime },
-      ]);
-    } catch {
+
+      // GPT 응답 수신 후 "대기 메시지"를 실제 응답으로 대체
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const index = newMessages.findIndex((msg) => msg.waiting);
+        if (index !== -1) {
+          newMessages[index] = {
+            sender: 'bot',
+            text: botReply,
+            time: botTime,
+          };
+        }
+        return newMessages;
+      });
+    } catch (err) {
+      console.error('GPT 응답 실패:', err);
+      // 대기 메시지를 오류 메시지로 대체
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const index = newMessages.findIndex((msg) => msg.waiting);
+        if (index !== -1) {
+          newMessages[index] = {
+            sender: 'bot',
+            text: '응답을 받아오지 못했습니다.',
+            time: formatTime(new Date()),
+          };
+        }
+        return newMessages;
+      });
+
       Swal.fire({
         title: '전송 실패',
         text: 'GPT 응답을 받아오지 못했어요.',
@@ -208,6 +266,17 @@ const ChatBot2 = () => {
   };
 
   const handleEnd = () => {
+    // 응답 대기 중인지 확인
+    const isWaiting = messages.some((msg) => msg.waiting);
+    if (isWaiting) {
+      Swal.fire({
+        icon: 'info',
+        title: '마일로가 아직 응답 중이에요!',
+        text: '응답이 완료되면 종료할 수 있어요.',
+      });
+      return;
+    }
+
     Swal.fire({
       title: '정말 종료하시겠어요?',
       text: '입력한 역할극 정보가 모두 삭제됩니다.',
@@ -264,23 +333,34 @@ const ChatBot2 = () => {
               <div className={`bubble-wrapper ${msg.sender}`}>
                 <div className={`message-bubble ${msg.sender}`}>
                   {msg.text.split('\n').map((line, i) => (
-                    <p key={i}>{line}</p>
+                    <p key={i}>
+                      {line}
+                      {msg.waiting && (
+                        <span className="typing-dots">
+                          <span className="typing-dot">.</span>
+                          <span className="typing-dot">.</span>
+                          <span className="typing-dot">.</span>
+                        </span>
+                      )}
+                    </p>
                   ))}
                 </div>
                 {msg.sender === 'bot' ? (
                   <>
-                    <div
-                      className="heart-icon"
-                      onClick={() => handleSave(actualIdx)}
-                    >
-                      {savedMessageIds.find(
-                        (item) => item.index === actualIdx
-                      ) ? (
-                        <AiFillHeart size={16} color="#FF9F4A" />
-                      ) : (
-                        <FiHeart size={16} color="#FF9F4A" />
-                      )}
-                    </div>
+                    {!msg.waiting && (
+                      <div
+                        className="heart-icon"
+                        onClick={() => handleSave(actualIdx)}
+                      >
+                        {savedMessageIds.find(
+                          (item) => item.index === actualIdx
+                        ) ? (
+                          <AiFillHeart size={16} color="#FF9F4A" />
+                        ) : (
+                          <FiHeart size={16} color="#FF9F4A" />
+                        )}
+                      </div>
+                    )}
                     <div className="timestamp">{msg.time}</div>
                   </>
                 ) : (
@@ -294,13 +374,23 @@ const ChatBot2 = () => {
 
       <div className="chat-input-area">
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="상담 메시지 입력"
+          placeholder={
+            messages.some((msg) => msg.waiting)
+              ? '응답 대기 중입니다...'
+              : '상담 메시지 입력'
+          }
+          disabled={messages.some((msg) => msg.waiting)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         />
-        <button className="send-button" onClick={handleSend}>
+        <button
+          className="send-button"
+          onClick={handleSend}
+          disabled={messages.some((msg) => msg.waiting)}
+        >
           <FiSend size={22} color="#000" />
         </button>
       </div>
