@@ -115,6 +115,12 @@ function SignUp() {
 
   return (
     <div className={`signup ${fadeOut ? 'fade-out' : ''}`}>
+      <button
+        className="signup-back-button"
+        onClick={() => window.history.back()}
+      >
+        ←
+      </button>
       <div className="signup">
         <h2 className="logo2">Milo.</h2>
         <p className="subtitle">가입을 환영합니다.</p>

@@ -74,6 +74,12 @@ function Login() {
   return (
     <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
       <div className="login-container">
+        <button
+          className="login-back-button"
+          onClick={() => window.history.back()}
+        >
+          ←
+        </button>
         <div className="character-logo">
           <img src={loginCharacter} alt="milo 캐릭터" className="character1" />
           <h2 className="logo1">Milo.</h2>

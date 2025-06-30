@@ -29,6 +29,12 @@ function FindPassword() {
 
   return (
     <div className="findpw-container">
+      <button
+        className="findpass-back-button"
+        onClick={() => window.history.back()}
+      >
+        ←
+      </button>
       <h2 className="findpw-title">비밀번호 찾기</h2>
       <form onSubmit={handleFindPassword} className="findpw-form">
         <input

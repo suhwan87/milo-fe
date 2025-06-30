@@ -28,6 +28,12 @@ function FindId() {
   return (
     <div className="findid-container">
       <h2 className="findid-title">아이디 찾기</h2>
+      <button
+        className="findid-back-button"
+        onClick={() => window.history.back()}
+      >
+        ←
+      </button>
       <form onSubmit={handleFindId} className="findid-form">
         <input
           type="text"

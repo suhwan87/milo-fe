@@ -14,6 +14,19 @@
   color: #444;
 }
 
+/* 뒤로가기 버튼 */
+.login-back-button {
+  font-size: 24px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 100; /* 겹치는 일 방지용 */
+  position: absolute;
+  left: 30px;
+  top: 20px;
+}
+
 /* 캐릭터 및 로고 */
 .character-logo {
   position: relative;
