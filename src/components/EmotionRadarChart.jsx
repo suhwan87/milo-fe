@@ -56,6 +56,9 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
   const iconRadius = 170;
   const iconSize = 32;
 
+  const maxValue = Math.max(...emotionValues);
+  const chartMax = maxValue > 40 ? Math.ceil(maxValue / 10) * 10 : 40;
+
   const data = {
     labels: ['', '', '', '', ''],
     datasets: [
@@ -89,7 +92,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     scales: {
       r: {
         min: 0,
-        max: 40, // 최대값 고정 (시각 강조)
+        max: chartMax, // 최대값 고정 (시각 강조)
         ticks: { display: false },
         pointLabels: { display: false },
         grid: { color: '#ccc' },

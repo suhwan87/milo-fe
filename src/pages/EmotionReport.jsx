@@ -37,9 +37,9 @@ const EmotionReport = () => {
     const isToday = date === today;
 
     const userId = localStorage.getItem('userId');
+    const accessToken = localStorage.getItem('token');
     const lastChatEnd = localStorage.getItem(`lastChatEnd_${userId}`);
     const lastEnd = parseInt(lastChatEnd, 10);
-    const accessToken = localStorage.getItem('token');
 
     try {
       const res = await api.get(`/api/report/daily?date=${date}`, {
@@ -48,9 +48,11 @@ const EmotionReport = () => {
 
       const reportData = res.data;
       const createdAt = new Date(reportData.createdAt).getTime();
+      const mainEmotion = reportData.mainEmotion;
 
-      if (pollingTokenRef.current !== token) return; // ✅ 토큰이 다르면 무시
+      if (pollingTokenRef.current !== token) return;
 
+      // ✅ 오늘이고, 채팅 기록 있음, 리포트가 채팅 이후 생성되지 않았으면 → polling
       if (
         isToday &&
         lastChatEnd &&
@@ -60,9 +62,10 @@ const EmotionReport = () => {
         setLoading(true);
         setTimeout(() => {
           setRetryCount((prev) => prev + 1);
-          fetchReport(dateObj, token);
+          fetchReport(dateObj, token); // 꼭 token 넘겨야 함
         }, RETRY_INTERVAL);
       } else {
+        // ✅ 최신 리포트 또는 과거 리포트
         setReport(reportData);
         setNotFound(false);
         setLoading(false);
@@ -70,18 +73,21 @@ const EmotionReport = () => {
     } catch (err) {
       if ([400, 404].includes(err.response?.status)) {
         if (isToday && lastChatEnd && retryCount < MAX_RETRY) {
-          // ✅ 오늘이고, 리포트는 아직 없음 (예: 채팅 직후)
+          // ✅ 오늘이고, 리포트 아직 없음 → polling
           setLoading(true);
           setTimeout(() => {
             setRetryCount((prev) => prev + 1);
-            fetchReport(dateObj, token); // 🔥 token 포함 중요
+            fetchReport(dateObj, token);
           }, RETRY_INTERVAL);
         } else {
-          // ✅ 과거나 retry 초과 → 진짜 리포트 없음
+          // ✅ 과거거나 retry 초과 → 진짜 없음
           setNotFound(true);
           setReport(null);
           setLoading(false);
         }
+      } else {
+        console.error('리포트 조회 실패:', err);
+        setLoading(false);
       }
     }
   };
