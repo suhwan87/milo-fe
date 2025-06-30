@@ -81,8 +81,20 @@ function Login() {
           ←
         </button>
         <div className="character-logo">
-          <img src={loginCharacter} alt="milo 캐릭터" className="character1" />
-          <h2 className="logo1">Milo.</h2>
+          <img
+            src={loginCharacter}
+            alt="milo 캐릭터"
+            className="character1"
+            onClick={() => handleNavigate('/')} // ✅ 클릭 시 스플래시로 이동
+            style={{ cursor: 'pointer' }}
+          />
+          <h2
+            className="logo1"
+            onClick={() => handleNavigate('/')} // ✅ 클릭 시 스플래시로 이동
+            style={{ cursor: 'pointer' }}
+          >
+            Milo.
+          </h2>
         </div>
         <form className="login-form" onSubmit={handleLogin}>
           아이디
