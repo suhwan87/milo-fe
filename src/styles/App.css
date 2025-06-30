@@ -134,3 +134,18 @@ p {
   overflow: unset;
   padding-bottom: 0px; /* 하단 여백 추가 */
 }
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px); /* 조금 아래로 흐르듯 사라짐 */
+  }
+}

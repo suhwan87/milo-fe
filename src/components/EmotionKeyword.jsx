@@ -64,7 +64,7 @@ const EmotionKeyword = () => {
             <span className="keyword-badge">불러오는 중...</span>
           ) : notFound ? (
             <span className="keyword-badge">
-              감정을 찾는 중... 로딩이 조금 긴가 봐요 🙃
+              아직 오늘의 감정이 등록되지 않았어요. 어떤 하루를 보내셨나요?
             </span>
           ) : (
             keywords.map((word, idx) => (
