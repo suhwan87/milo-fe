@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/EmotionKeyword.css';
 import bookIcon from '../assets/icons/report_image.png';
-import api from '../config/axios'; // axios 추가
+import api from '../config/axios';
 
 const EmotionKeyword = () => {
   const [keywords, setKeywords] = useState([]);
@@ -11,18 +11,48 @@ const EmotionKeyword = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 오늘의 감정 키워드 불러오기
   useEffect(() => {
-    const fetchTodayReport = async () => {
-      try {
-        const today = new Date().toISOString().split('T')[0];
-        const token = localStorage.getItem('accessToken');
+    const MAX_RETRY = 5;
+    const RETRY_INTERVAL = 1500;
 
+    // 오늘 날짜, 토큰, 유저 정보 및 마지막 채팅 종료 시간 가져오기
+    const today = new Date().toISOString().split('T')[0];
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const lastChatEnd = parseInt(
+      localStorage.getItem(`lastChatEnd_${userId}`),
+      10
+    );
+
+    let retryCount = 0;
+    let timeoutId;
+
+    // 오늘 리포트 요청 함수
+    const fetchTodayReport = async () => {
+      setLoading(true);
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // 오늘 날짜 기준 리포트 요청
         const res = await api.get(`/api/report/daily?date=${today}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const mainEmotion = res.data?.mainEmotion;
+        const report = res.data;
+        const createdAt = new Date(report.createdAt).getTime();
+
+        if (createdAt <= lastChatEnd && retryCount < MAX_RETRY) {
+          retryCount++;
+          timeoutId = setTimeout(fetchTodayReport, RETRY_INTERVAL);
+          return;
+        }
+
+        // 리포트 수신 완료
+        const mainEmotion = report.mainEmotion;
         if (mainEmotion) {
           setKeywords([mainEmotion]);
           setNotFound(false);
@@ -30,21 +60,30 @@ const EmotionKeyword = () => {
           setKeywords([]);
           setNotFound(true);
         }
+
+        setLoading(false);
       } catch (err) {
         if ([400, 404].includes(err.response?.status)) {
+          if (retryCount < MAX_RETRY) {
+            retryCount++;
+            timeoutId = setTimeout(fetchTodayReport, RETRY_INTERVAL);
+            return;
+          }
           setNotFound(true);
-        } else {
-          console.error('오늘의 리포트 조회 실패:', err);
         }
-      } finally {
+
         setLoading(false);
       }
     };
 
     fetchTodayReport();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
-  // 카드 클릭 시 리포트 상세 페이지 이동
+  // 카드 클릭 시 리포트 상세 페이지로 이동
   const handleClick = () => {
     navigate('/emotion-report');
   };
