@@ -1,4 +1,4 @@
-// src/components/EmotionArchive.jsx
+// 메인 화면 감정 아카이빙 섹션 컴포넌트
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/EmotionArchive.css';
@@ -9,7 +9,7 @@ const EmotionArchive = () => {
   const navigate = useNavigate();
   const [recordCount, setRecordCount] = useState(0);
 
-  // 이번달 감정 기록 수 가져오기
+  // 이번 달 감정 기록 횟수 불러오기
   useEffect(() => {
     const fetchRecordCount = async () => {
       try {
@@ -36,7 +36,7 @@ const EmotionArchive = () => {
     fetchRecordCount();
   }, []);
 
-  // 기록 수에 따른 문구 설정
+  // 기록 횟수에 따른 안내 문구 반환
   const getArchiveSub = () => {
     if (recordCount <= 2)
       return '오늘의 감정을 한 번 더 남겨보는 건 어때요? 🌱';

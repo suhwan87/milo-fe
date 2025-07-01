@@ -1,3 +1,4 @@
+// 회복 문장 보관함 공통 컴포넌트
 import React, { useState, useEffect } from 'react';
 import '../styles/FolderDetailView.css';
 import api from '../config/axios';
@@ -14,7 +15,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
   const CARD_WIDTH = 355;
   const CARD_MARGIN = 20;
 
-  // ✅ 회복 문장 조회
+  // 폴더 내 회복 문장 조회 + 분석 리포트 연동
   useEffect(() => {
     const fetchSentencesWithEmotion = async () => {
       try {
@@ -43,7 +44,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
           })
         );
 
-        // 🔽 최신순 정렬 후 상태 설정
+        // 최신순 정렬 후 상태 설정
         setSentences(
           enriched.sort(
             (a, b) =>
@@ -60,7 +61,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
     fetchSentencesWithEmotion();
   }, [folder.folderId]);
 
-  // ✅ 문장 삭제 처리
+  // 문장 삭제 처리
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -68,16 +69,16 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
         headers: { Authorization: `Bearer ${token}` },
         data: {
           folderId: folder.folderId,
-          sentenceId: selectedSentence.sentenceId, // ✅ 고유 ID로 삭제
+          sentenceId: selectedSentence.sentenceId, // 고유 ID로 삭제
         },
       });
 
+      // 삭제 후 상태 갱신 및 인덱스 조정
       setSentences((prev) => {
         const updated = prev.filter(
           (s) => s.sentenceId !== selectedSentence.sentenceId
         );
 
-        // ✅ 삭제 후 슬라이드 인덱스 조정
         setCurrentIndex((prevIndex) =>
           prevIndex >= updated.length && updated.length > 0
             ? updated.length - 1
@@ -88,14 +89,14 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
       });
 
       setShowDeleteModal(false);
-      onSentenceDelete?.(); // ✅ count 갱신 등
+      onSentenceDelete?.(); // count 갱신 등
     } catch (err) {
       console.error('삭제 실패:', err);
       alert('문장 삭제 중 오류가 발생했어요.');
     }
   };
 
-  // ✅ 문장 수정 처리
+  // 문장 수정 처리
   const handleEditSave = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -126,7 +127,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
     }
   };
 
-  // 슬라이드 이동
+  // 슬라이드 이동 핸들러
   const slideTo = (dir) => {
     if (dir === 'prev' && currentIndex > 0) setCurrentIndex((prev) => prev - 1);
     if (dir === 'next' && currentIndex < sentences.length - 1)
@@ -148,6 +149,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
           <p className="loading-message"></p>
         ) : sentences.length > 0 ? (
           <div className="folder-sentence-card-wrapper">
+            {/* 왼쪽 화살표 */}
             <button
               className="folder-arrow-btn"
               onClick={() => slideTo('prev')}
@@ -156,6 +158,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
               〈
             </button>
 
+            {/* 슬라이드 카드 영역 */}
             <div
               className="slider-track"
               onTouchStart={(e) => setStartX(e.targetTouches[0].clientX)}
@@ -218,6 +221,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
               ))}
             </div>
 
+            {/* 오른쪽 화살표 */}
             <button
               className="folder-arrow-btn"
               onClick={() => slideTo('next')}
@@ -231,6 +235,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
         )}
       </div>
 
+      {/* 삭제 모달 */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -250,6 +255,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
         </div>
       )}
 
+      {/* 수정 모달 */}
       {showEditModal && (
         <div className="modal-overlay">
           <div className="modal-content">

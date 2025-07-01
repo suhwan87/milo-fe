@@ -1,4 +1,4 @@
-// src/config/auth.js
+// JWT 토큰 발급 관련 코드
 export const isAuthenticated = () => {
   const token = localStorage.getItem('token');
   return !!token;

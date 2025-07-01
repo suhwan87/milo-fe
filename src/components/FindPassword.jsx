@@ -1,3 +1,4 @@
+// 비밀번호 찾기 컴포넌트
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../config/axios';
@@ -11,6 +12,7 @@ function FindPassword() {
   const [tempPassword, setTempPassword] = useState('');
   const navigate = useNavigate();
 
+  // 임시 비밀번호 발급 요청
   const handleFindPassword = async (e) => {
     e.preventDefault();
     try {
@@ -19,9 +21,9 @@ function FindPassword() {
         userId,
         email,
       });
-      setTempPassword(res.data.tempPassword); // ✅ 임시 비밀번호 저장
+      setTempPassword(res.data.tempPassword); // 성공 시 임시 비밀번호 저장
     } catch (err) {
-      setTempPassword(''); // 실패 시 비워두기
+      setTempPassword(''); // 실패 시 결과 초기화
     } finally {
       setSearchAttempted(true);
     }
@@ -36,6 +38,8 @@ function FindPassword() {
         ←
       </button>
       <h2 className="findpw-title">비밀번호 찾기</h2>
+
+      {/* 사용자 정보 입력 폼 */}
       <form onSubmit={handleFindPassword} className="findpw-form">
         <input
           type="text"
@@ -61,6 +65,7 @@ function FindPassword() {
         <button type="submit">비밀번호 찾기</button>
       </form>
 
+      {/* 결과 박스 렌더링 */}
       {searchAttempted && (
         <div className="result-box">
           {tempPassword ? (
@@ -78,6 +83,7 @@ function FindPassword() {
               </div>
             </div>
           ) : (
+            // 실패 시 안내 메시지 및 대안 버튼
             <div className="fail-box">
               <p className="no-result">일치하는 정보가 없습니다.</p>
               <div className="button-group">

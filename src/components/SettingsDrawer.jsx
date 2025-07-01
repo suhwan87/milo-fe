@@ -1,3 +1,4 @@
+// 메인 화면 설정 창 컴포넌트
 import React from 'react';
 import '../styles/SettingsDrawer.css';
 import { useNavigate } from 'react-router-dom';
@@ -7,12 +8,12 @@ import { RiChatSmile3Line } from 'react-icons/ri';
 import { RxReset } from 'react-icons/rx';
 import { FiInfo, FiLogOut, FiTrash2 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
-import api from '../config/axios'; // ✅ axios 인스턴스
+import api from '../config/axios';
 
 const SettingsDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-  // ✅ 앱 초기화: localStorage 전체 삭제
+  // 앱 초기화: localStorage 전체 삭제
   const handleResetApp = async () => {
     const result = await Swal.fire({
       title: '앱 초기화',
@@ -42,7 +43,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         },
       });
 
-      // ✅ 전체 초기화 후 필요한 정보 복원
+      // 전체 초기화 후 필요한 정보 복원
       localStorage.clear();
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
@@ -65,7 +66,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
     }
   };
 
-  // ✅ 로그아웃: 토큰만 삭제 + 로그인 이동
+  // 로그아웃: 토큰만 삭제 + 로그인 이동
   const handleLogout = () => {
     Swal.fire({
       title: '정말 로그아웃하시겠어요?',
@@ -79,9 +80,9 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         const userId = localStorage.getItem('userId');
-        localStorage.removeItem('token'); // ✅ 토큰만 제거
+        localStorage.removeItem('token'); // 토큰만 제거
         localStorage.removeItem(`lastChatEnd_${userId}`);
-        navigate('/login', { replace: true }); // ✅ replace로 뒤로가기 차단
+        navigate('/login', { replace: true }); // replace로 뒤로가기 차단
       }
     });
   };
@@ -103,6 +104,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
           <span>설정</span>
         </div>
 
+        {/* 회원정보 섹션 */}
         <div className="drawer-section">
           <p className="setting-section-title">회원정보</p>
           <div
@@ -121,6 +123,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
           </div>
         </div>
 
+        {/* 챗봇 섹션 */}
         <div className="drawer-section">
           <p className="setting-section-title">챗봇</p>
           <div
@@ -135,6 +138,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
           </div>
         </div>
 
+        {/* 서비스 관련 섹션 */}
         <div className="drawer-section">
           <p className="setting-section-title">서비스</p>
           <div
@@ -157,6 +161,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
           </div>
         </div>
 
+        {/* 하단 회원 탈퇴 */}
         <div
           className="drawer-footer"
           onClick={() => navigate('/settings/Withdraw')}

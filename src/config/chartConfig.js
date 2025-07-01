@@ -9,7 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 
-// ⛔️ 없으면 radar 차트 안 뜨고 radialLinear 에러남
+// 없으면 radar 차트 안 뜨고 radialLinear 에러남
 ChartJS.register(
   RadialLinearScale,
   PointElement,

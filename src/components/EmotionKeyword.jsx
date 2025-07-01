@@ -1,3 +1,4 @@
+// 메인 화면 분석 리포트 섹션 컴포넌트
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/EmotionKeyword.css';
@@ -10,6 +11,7 @@ const EmotionKeyword = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // 오늘의 감정 키워드 불러오기
   useEffect(() => {
     const fetchTodayReport = async () => {
       try {
@@ -42,6 +44,7 @@ const EmotionKeyword = () => {
     fetchTodayReport();
   }, []);
 
+  // 카드 클릭 시 리포트 상세 페이지 이동
   const handleClick = () => {
     navigate('/emotion-report');
   };
