@@ -35,7 +35,14 @@ const AppLayout = ({ children }) => {
     } else {
       closeDrawer(); // 메인 외에는 항상 drawer 닫기
     }
-  }, [location.pathname]);
+  }, [
+    location.pathname,
+    shouldAutoOpen,
+    openDrawer,
+    closeDrawer,
+    setShouldAutoOpen,
+    isMainPage,
+  ]);
 
   // 토큰 만료 여부 확인 → 만료 시 로그아웃 처리
   useEffect(() => {

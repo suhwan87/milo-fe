@@ -35,6 +35,27 @@ const ChatBot2 = () => {
 
   // 컴포넌트 마운트 시 유저 유효성 확인 및 채팅 로그 불러오기
   useEffect(() => {
+    // 역할극 로그 불러오기
+    const fetchLogs = async () => {
+      try {
+        const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
+        const logs = res.data.flatMap((log) => [
+          {
+            sender: 'user',
+            text: log.sender,
+            time: formatTime(log.createdAt),
+          },
+          {
+            sender: 'bot',
+            text: log.responder,
+            time: formatTime(log.createdAt),
+          },
+        ]);
+        setMessages(logs);
+      } catch (err) {
+        console.error('대화 로그 불러오기 실패:', err);
+      }
+    };
     if (!userId) {
       Swal.fire({
         title: '오류 발생',
@@ -66,28 +87,6 @@ const ChatBot2 = () => {
       inputRef.current.focus();
     }
   }, [messages]);
-
-  // 역할극 로그 불러오기
-  const fetchLogs = async () => {
-    try {
-      const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
-      const logs = res.data.flatMap((log) => [
-        {
-          sender: 'user',
-          text: log.sender,
-          time: formatTime(log.createdAt),
-        },
-        {
-          sender: 'bot',
-          text: log.responder,
-          time: formatTime(log.createdAt),
-        },
-      ]);
-      setMessages(logs);
-    } catch (err) {
-      console.error('대화 로그 불러오기 실패:', err);
-    }
-  };
 
   // 메시지 전송
   const handleSend = async () => {

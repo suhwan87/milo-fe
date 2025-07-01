@@ -95,7 +95,7 @@ function SignUp() {
 
     // 회원가입 요청
     try {
-      const response = await api.post('/api/users/register', {
+      await api.post('/api/users/register', {
         userId: id,
         password,
         nickname,

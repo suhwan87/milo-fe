@@ -54,6 +54,12 @@ function RolePlay() {
     checkCharacter();
   }, [navigate]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [step]);
+
   // 입력창 높이 자동 조절
   const handleChange = (e) => {
     setInputValue(e.target.value);
@@ -144,7 +150,13 @@ function RolePlay() {
         >
           ←
         </span>
-        <span className="roleplay-title">Milo.</span>
+        <span
+          className="roleplay-title"
+          onClick={() => navigate('/main')}
+          style={{ cursor: 'pointer' }} // 👉 클릭 가능하게 커서 스타일 변경
+        >
+          Milo.
+        </span>
         <span className="header-space" />
       </div>
 
