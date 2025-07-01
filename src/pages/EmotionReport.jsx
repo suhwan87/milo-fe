@@ -49,7 +49,6 @@ const EmotionReport = () => {
 
       const reportData = res.data;
       const createdAt = new Date(reportData.createdAt).getTime();
-      const mainEmotion = reportData.mainEmotion;
 
       if (pollingTokenRef.current !== token) return;
 

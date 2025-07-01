@@ -141,7 +141,7 @@
   align-items: center;
   gap: 2px;
   z-index: 1;
-  -webkit-user-drag: none; 
+  -webkit-user-drag: none;
   user-select: none;
 }
 
