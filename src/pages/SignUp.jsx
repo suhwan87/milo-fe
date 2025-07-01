@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SignUp.css';
-import api from '../config/axios'; // ✅ axios 인스턴스 사용
+import api from '../config/axios'; // axios 인스턴스 사용
 import Swal from 'sweetalert2';
 
 function SignUp() {
@@ -187,33 +187,43 @@ function SignUp() {
           />
 
           <div className="checkbox-row">
-            <input
-              type="checkbox"
-              id="privacy"
-              checked={agreePrivacy}
-              onChange={(e) => setAgreePrivacy(e.target.checked)}
-            />
+            {/* 개인정보 수집 및 이용 */}
+            <label htmlFor="privacy" className="checkbox-label">
+              <input
+                type="checkbox"
+                id="privacy"
+                checked={agreePrivacy}
+                onChange={(e) => setAgreePrivacy(e.target.checked)}
+              />
+              <span className="terms-text">개인정보 수집 및 이용</span>
+            </label>
             <span
-              onClick={() => setShowPrivacyModal(true)}
-              className="terms-text"
+              className="required"
+              onClick={() => setShowPrivacyModal(true)} // 더보기 모달은 (필수)를 클릭해야 열림
+              style={{ cursor: 'pointer' }}
             >
-              개인정보 수집 및 이용
+              (필수)
             </span>
-            <span className="required">(필수)</span>
+
             <br />
-            <input
-              type="checkbox"
-              id="service"
-              checked={agreeService}
-              onChange={(e) => setAgreeService(e.target.checked)}
-            />
+
+            {/* 서비스 이용약관 */}
+            <label htmlFor="service" className="checkbox-label">
+              <input
+                type="checkbox"
+                id="service"
+                checked={agreeService}
+                onChange={(e) => setAgreeService(e.target.checked)}
+              />
+              <span className="terms-text">서비스 이용약관</span>
+            </label>
             <span
-              onClick={() => setShowServiceModal(true)}
-              className="terms-text"
+              className="required"
+              onClick={() => setShowServiceModal(true)} // 더보기 모달은 (필수)를 클릭해야 열림
+              style={{ cursor: 'pointer' }}
             >
-              서비스 이용약관
+              (필수)
             </span>
-            <span className="required">(필수)</span>
           </div>
 
           {agreementError && <p className="error-message">{agreementError}</p>}
@@ -224,8 +234,14 @@ function SignUp() {
         </form>
 
         {showPrivacyModal && (
-          <div className="modal-overlay">
-            <div className="modal">
+          <div
+            className="modal-overlay"
+            onClick={() => setShowPrivacyModal(false)} // 오버레이 클릭 시 닫기
+          >
+            <div
+              className="modal"
+              onClick={(e) => e.stopPropagation()} // 모달 내부 클릭은 이벤트 버블링 차단
+            >
               <h3>개인정보 수집 및 이용</h3>
               <p>
                 당신의 정보는 마일로가 소중히 다룰게요!
@@ -241,8 +257,14 @@ function SignUp() {
         )}
 
         {showServiceModal && (
-          <div className="modal-overlay">
-            <div className="modal">
+          <div
+            className="modal-overlay"
+            onClick={() => setShowServiceModal(false)} // 오버레이 클릭 시 닫기
+          >
+            <div
+              className="modal"
+              onClick={(e) => e.stopPropagation()} // 모달 내부는 클릭 무시
+            >
               <h3>서비스 이용약관</h3>
               <p>
                 1. 마일로는 여러분의 감정을 진심으로 존중합니다

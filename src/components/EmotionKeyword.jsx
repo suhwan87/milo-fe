@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/EmotionKeyword.css';
 import bookIcon from '../assets/icons/report_image.png';
-import api from '../config/axios'; // ✅ axios 추가
+import api from '../config/axios'; // axios 추가
 
 const EmotionKeyword = () => {
   const [keywords, setKeywords] = useState([]);

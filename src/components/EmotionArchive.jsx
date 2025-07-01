@@ -9,7 +9,7 @@ const EmotionArchive = () => {
   const navigate = useNavigate();
   const [recordCount, setRecordCount] = useState(0);
 
-  // ✅ 이번달 감정 기록 수 가져오기
+  // 이번달 감정 기록 수 가져오기
   useEffect(() => {
     const fetchRecordCount = async () => {
       try {
@@ -36,7 +36,7 @@ const EmotionArchive = () => {
     fetchRecordCount();
   }, []);
 
-  // ✅ 기록 수에 따른 문구 설정
+  // 기록 수에 따른 문구 설정
   const getArchiveSub = () => {
     if (recordCount <= 2)
       return '오늘의 감정을 한 번 더 남겨보는 건 어때요? 🌱';

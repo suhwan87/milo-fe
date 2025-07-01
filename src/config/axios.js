@@ -19,4 +19,19 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // ❗ 401 Unauthorized 응답 → 토큰 만료 or 위조
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+
+      // 강제 리다이렉트
+      window.location.href = '/login'; // 또는 navigate('/login')
+    }
+
+    return Promise.reject(error);
+  }
+);
 export default instance;
