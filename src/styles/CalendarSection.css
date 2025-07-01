@@ -1,4 +1,4 @@
-/* 📌 전체 달력 슬라이드 (토글 + 뷰 포함) */
+/* 전체 달력 슬라이드 (토글 + 뷰 포함) */
 .calendar-slide-wrapper {
   position: fixed;
   bottom: 0;
@@ -16,11 +16,11 @@
 }
 
 .calendar-slide-wrapper.open {
-  transform: translateX(-50%) translateY(0%); /* 위로 슬라이드*/
+  transform: translateX(-50%) translateY(0%);
   overflow: visible;
 }
 
-/* 👇 하단 토글바 */
+/* 하단 토글바 */
 .calendar-toggle-bar {
   background: #ffae63;
   border-radius: 24px 24px 0 0;
@@ -36,7 +36,7 @@
   cursor: pointer;
 }
 
-/* 📅 버튼 (플로팅 버튼 느낌) */
+/* 버튼 (플로팅 버튼 느낌) */
 .calendar-fab {
   background: #3dafff;
   color: white;
@@ -44,8 +44,8 @@
   border-radius: 50%;
   width: 54px;
   height: 54px;
-  font-size: 28px; /* ✅ 아이콘 크기 조절 */
-  display: flex; /* ✅ 가운데 정렬 */
+  font-size: 28px;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -54,7 +54,7 @@
   transform: translateY(-50%);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.11);
   cursor: pointer;
-  padding: 0; /* ✅ padding 제거로 크기 정확히 맞춤 */
+  padding: 0;
 }
 
 /* 텍스트 구성 */
@@ -75,7 +75,7 @@
   font-weight: normal;
 }
 
-/* 👇 달력 내용 */
+/* 달력 내용 */
 .calendar-view {
   padding: 24px 18px;
   border-top: 1px solid #eee;
@@ -123,7 +123,7 @@
   width: 60%;
   height: 4px;
   border-radius: 2px;
-  background-color: #ffa94d; /* 감정 리포트 존재 표시 */
+  background-color: #ffa94d;
 }
 
 .calendar-days .selected {
@@ -133,7 +133,7 @@
   font-weight: bold;
 }
 
-/* 🔒 하단 덮힘 방지용 여백 (EmotionReport.css에 있으면 좋음) */
+/* 하단 덮힘 방지용 여백 */
 .report-container {
   padding-bottom: 100px;
 }
@@ -144,11 +144,11 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 598px; /* 앱 화면 폭 기준 */
+  max-width: 598px;
   height: 100vh;
-  background: transparent; /* 클릭은 가능하지만 안 보이게 */
-  background-color: rgba(153, 153, 153, 0.6); /* ✅ #999 투명 버전 */
-  z-index: 180; /* 슬라이드보다 낮고, 컨텐츠보다는 높게 */
+  background: transparent;
+  background-color: rgba(153, 153, 153, 0.6);
+  z-index: 180;
 }
 
 .calendar-nav {

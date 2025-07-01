@@ -17,9 +17,11 @@
 - [🤯 트러블슈팅 요약](#-트러블슈팅-요약)
 - [👨‍👩‍👧‍👦 팀원 역할](#-팀원-역할)
 - [📄 라이선스](#-라이선스)
+
 ---
 
-# 🧠 마음을 기억하는 챗봇, Milo  
+# 🧠 마음을 기억하는 챗봇, Milo
+
 > (Agent Tool 기반 AI 정서 케어 챗봇 서비스)
 
 <div align="center">
@@ -30,7 +32,8 @@
 ---
 
 ## 👀 서비스 소개
-- **서비스명**: Milo  
+
+- **서비스명**: Milo
 - **서비스 설명**:  
   정서 표현이 어려운 사람들을 위한 **AI 기반 정서지원 챗봇 플랫폼**  
   사용자의 감정을 기억하고, 분석하고, 회복 문장과 위로 메시지를 제공합니다.  
@@ -39,11 +42,13 @@
 ---
 
 ## 📅 프로젝트 기간
+
 2025.05.14 ~ 2025.07.10 (약 8주)
 
 ---
 
 ## 📎 GitHub 주소 (Frontend / Backend / AI)
+
 - Frontend : https://github.com/suhwan87/milo-fe <br>
 - Backend (Spring) : https://github.com/suhwan87/milo-be <br>
 - AI Server (FastAPI) : https://github.com/julle0123/milo-ai
@@ -52,15 +57,15 @@
 
 ## ⭐ 주요 기능
 
-| 구분         | 설명                                                                 |
-|--------------|----------------------------------------------------------------------|
-| 상담 챗봇     | 감정을 분석하고 위로의 말을 건네는 GPT 기반 상담 챗봇              |
-| 역할극 챗봇   | 이름/관계/말투/상황을 설정한 감정 리허설 챗봇                       |
-| 감정 리포트   | 일일/월간 감정 흐름 요약 리포트 생성 및 저장                        |
-| 회복 문장     | 유사 감정 기반 회복 문장 저장 보관함 구성                          |
-| 회복 컨텐츠   | 대화 중 사용자의 감정 변동에 따라 감정 회복 컨텐츠 추천               |
-| 시각화 기능   | 감정 이모지 캘린더 / 월간 감정 레이더 차트                         |
-| 위험 감지     | 감정 분석 결과 위기 신호 시 안정 응답 + 기관 연결                  |
+| 구분        | 설명                                                    |
+| ----------- | ------------------------------------------------------- |
+| 상담 챗봇   | 감정을 분석하고 위로의 말을 건네는 GPT 기반 상담 챗봇   |
+| 역할극 챗봇 | 이름/관계/말투/상황을 설정한 감정 리허설 챗봇           |
+| 감정 리포트 | 일일/월간 감정 흐름 요약 리포트 생성 및 저장            |
+| 회복 문장   | 유사 감정 기반 회복 문장 저장 보관함 구성               |
+| 회복 컨텐츠 | 대화 중 사용자의 감정 변동에 따라 감정 회복 컨텐츠 추천 |
+| 시각화 기능 | 감정 이모지 캘린더 / 월간 감정 레이더 차트              |
+| 위험 감지   | 감정 분석 결과 위기 신호 시 안정 응답 + 기관 연결       |
 
 ---
 
@@ -124,25 +129,24 @@
 
 ## 🛠 기술 스택
 
-| 구분 | 사용 기술 |
-|------|-----------|
-| **Frontend** | ![](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white) <br> ![](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white) ![](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)|
-| **Backend** | ![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![](https://img.shields.io/badge/JPA-007396?style=for-the-badge&logo=hibernate&logoColor=white) ![](https://img.shields.io/badge/SpringSecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) ![](https://img.shields.io/badge/Lombok-EC722E?style=for-the-badge&logo=lombok&logoColor=white) <br>![](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black) ![](https://img.shields.io/badge/RESTful_API-000000?style=for-the-badge) ![](https://img.shields.io/badge/CORS_Global-FFB300?style=for-the-badge) ![](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)|
-| **AI Server** | ![](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![](https://img.shields.io/badge/Pydantic-007EC6?style=for-the-badge) ![](https://img.shields.io/badge/SQLAlchemy-FFCA28?style=for-the-badge) ![](https://img.shields.io/badge/Uvicorn-000000?style=for-the-badge) |
-| **AI & LLM** | ![](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white) ![](https://img.shields.io/badge/LangChain-000000?style=for-the-badge) ![](https://img.shields.io/badge/AgentTool-0A0A0A?style=for-the-badge) ![](https://img.shields.io/badge/RAG-000000?style=for-the-badge) |
-| **Database** | ![](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![](https://img.shields.io/badge/Qdrant-1A1A1A?style=for-the-badge) |
-| **Infra / Deploy** | ![](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![](https://img.shields.io/badge/NaverCloud-03C75A?style=for-the-badge&logo=naver&logoColor=white) |
-| **개발 도구** | ![](https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=intellijidea&logoColor=white) ![](https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white) ![](https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white) |
-| **기획 / 디자인 도구** | ![](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) ![](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) |
-| **협업 도구** | ![](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) |
-
+| 구분                   | 사용 기술                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**           | ![](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white) <br> ![](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white) ![](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)                                                                                                                                                                         |
+| **Backend**            | ![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) ![](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![](https://img.shields.io/badge/JPA-007396?style=for-the-badge&logo=hibernate&logoColor=white) ![](https://img.shields.io/badge/SpringSecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) ![](https://img.shields.io/badge/Lombok-EC722E?style=for-the-badge&logo=lombok&logoColor=white) <br>![](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black) ![](https://img.shields.io/badge/RESTful_API-000000?style=for-the-badge) ![](https://img.shields.io/badge/CORS_Global-FFB300?style=for-the-badge) ![](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) |
+| **AI Server**          | ![](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![](https://img.shields.io/badge/Pydantic-007EC6?style=for-the-badge) ![](https://img.shields.io/badge/SQLAlchemy-FFCA28?style=for-the-badge) ![](https://img.shields.io/badge/Uvicorn-000000?style=for-the-badge)                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **AI & LLM**           | ![](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white) ![](https://img.shields.io/badge/LangChain-000000?style=for-the-badge) ![](https://img.shields.io/badge/AgentTool-0A0A0A?style=for-the-badge) ![](https://img.shields.io/badge/RAG-000000?style=for-the-badge)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Database**           | ![](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![](https://img.shields.io/badge/Qdrant-1A1A1A?style=for-the-badge)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Infra / Deploy**     | ![](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![](https://img.shields.io/badge/NaverCloud-03C75A?style=for-the-badge&logo=naver&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **개발 도구**          | ![](https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=intellijidea&logoColor=white) ![](https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white) ![](https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **기획 / 디자인 도구** | ![](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) ![](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **협업 도구**          | ![](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ---
-
 
 ## 🧼 데이터 전처리 과정
 
 ### 📁 데이터 출처
+
 - AI Hub 감성 대화 말뭉치
 - CounselGPT 한국어 심리상담 데이터셋
 - 하이닥 심리상담 Q&A 크롤링
@@ -152,21 +156,25 @@
 
 ### 🔍 전처리 단계 요약
 
-| 단계 | 설명 |
-|------|------|
-| 1. 중복 제거 | 동일 문장 또는 유사도 0.95 이상 문장 필터링 |
-| 2. 비어 있는 행 제거 | 질문 또는 응답이 누락된 row 제거 |
-| 3. 감정 라벨 정제 | 대분류 감정만 추출 (예: "불안_긴장" → "불안") |
-| 4. 텍스트 분리 | 멀티턴 데이터를 싱글턴 데이터로 분리 |
-| 5. 특수문자 제거 | `[^ㄱ-ㅎ가-힣a-zA-Z0-9\s]` 패턴으로 클렌징 |
-| 6. 분류용 데이터셋 생성 | 감정 분석 학습용 `text`, `label` 컬럼 구성 |
+| 단계                    | 설명                                           |
+| ----------------------- | ---------------------------------------------- |
+| 1. 중복 제거            | 동일 문장 또는 유사도 0.95 이상 문장 필터링    |
+| 2. 비어 있는 행 제거    | 질문 또는 응답이 누락된 row 제거               |
+| 3. 감정 라벨 정제       | 대분류 감정만 추출 (예: "불안\_긴장" → "불안") |
+| 4. 텍스트 분리          | 멀티턴 데이터를 싱글턴 데이터로 분리           |
+| 5. 특수문자 제거        | `[^ㄱ-ㅎ가-힣a-zA-Z0-9\s]` 패턴으로 클렌징     |
+| 6. 분류용 데이터셋 생성 | 감정 분석 학습용 `text`, `label` 컬럼 구성     |
 
 ---
+
 ### 🧠 전처리한 데이터를 토대로 만든 감정분류 모델(hugging-face)
+
 - https://huggingface.co/Seonghaa/emotion-koelectra
 - KCELECTRA 활용
 - 만들어진 모델로 데이터 전체 감정분류 적용
+
 ---
+
 ### 🎯 최종 전처리 샘플
 
 ```csv
@@ -175,13 +183,18 @@ text,label
 "기분이 좋고 뿌듯해요. 다 잘 될 것 같아요.","기쁨"
 "그 사람이 또 나를 무시했어. 너무 화가 나.","분노"
 ```
+
 ---
+
 ### 🎒 임베딩 후 qdrant 벡터 DB 저장
+
 - openai 3-small-textembedding 모델 활용하여 감정 + 사용자입력 데이터 30만 문장 임베딩
 - metadata에 입력에 대한 응답 등을 포함하여 qdrant 벡터 DB에 저장하여 rag에 활용
+
 ---
 
 ## 📂 React 서버 디렉토리 구조
+
 --> 백엔드와 AI는 다른곳에 기록됨.
 
 ```
@@ -189,7 +202,7 @@ milo-fe/
 ├── .github/                              # GitHub Actions 관련 설정
 │   └── workflows/
 │       └── deploy.yml
-├── build/                                # 빌드 결과물 
+├── build/                                # 빌드 결과물
 ├── nginx/
 │   └── default.conf                      # Nginx 설정 파일
 ├── public/                               # 정적 파일 루트
@@ -281,7 +294,9 @@ milo-fe/
 ├── package.json                         # 프로젝트 의존성 및 스크립트
 └── README.md                            # 프로젝트 설명서
 ```
+
 ---
+
 ## 🛠 설치 및 실행 (React 프론트 서버)
 
 ```VScode
@@ -291,6 +306,7 @@ milo-fe/
 # 2. 개발 서버 실행 (http://localhost:3000)
 npm run start
 ```
+
 ---
 
 ## 📌 사용 예시
@@ -333,22 +349,23 @@ npm run start
 
 ## 🤯 트러블슈팅 요약
 
-| 문제 | 원인 | 해결 |
-|------|------|------|
+| 문제   | 원인   | 해결   |
+| ------ | ------ | ------ |
 | 내용~~ | 내용~~ | 내용~~ |
 
 ---
 
 ## 👨‍👩‍👧‍👦 팀원 역할
 
-| 이름 | 역할 | GitHub                                       |
-|------|------|----------------------------------------------|
-| 김성하 | PM / 데이터 전처리 / DB 설계 / ERD 설계 / AI 모델링 / FastAPI 서버 | [@julle0123](https://github.com/julle0123)   |
-| 정수한 | 데이터 수집 / 데이터 전처리 / 프롬프트 설계 / AI 모델링 / FastAPI 서버 | [@s2-honey](https://github.com/s2-honey) |
-| 김수환 | 프론트엔드 구현 / UI 구성 / 디자인 / Spring Boot API / DB 연동  | [@suhwan87](https://github.com/suhwan87)     |
-| 김서연 | 프론트엔드 구현 / UI 구성 / 디자인 /  Spring Boot API / DB 연동  | [@kimseoyeon21](https://github.com/kimseoyeon21) |
+| 이름   | 역할                                                                   | GitHub                                           |
+| ------ | ---------------------------------------------------------------------- | ------------------------------------------------ |
+| 김성하 | PM / 데이터 전처리 / DB 설계 / ERD 설계 / AI 모델링 / FastAPI 서버     | [@julle0123](https://github.com/julle0123)       |
+| 정수한 | 데이터 수집 / 데이터 전처리 / 프롬프트 설계 / AI 모델링 / FastAPI 서버 | [@s2-honey](https://github.com/s2-honey)         |
+| 김수환 | 프론트엔드 구현 / UI 구성 / 디자인 / Spring Boot API / DB 연동         | [@suhwan87](https://github.com/suhwan87)         |
+| 김서연 | 프론트엔드 구현 / UI 구성 / 디자인 / Spring Boot API / DB 연동         | [@kimseoyeon21](https://github.com/kimseoyeon21) |
 
 ---
+
 ## 📄 라이선스
 
-본 프로젝트는 오픈된 학습 자료로 누구나 자유롭게 사용할 수 있습니다.  
+본 프로젝트는 오픈된 학습 자료로 누구나 자유롭게 사용할 수 있습니다.

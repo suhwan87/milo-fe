@@ -1,4 +1,4 @@
-// src/components/ReportHeader.jsx
+// 분석 리포트 페이지 헤더 컴포넌트
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ReportHeader.css';

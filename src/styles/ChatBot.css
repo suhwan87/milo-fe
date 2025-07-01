@@ -1,4 +1,4 @@
-/* 📦 전체 채팅 레이아웃 */
+/* 전체 채팅 레이아웃 */
 .chat-container {
   height: 100vh;
   display: flex;
@@ -9,7 +9,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 📌 상단 헤더 */
+/* 상단 헤더 */
 .chat-header {
   padding: 18px 18px;
   background-color: #fff4de;
@@ -56,7 +56,7 @@
   width: 24px;
 }
 
-/* 💬 채팅 메시지 영역 */
+/* 채팅 메시지 영역 */
 .chat-body {
   flex: 1;
   overflow-y: auto;
@@ -65,7 +65,7 @@
   display: flex;
   flex-direction: column-reverse;
 
-  /* ✅ 스크롤바 숨기기 */
+  /* 스크롤바 숨기기 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE, Edge */
 }
@@ -83,7 +83,7 @@
   justify-content: flex-end;
 }
 
-/* 🐻 챗봇 캐릭터 */
+/* 챗봇 캐릭터 */
 .bot-avatar img {
   width: 50px;
 }
@@ -126,7 +126,7 @@
   }
 }
 
-/* 💬 말풍선 스타일 */
+/* 말풍선 스타일 */
 .message-bubble {
   max-width: 70%;
   padding: 12px 14px;
@@ -173,7 +173,7 @@
   clip-path: polygon(100% 0, 0 50%, 100% 100%);
 }
 
-/* 📐 말풍선 + 시간 묶음 정렬 */
+/* 말풍선 + 시간 묶음 정렬 */
 .bubble-wrapper {
   display: flex;
   align-items: flex-end;
@@ -201,7 +201,7 @@
   cursor: pointer;
 }
 
-/* 📝 메시지 입력창 */
+/* 메시지 입력창 */
 .chat-input-area {
   position: relative;
   padding: 20px 16px;

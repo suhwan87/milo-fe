@@ -1,3 +1,4 @@
+// 챗봇 대화 스타일 변경 페이지
 import { useState, useEffect } from 'react';
 import '../../styles/ChangeStyle.css';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +12,7 @@ export default function ChangeStyle() {
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
 
-  // ✅ 대화 스타일 조회
+  // 대화 스타일 조회
   useEffect(() => {
     const fetchUserPrompt = async () => {
       try {
@@ -29,7 +30,7 @@ export default function ChangeStyle() {
     fetchUserPrompt();
   }, []);
 
-  // ✅ 대화 스타일 저장
+  // 선택된 대화 스타일 저장
   const handleSaveStyle = async () => {
     const promptValue = selected === '공감형' ? 0 : 1;
 
@@ -56,6 +57,7 @@ export default function ChangeStyle() {
     }
   };
 
+  // 선택지 카드 목록
   const styles = [
     {
       type: '공감형',
@@ -84,6 +86,7 @@ export default function ChangeStyle() {
         <span className="style-title">스타일 변경</span>
       </div>
 
+      {/* 스타일 카드 리스트 */}
       <div className="style-list">
         {styles.map(({ type, description }) => (
           <div
@@ -100,6 +103,7 @@ export default function ChangeStyle() {
         ))}
       </div>
 
+      {/* 저장 버튼 */}
       <button
         className="style-save-button"
         onClick={handleSaveStyle}

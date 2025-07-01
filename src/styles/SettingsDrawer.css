@@ -1,8 +1,7 @@
-/* SettingsDrawer.css */
-
-/* ✅ 앱 내부에만 슬라이드 오버레이 적용 */
+/* 설청창 영역 */
+/* 앱 내부에만 슬라이드 오버레이 적용 */
 .drawer-overlay {
-  position: absolute; /* fixed → absolute */
+  position: absolute;
   inset: 0;
   height: 952px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -17,9 +16,9 @@
   pointer-events: auto;
 }
 
-/* ✅ 앱 내부에서만 슬라이드 나옴 */
+/* 앱 내부에서만 슬라이드 나옴 */
 .drawer {
-  position: absolute; /* fixed → absolute */
+  position: absolute;
   top: 0;
   right: -100%;
   width: 70%;
@@ -30,7 +29,7 @@
   transition: right 0.3s ease;
   padding: 20px;
   box-sizing: border-box;
-  border-top-left-radius: 16px; /* 선택사항: 둥글게 */
+  border-top-left-radius: 16px;
   border-bottom-left-radius: 16px;
   display: flex;
   flex-direction: column;

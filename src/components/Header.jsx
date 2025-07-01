@@ -1,12 +1,10 @@
-// src/components/Header.jsx
+// 메인 화면 헤더 공통 컴포넌트
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
-import { useDrawerStore } from '../stores/useDrawerStore';
 
 const Header = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
-  const openDrawer = useDrawerStore((state) => state.openDrawer);
 
   return (
     <header className="header">

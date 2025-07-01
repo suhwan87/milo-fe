@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.10.0",
     "chart.js": "^4.4.0",
+    "eslint-plugin-react-hooks": "^6.1.0-canary-65c4decb-20250630",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.514.0",
     "react": "^19.1.0",

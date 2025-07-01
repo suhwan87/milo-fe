@@ -1,9 +1,10 @@
+// 닉네임 변경 페이지
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/ChangeNickname.css';
 import { useDrawerStore } from '../../stores/useDrawerStore';
 import Swal from 'sweetalert2';
-import api from '../../config/axios'; // ✅ axios 인스턴스
+import api from '../../config/axios';
 
 export default function ChangeNickname() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function ChangeNickname() {
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState('');
 
-  // ✅ 현재 닉네임 불러오기 (GET /api/users/me)
+  // 현재 닉네임 조회
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -32,6 +33,7 @@ export default function ChangeNickname() {
     fetchUserInfo();
   }, []);
 
+  // 닉네임 제출
   const handleSubmit = async () => {
     const trimmed = nickname.trim();
     if (!trimmed) {

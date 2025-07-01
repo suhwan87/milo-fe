@@ -2,7 +2,7 @@ name: Deploy Frontend to NCP
 
 on:
   push:
-    branches: [main] # 또는 main 브랜치라면 수정
+    branches: [main]
 
 jobs:
   deploy:

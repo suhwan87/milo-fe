@@ -36,10 +36,10 @@ import Withdraw from './pages/settings/Withdraw';
 
 function App() {
   return (
-    // ✅ scrollable-container 제거하고 Router를 직접 렌더링
+    // scrollable-container 제거하고 Router를 직접 렌더링
     <Router>
       <Routes>
-        {/* ✅ 누구나 접근 가능한 경로 */}
+        {/* 누구나 접근 가능한 경로 */}
         <Route path="/" element={<Splash />} />
         <Route
           path="/login"
@@ -74,7 +74,7 @@ function App() {
           }
         />
 
-        {/* 🔐 로그인한 사용자만 접근 가능한 경로 */}
+        {/* 로그인한 사용자만 접근 가능한 경로 */}
         <Route
           path="/main"
           element={

@@ -1,6 +1,8 @@
+// 캘린더 토글 컴포넌트
 import React from 'react';
 import '../styles/CalendarSection.css';
 
+// 날짜 정보(일/월/년)를 보여주며 클릭 시 캘린더 슬라이드 토글
 const CalendarToggle = ({ isOpen, onToggle, selectedDate }) => {
   const day = selectedDate.getDate();
   const month = selectedDate.toLocaleString('en-US', { month: 'short' });

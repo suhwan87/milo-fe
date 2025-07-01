@@ -1,3 +1,4 @@
+// 로그인 페이지
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
@@ -11,7 +12,7 @@ function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  // ✅ fadeOut이 true일 때 body overflow를 잠시 제거
+  // 페이지 전환 애니메이션 시 스크롤 방지
   useEffect(() => {
     if (fadeOut) {
       document.body.style.overflow = 'hidden';
@@ -22,24 +23,29 @@ function Login() {
     };
   }, [fadeOut]);
 
+  // 라우팅 핸들러 (페이드아웃 후 이동)
   const handleNavigate = (path) => {
     setFadeOut(true);
     setTimeout(() => navigate(path), 300);
   };
 
+  // 로그인 처리 함수
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // 폼 기본 제출 방지
 
     try {
+      // 로그인 요청
       const response = await api.post('/api/users/login', {
         userId: id,
         password: password,
       });
 
+      // 로그인 성공 시 토큰 및 ID 저장
       const { token, userId } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
 
+      // 성공 메시지 표시 후 메인으로 전환
       Swal.fire({
         title: '로그인 완료!',
         text: '환영합니다 😊',
@@ -49,7 +55,7 @@ function Login() {
         allowOutsideClick: false,
         allowEscapeKey: false,
       }).then(() => {
-        // ✅ 전환 직전에 스크롤바 제거
+        // 전환 직전에 스크롤바 제거
         document.body.style.overflow = 'hidden';
         setFadeOut(true);
 
@@ -59,6 +65,7 @@ function Login() {
         }, 300);
       });
     } catch (error) {
+      // 로그인 실패 처리
       Swal.fire({
         title: '로그인 실패!',
         text:
@@ -74,22 +81,25 @@ function Login() {
   return (
     <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
       <div className="login-container">
+        {/* Milo 로고 및 캐릭터 클릭 시 → Splash 페이지 이동 */}
         <div className="character-logo">
           <img
             src={loginCharacter}
             alt="milo 캐릭터"
             className="character1"
-            onClick={() => handleNavigate('/')} // ✅ 클릭 시 스플래시로 이동
+            onClick={() => handleNavigate('/')}
             style={{ cursor: 'pointer' }}
           />
           <h2
             className="logo1"
-            onClick={() => handleNavigate('/')} // ✅ 클릭 시 스플래시로 이동
+            onClick={() => handleNavigate('/')}
             style={{ cursor: 'pointer' }}
           >
             Milo.
           </h2>
         </div>
+
+        {/* 로그인 입력 폼 */}
         <form className="login-form" onSubmit={handleLogin}>
           아이디
           <input
@@ -107,6 +117,7 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {/* 아이디 / 비밀번호 찾기 라우팅 */}
           <div className="find-info">
             <span onClick={() => handleNavigate('/find-id')}>아이디 찾기</span>{' '}
             |{' '}
@@ -114,8 +125,10 @@ function Login() {
               비밀번호 찾기
             </span>
           </div>
+          {/* 로그인 버튼 */}
           <button type="submit">Login</button>
         </form>
+        {/* 회원가입 안내 */}
         <p className="login-footer">
           아직 계정이 없으신가요?{' '}
           <span onClick={() => handleNavigate('/signup')}>Signup</span>

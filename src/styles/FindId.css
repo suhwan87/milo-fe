@@ -1,7 +1,7 @@
 /* 아이디 찾기 전체 컨테이너 */
 .findid-container {
   width: 100%;
-    min-height: 100vh;
+  min-height: 100vh;
   padding: 50px;
   flex-direction: column;
   justify-content: center;
@@ -17,7 +17,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  z-index: 100; /* 겹치는 일 방지용 */
+  z-index: 100;
   position: absolute;
   left: 30px;
   top: 20px;

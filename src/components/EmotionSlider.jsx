@@ -1,3 +1,4 @@
+// 메인 화면 채팅 선택 슬라이드 컴포넌트
 import React, { useRef, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
@@ -23,11 +24,12 @@ const EmotionSlider = () => {
     hasAnyReport: false,
     hasTodayReport: false,
   });
-  const [hasRoleCharacter, setHasRoleCharacter] = useState(false);
+  const [hasRoleCharacter, setHasRoleCharacter] = useState(false); // 사용자 데이터 로딩 여부
 
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
+  const [isBeginning, setIsBeginning] = useState(true); // 좌측 화살표 제어용
+  const [isEnd, setIsEnd] = useState(false); // 우측 화살표 제어용
 
+  // 사용자 정보 + 감정 기록 상태 + 역할극 캐릭터 존재 여부 조회
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
@@ -62,7 +64,7 @@ const EmotionSlider = () => {
     fetchUserInfo();
   }, []);
 
-  // ✅ 인삿말 문구 조건 분기
+  // 상태값 기반 인삿말 생성 로직
   const getGreetingMessage = () => {
     const { isNewUser, hasAnyReport, hasTodayReport } = status;
 
@@ -81,12 +83,14 @@ const EmotionSlider = () => {
     return `${nickname}님,\n이어서 이야기 나눠볼까요?`;
   };
 
+  // 역할극 문구 분기
   const getRoleplayMessage = () => {
     return hasRoleCharacter
       ? '다시 그 장면으로 가볼까요?\n마일로가 무대를 열어둘게요.'
       : '무대가 준비 중이에요,\n역할을 골라주세요!';
   };
 
+  // 슬라이드 카드 목록
   const slides = [
     {
       title: '상담형',
@@ -100,6 +104,7 @@ const EmotionSlider = () => {
     },
   ];
 
+  // 슬라이드 선택 후 라우팅
   const handleStart = (index) => {
     const selected = slides[index].title;
 
@@ -118,7 +123,7 @@ const EmotionSlider = () => {
 
   return (
     <div className="slider-container">
-      {/* 🔽 좌우 네비게이션 화살표 */}
+      {/* 좌우 네비게이션 화살표 */}
       <div className="slide-nav">
         <button
           className="slide-arrow-button left"
@@ -137,6 +142,8 @@ const EmotionSlider = () => {
       </div>
 
       {!isReady && <div style={{ height: '280px' }} />}
+
+      {/* 메인 슬라이더 */}
       {isReady && (
         <Swiper
           slidesPerView={1.1}
@@ -156,11 +163,11 @@ const EmotionSlider = () => {
               swiper.pagination.update();
             }
 
-            // ✅ 초기 상태 설정
+            // 초기 상태 설정
             setIsBeginning(swiper.isBeginning);
             setIsEnd(swiper.isEnd);
 
-            // ✅ 슬라이드 변경될 때마다 상태 업데이트
+            // 슬라이드 변경될 때마다 상태 업데이트
             swiper.on('slideChange', () => {
               setIsBeginning(swiper.isBeginning);
               setIsEnd(swiper.isEnd);
@@ -200,6 +207,7 @@ const EmotionSlider = () => {
         </Swiper>
       )}
 
+      {/* 페이지네이션 표시 */}
       <div className="custom-pagination" ref={paginationRef}></div>
     </div>
   );

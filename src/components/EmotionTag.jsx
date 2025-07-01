@@ -1,4 +1,4 @@
-// src/components/EmotionTag.jsx
+// 분석 리포트 감정 키워드 컴포넌트
 import React from 'react';
 import '../styles/EmotionTag.css';
 

@@ -1,3 +1,4 @@
+// 서비스 이용약관 페이지
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Terms.css';
 import { useDrawerStore } from '../../stores/useDrawerStore';
@@ -21,6 +22,7 @@ export default function Terms() {
         <span className="terms-title">서비스 이용약관</span>
       </div>
 
+      {/* 본문 내용 */}
       <div className="terms-body">
         <h4>[면책 조항]</h4>
         <div className="terms-box">

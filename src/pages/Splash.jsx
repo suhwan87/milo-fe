@@ -1,3 +1,4 @@
+// 스플래시 페이지(앱 진입 초기 화면)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Splash.css';
@@ -7,7 +8,7 @@ function Splash() {
   const navigate = useNavigate();
   const [fadeOut, setFadeOut] = useState(false);
 
-  // ✅ Splash가 보여질 때 body 스크롤 잠금
+  // 마운트 시 스크롤 잠금 (Splash 화면에서만 전체 고정)
   useEffect(() => {
     document.body.style.overflow = 'hidden'; // 스크롤 제거
     return () => {
@@ -15,6 +16,7 @@ function Splash() {
     };
   }, []);
 
+  // '지금 시작하기' 클릭 시 → 페이드 아웃 효과 후 로그인으로 이동
   const handleStart = () => {
     setFadeOut(true);
     setTimeout(() => {
@@ -23,6 +25,7 @@ function Splash() {
   };
 
   return (
+    // Splash 전체 컨테이너
     <div className={`splash ${fadeOut ? 'fade-out' : ''}`}>
       <div className="splash-header">
         <h1 className="logo">Milo.</h1>

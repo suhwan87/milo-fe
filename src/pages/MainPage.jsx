@@ -1,4 +1,4 @@
-// src/pages/MainPage.jsx
+// 메인 페이지
 import React from 'react';
 import EmotionSlider from 'components/EmotionSlider';
 import EmotionKeyword from 'components/EmotionKeyword';

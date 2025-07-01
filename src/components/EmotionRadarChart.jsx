@@ -1,3 +1,4 @@
+// 감정 분포 레이더 차트 컴포넌트
 import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
 import api from '../config/axios';
@@ -14,8 +15,9 @@ const emotionIcons = [joyIcon, stableIcon, anxietyIcon, sadnessIcon, angerIcon];
 const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
   const [emotionValues, setEmotionValues] = useState([0, 0, 0, 0, 0]);
 
+  // 월별 감정 요약 API 요청 → 정규화된 값으로 차트 구성
   useEffect(() => {
-    setEmotionValues([0, 0, 0, 0, 0]); // 초기화
+    setEmotionValues([0, 0, 0, 0, 0]); // 차트 초기화
 
     const fetchEmotionSummary = async () => {
       try {
@@ -30,7 +32,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
         const { avgJoy, avgStable, avgAnxiety, avgSadness, avgAnger } =
           response.data;
 
-        // ✅ 총합 기준 정규화
+        // 총합 기준 정규화
         const sum =
           avgJoy + avgStable + avgAnxiety + avgSadness + avgAnger || 1;
 
@@ -51,14 +53,17 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     fetchEmotionSummary();
   }, [yearMonth]);
 
+  // 차트 크기 및 위치 계산
   const chartSize = 280;
   const center = chartSize / 2;
   const iconRadius = 170;
   const iconSize = 32;
 
+  // 최대값 자동 조정 (최소 40 보장)
   const maxValue = Math.max(...emotionValues);
   const chartMax = maxValue > 40 ? Math.ceil(maxValue / 10) * 10 : 40;
 
+  // 차트 데이터 구성
   const data = {
     labels: ['', '', '', '', ''],
     datasets: [
@@ -75,6 +80,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     ],
   };
 
+  // 차트 옵션 설정
   const options = {
     maintainAspectRatio: false,
     plugins: {
@@ -92,7 +98,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     scales: {
       r: {
         min: 0,
-        max: chartMax, // 최대값 고정 (시각 강조)
+        max: chartMax,
         ticks: { display: false },
         pointLabels: { display: false },
         grid: { color: '#ccc' },
@@ -113,6 +119,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     >
       <Radar data={data} options={options} />
 
+      {/* 각 감정 아이콘 및 퍼센트 표시 */}
       {emotionIcons.map((icon, idx) => {
         const angle = ((Math.PI * 2) / emotionIcons.length) * idx - Math.PI / 2;
         const x = center + iconRadius * Math.cos(angle) - iconSize / 2;

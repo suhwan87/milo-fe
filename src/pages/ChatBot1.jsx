@@ -1,3 +1,4 @@
+// 상담형 챗봇 페이지
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ChatBot.css';
@@ -9,11 +10,13 @@ import api from '../config/axios';
 import Swal from 'sweetalert2';
 
 const ChatBot1 = () => {
+  // 채팅 관련 상태
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const [input, setInput] = useState('');
   const chatBodyRef = useRef(null);
 
+  // 회복 문장 저장 관련 상태
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [savedMessageIds, setSavedMessageIds] = useState([]);
   const [folders, setFolders] = useState([]);
@@ -22,7 +25,7 @@ const ChatBot1 = () => {
   const [isAddingFolder, setIsAddingFolder] = useState(false);
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
-  const [initialGreetingText, setInitialGreetingText] = useState('');
+
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   const inputRef = useRef(null);
@@ -75,7 +78,7 @@ const ChatBot1 = () => {
       setIsLoading(true);
 
       try {
-        // 1. 기존 메시지 불러오기
+        // 기존 메시지 불러오기
         const savedMessages = loadMessagesFromStorage();
 
         if (savedMessages.length > 0) {

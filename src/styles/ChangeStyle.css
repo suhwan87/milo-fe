@@ -1,4 +1,4 @@
-/* 전체 css */
+/* 챗봇 대화 스타일 변경 페이지 */
 .style-container {
   background-color: white;
   height: 100vh;
@@ -49,7 +49,7 @@
   transition:
     border 0.3s ease,
     background-color 0.3s ease;
-  min-height: 240px; /* ✅ 고정 높이 추가 */
+  min-height: 240px;
   display: flex;
   flex-direction: column;
 }
@@ -63,8 +63,8 @@
   color: #000;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 양 끝 정렬 */
-  margin-bottom: 8px; /* 라벨 아래 여백 */
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .style-label-type {
@@ -93,7 +93,7 @@
 
 /* 챗봇 스타일 저장 버튼 */
 .style-save-button {
-  margin: 32px auto 48px; /* 위: 작게 / 아래: 적당히 */
+  margin: 32px auto 48px;
   display: block;
   width: 140px;
   padding: 14px 0;
@@ -102,7 +102,7 @@
   color: white;
   font-weight: bold;
   font-size: 15px;
-  border-radius: 999px; /* pill 모양 */
+  border-radius: 999px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: background-color 0.3s ease;
