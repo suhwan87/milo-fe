@@ -349,9 +349,11 @@ npm run start
 
 ## 🤯 트러블슈팅 요약
 
-| 문제   | 원인   | 해결   |
-| ------ | ------ | ------ |
-| 내용~~ | 내용~~ | 내용~~ |
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| 대화 종료 후 감정 리포트가 생성되기 전에 조회되어 "리포트 없음"으로 응답됨 | Spring Boot 서버에서 리포트 조회 시점이 FastAPI 생성보다 빨라, 생성이 완료되지 않은 상태의 데이터를 먼저 조회함 | 리포트 생성 시간 `createdAt`이 `lastChatEnd` 이후인지 비교하여 응답하도록 로직 수정. 프론트에서는 polling 방식으로 최대 5회 재시도 |
+| 로그인 후에도 API 호출 시 401 Unauthorized 오류 발생 | Axios 요청 시 `Authorization` 헤더가 누락되거나 `Bearer` 키워드 없이 전송되어 Spring Boot에서 토큰 파싱 실패 | Axios 인스턴스에 interceptors 설정으로 토큰 자동 삽입. 백엔드에서는 `Bearer` 제거 후 파싱 및 인증 처리 |
+| Docker 배포 시 코드 수정 사항이 반영되지 않음 | `./gradlew build` 없이 Docker 이미지 생성 시, 이전 버전 JAR이 그대로 포함되어 실행됨 | 배포 전 항상 `./gradlew clean build` 실행 후, `--no-cache` 옵션으로 Docker 이미지 재빌드. Dockerfile 내 JAR 경로도 확인 필요 |
 
 ---
 
