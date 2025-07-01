@@ -1,10 +1,11 @@
+// 비밀번호 변경 페이지
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import '../../styles/ChangePassword.css';
 import { useDrawerStore } from '../../stores/useDrawerStore';
-import api from '../../config/axios'; // ✅ axios 인스턴스 사용
+import api from '../../config/axios';
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function ChangePassword() {
   const [errorConfirm, setErrorConfirm] = useState('');
 
   const handleChangePassword = async () => {
-    // ✅ 프론트 유효성 검사
+    // 프론트 유효성 검사
     if (!currentPw) {
       setErrorCurrent('현재 비밀번호를 입력해주세요.');
       setErrorNew('');
@@ -45,7 +46,7 @@ export default function ChangePassword() {
       return;
     }
 
-    // ✅ 서버에 비밀번호 변경 요청
+    // 서버에 비밀번호 변경 요청
     try {
       await api.patch('/api/users/password', {
         currentPassword: currentPw,
@@ -88,6 +89,7 @@ export default function ChangePassword() {
         <span className="pw-title">비밀번호 변경</span>
       </div>
 
+      {/* 입력 폼 */}
       <div className="pw-body">
         <FiLock className="pw-icon" />
         <p className="pw-guide">비밀번호를 변경해주세요.</p>

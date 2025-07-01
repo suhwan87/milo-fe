@@ -1,3 +1,4 @@
+// 역할극 정보 입력 페이지
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../config/axios';
@@ -5,6 +6,7 @@ import Swal from 'sweetalert2';
 import Character from '../assets/characters/login-character.png';
 import '../styles/RolePlay.css';
 
+// 역할극 질문 목록 정의
 const steps = [
   { id: 1, question: '상대방의 이름을 알려주세요.' },
   { id: 2, question: '상대방과의 관계를 알려주세요.' },
@@ -15,17 +17,20 @@ const steps = [
 
 function RolePlay() {
   const navigate = useNavigate();
+  // 현재 질문 단계 상태
   const [step, setStep] = useState(0);
+  // 각 질문에 대한 답변 저장 배열
   const [answers, setAnswers] = useState(Array(steps.length).fill(''));
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
   const [fadeOut, setFadeOut] = useState(false);
 
-  // ✅ 진입 시 역할 존재 여부 확인
+  // 진입 시 역할 존재 여부 확인
   useEffect(() => {
     const checkCharacter = async () => {
       const userId = localStorage.getItem('userId');
       if (!userId) {
+        // 로그인되지 않은 경우 경고 후 로그인 페이지 이동
         Swal.fire({
           title: '로그인이 필요합니다.',
           text: '로그인 후 다시 시도해 주세요.',
@@ -37,6 +42,7 @@ function RolePlay() {
 
       try {
         const res = await api.get(`/api/character/${userId}/exists`);
+        // 이미 역할이 존재하는 경우 → 바로 채팅 페이지로 이동
         if (res.data === true) {
           navigate('/roleplay/chat');
         }
@@ -48,20 +54,24 @@ function RolePlay() {
     checkCharacter();
   }, [navigate]);
 
+  // 입력창 높이 자동 조절
   const handleChange = (e) => {
     setInputValue(e.target.value);
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
+  // 다음 질문 또는 제출 처리
   const handleNext = async () => {
     if (inputValue.trim() === '') return;
 
+    // 현재 입력 저장
     const updated = [...answers];
     updated[step] = inputValue;
     setAnswers(updated);
     setInputValue('');
 
+    // 다음 질문으로 이동
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
@@ -78,6 +88,7 @@ function RolePlay() {
           return;
         }
 
+        // 최종 제출 - API 요청 payload 구성
         const payload = {
           userId,
           name: updated[0],
@@ -90,6 +101,7 @@ function RolePlay() {
         const res = await api.post('/api/character', payload);
         const characterId = res.data;
 
+        // 성공 알림 후 페이드 아웃 → 역할극 채팅 화면 이동
         Swal.fire({
           title: '역할 저장 완료!',
           text: '이제 역할극을 시작해볼까요?',
@@ -136,10 +148,12 @@ function RolePlay() {
         <span className="header-space" />
       </div>
 
+      {/* 본문 영역 */}
       <div className="roleplay-body">
         {step === 0 && <p className="greeting">안녕하굴! 👋</p>}
         <img src={Character} alt="milo 캐릭터" className="roleplay-character" />
 
+        {/* 진행률 바 */}
         <div className="progress-bar">
           <div
             className="progress-fill"
@@ -150,16 +164,18 @@ function RolePlay() {
           {step + 1}/{steps.length}
         </div>
 
+        {/* 질문 출력 */}
         <p className="prompt-text">{steps[step].question}</p>
 
+        {/* 사용자 입력창 */}
         <textarea
           className="target-input"
           value={inputValue}
           onChange={handleChange}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault(); // 기본 줄바꿈 막기
-              handleNext(); // 다음 질문으로 이동
+              e.preventDefault();
+              handleNext();
             }
           }}
           placeholder="입력해 주세요"
@@ -167,6 +183,7 @@ function RolePlay() {
           ref={inputRef}
         />
 
+        {/* 이전 입력값 표시 */}
         {answers[step] && (
           <p className="previous-answer">이전 입력: {answers[step]}</p>
         )}

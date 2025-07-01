@@ -1,3 +1,4 @@
+// 회원 탈퇴 페이지
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -6,22 +7,22 @@ import Character from '../../assets/characters/crying-character.png';
 import Flower from '../../assets/icons/flower.png';
 import { FiLock } from 'react-icons/fi';
 import { useDrawerStore } from '../../stores/useDrawerStore';
-import api from '../../config/axios'; // ✅ axios 인스턴스
+import api from '../../config/axios';
 
 export default function Withdraw() {
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1); // 1: 입력, 2: 완료
   const [password, setPassword] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState(false);
 
-  // ✅ 실제 탈퇴 요청 처리
+  // 실제 탈퇴 요청 처리
   const requestWithdraw = async () => {
     try {
       await api.delete('/api/users/delete', {
-        data: { password: password }, // ✅ body에 비밀번호 전달
+        data: { password: password }, // body에 비밀번호 전달
       });
 
       Swal.fire({
@@ -32,7 +33,7 @@ export default function Withdraw() {
         confirmButtonText: '확인',
       });
 
-      localStorage.removeItem('token'); // ✅ 토큰 제거
+      localStorage.removeItem('token'); // 토큰 제거
       setStep(2); // 완료 페이지 전환
     } catch (err) {
       console.error(err);
@@ -50,7 +51,7 @@ export default function Withdraw() {
     }
   };
 
-  // ✅ 탈퇴 버튼 클릭 시 확인 모달 → 실제 탈퇴 요청
+  // 탈퇴 버튼 클릭 시 확인 모달 → 실제 탈퇴 요청
   const handleWithdraw = () => {
     if (!password) {
       setError(true);

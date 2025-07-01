@@ -1,14 +1,15 @@
-// src/components/SignUp.jsx
+// 회원가입 페이지
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SignUp.css';
-import api from '../config/axios'; // axios 인스턴스 사용
+import api from '../config/axios';
 import Swal from 'sweetalert2';
 
 function SignUp() {
   const navigate = useNavigate();
   const [fadeOut, setFadeOut] = useState(false);
 
+  // 입력 상태 관리
   const [id, setId] = useState('');
   const [idMessage, setIdMessage] = useState('');
   const [isIdAvailable, setIsIdAvailable] = useState(null);
@@ -17,15 +18,20 @@ function SignUp() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
 
+  // 약관 동의 상태
   const [agreeService, setAgreeService] = useState(false);
   const [agreePrivacy, setAgreePrivacy] = useState(false);
+
+  // 모달 표시 상태
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showServiceModal, setShowServiceModal] = useState(false);
 
+  // 에러 메시지
   const [passwordFormatError, setPasswordFormatError] = useState('');
   const [passwordMatchError, setPasswordMatchError] = useState('');
   const [agreementError, setAgreementError] = useState('');
 
+  // 아이디 중복 확인 핸들러
   const handleCheckDuplicate = async () => {
     if (!id) {
       setIdMessage('아이디를 입력해주세요.');
@@ -56,12 +62,15 @@ function SignUp() {
     }
   };
 
+  // 회원가입 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 초기화
     setPasswordFormatError('');
     setPasswordMatchError('');
     setAgreementError('');
 
+    // 유효성 검사
     const idRegex = /^[A-Za-z0-9]{6,20}$/;
     const passwordRegex =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,20}$/;
@@ -84,6 +93,7 @@ function SignUp() {
       return;
     }
 
+    // 회원가입 요청
     try {
       const response = await api.post('/api/users/register', {
         userId: id,
@@ -92,6 +102,7 @@ function SignUp() {
         email,
       });
 
+      // 성공 시 알림 후 로그인 페이지 이동
       Swal.fire({
         title: '회원가입 완료!',
         text: '로그인 페이지로 이동합니다 😊',
@@ -121,11 +132,13 @@ function SignUp() {
       >
         ←
       </button>
+      {/* 회원가입 폼 */}
       <div className="signup">
         <h2 className="logo2">Milo.</h2>
         <p className="subtitle">가입을 환영합니다.</p>
 
         <form className="signup-form" onSubmit={handleSubmit}>
+          {/* 아이디 입력 + 중복확인 */}
           <label>아이디</label>
           <div className="input-with-button">
             <input
@@ -148,6 +161,7 @@ function SignUp() {
             </p>
           )}
 
+          {/* 비밀번호 */}
           <label>비밀번호</label>
           <input
             type="password"
@@ -170,6 +184,7 @@ function SignUp() {
             <p className="error-message">{passwordMatchError}</p>
           )}
 
+          {/* 닉네임 */}
           <label>닉네임</label>
           <input
             type="text"
@@ -178,6 +193,7 @@ function SignUp() {
             onChange={(e) => setNickname(e.target.value)}
           />
 
+          {/* 이메일 */}
           <label>이메일</label>
           <input
             type="email"
@@ -219,7 +235,7 @@ function SignUp() {
             </label>
             <span
               className="required"
-              onClick={() => setShowServiceModal(true)} // 더보기 모달은 (필수)를 클릭해야 열림
+              onClick={() => setShowServiceModal(true)}
               style={{ cursor: 'pointer' }}
             >
               (필수)
@@ -228,20 +244,19 @@ function SignUp() {
 
           {agreementError && <p className="error-message">{agreementError}</p>}
 
+          {/* 회원가입 제출 버튼 */}
           <button type="submit" className="submit-btn">
             Sign up
           </button>
         </form>
 
+        {/* 개인정보 모달 */}
         {showPrivacyModal && (
           <div
             className="modal-overlay"
-            onClick={() => setShowPrivacyModal(false)} // 오버레이 클릭 시 닫기
+            onClick={() => setShowPrivacyModal(false)}
           >
-            <div
-              className="modal"
-              onClick={(e) => e.stopPropagation()} // 모달 내부 클릭은 이벤트 버블링 차단
-            >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
               <h3>개인정보 수집 및 이용</h3>
               <p>
                 당신의 정보는 마일로가 소중히 다룰게요!
@@ -259,12 +274,9 @@ function SignUp() {
         {showServiceModal && (
           <div
             className="modal-overlay"
-            onClick={() => setShowServiceModal(false)} // 오버레이 클릭 시 닫기
+            onClick={() => setShowServiceModal(false)}
           >
-            <div
-              className="modal"
-              onClick={(e) => e.stopPropagation()} // 모달 내부는 클릭 무시
-            >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
               <h3>서비스 이용약관</h3>
               <p>
                 1. 마일로는 여러분의 감정을 진심으로 존중합니다

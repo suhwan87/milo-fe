@@ -1,3 +1,4 @@
+// 회복 문장 보관함 페이지
 import React, { useEffect, useRef, useState } from 'react';
 import FolderDetailView from '../components/FolderDetailView';
 import '../styles/MindDrawerPage.css';
@@ -8,51 +9,50 @@ import Swal from 'sweetalert2';
 
 const COLOR_CLASS_COUNT = 7;
 
-// ✅ 폴더 배열을 받아 폴더 ID 기준 고정 색상 생성
+// 폴더 배열을 받아 폴더 ID 기준 고정 색상 생성
 const generateColorClasses = (folders) => {
   const stored = localStorage.getItem('folderColors');
   const folderColors = stored ? JSON.parse(stored) : {};
-
   const result = folders.map((folder) => {
     const id = folder.folderId;
-
     if (folderColors[id]) return `color-${folderColors[id]}`;
-
     const randomIndex = Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1;
     folderColors[id] = randomIndex;
     return `color-${randomIndex}`;
   });
-
   localStorage.setItem('folderColors', JSON.stringify(folderColors));
   return result;
 };
 
+// 폴더를 최신순으로 정렬하는 함수
 const sortFoldersByLatest = (folders) => {
   return [...folders].sort((a, b) => b.folderId - a.folderId);
 };
 
 const MindDrawerPage = () => {
+  // 전체 폴더 관련
   const [drawerList, setDrawerList] = useState([]);
   const [colorClasses, setColorClasses] = useState([]);
   const [allFolders, setAllFolders] = useState([]);
   const [allColors, setAllColors] = useState([]);
-
+  // 폴더 생성 및 삭제
   const [showModal, setShowModal] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTargetIndex, setDeleteTargetIndex] = useState(null);
   const [expandedFolderIndex, setExpandedFolderIndex] = useState(null);
+  // 폴더 검색
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
+  // 폴더 수정
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFolderName, setEditFolderName] = useState('');
   const [editTargetIndex, setEditTargetIndex] = useState(null);
 
   const menuRef = useRef(null);
 
-  // ✅ 폴더 목록 불러오기
+  // 폴더 목록 불러오기
   const fetchFolders = async () => {
     try {
       const res = await api.get('/api/recovery/folders');
@@ -77,7 +77,7 @@ const MindDrawerPage = () => {
     fetchFolders();
   }, []);
 
-  // ✅ 검색어 필터링 (이름 기준)
+  // 검색어 필터링 (이름 기준)
   useEffect(() => {
     if (!searchTerm.trim()) {
       setDrawerList(allFolders);
@@ -94,7 +94,7 @@ const MindDrawerPage = () => {
     }
   }, [searchTerm, allFolders, allColors]);
 
-  // ✅ 드롭다운 외부 클릭 시 닫기
+  // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -105,9 +105,10 @@ const MindDrawerPage = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // 폴더 추가 모달 열기
   const handleAddFolder = () => setShowModal(true);
 
-  // ✅ 폴더 생성
+  // 폴더 생성
   const handleConfirm = async () => {
     if (!newFolderName.trim()) return;
 
@@ -120,7 +121,7 @@ const MindDrawerPage = () => {
       const stored = localStorage.getItem('folderColors');
       const folderColors = stored ? JSON.parse(stored) : {};
 
-      // ✅ 고정 색상 배정
+      // 고정 색상 배정
       const colorIndex =
         folderColors[folderId] ||
         Math.floor(Math.random() * COLOR_CLASS_COUNT) + 1;
@@ -157,7 +158,7 @@ const MindDrawerPage = () => {
     }
   };
 
-  // ✅ 폴더 수정
+  // 폴더 이름 수정
   const handleEditConfirm = async () => {
     if (!editFolderName.trim()) return;
 
@@ -178,7 +179,7 @@ const MindDrawerPage = () => {
       setShowEditModal(false);
       setEditTargetIndex(null);
 
-      // ✅ 수정 완료 알림
+      // 수정 완료 알림
       Swal.fire('수정 완료', '폴더 이름이 성공적으로 수정되었어요.', 'success');
     } catch (error) {
       if (
@@ -192,7 +193,7 @@ const MindDrawerPage = () => {
     }
   };
 
-  // ✅ 폴더 삭제
+  // 폴더 삭제
   const handleDelete = async (index) => {
     const targetFolder = drawerList[index];
 
@@ -216,7 +217,7 @@ const MindDrawerPage = () => {
       setDeleteTargetIndex(null);
       setShowDeleteModal(false);
 
-      // ✅ 삭제 완료 알림
+      // 삭제 완료 알림
       Swal.fire('삭제 완료', '폴더가 성공적으로 삭제되었어요.', 'success');
     } catch (err) {
       console.error('❌ 폴더 삭제 실패:', err);
@@ -224,6 +225,7 @@ const MindDrawerPage = () => {
     }
   };
 
+  // 폴더 클릭 시 상세 콘텐츠 펼치기
   const handleFolderClick = (idx) => {
     setExpandedFolderIndex(idx === expandedFolderIndex ? null : idx);
   };
@@ -337,7 +339,7 @@ const MindDrawerPage = () => {
                             setEditTargetIndex(idx);
                             setEditFolderName(item.title);
                             setShowEditModal(true);
-                            setActiveMenuIndex(null); // 닫기
+                            setActiveMenuIndex(null);
                           }}
                         >
                           수정
@@ -348,7 +350,7 @@ const MindDrawerPage = () => {
                             e.stopPropagation();
                             setDeleteTargetIndex(idx);
                             setShowDeleteModal(true);
-                            setActiveMenuIndex(null); // 닫기
+                            setActiveMenuIndex(null);
                           }}
                         >
                           삭제

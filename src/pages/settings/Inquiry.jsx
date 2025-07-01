@@ -1,3 +1,4 @@
+// 문의하기 페이지
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Inquiry.css';
 import { useDrawerStore } from '../../stores/useDrawerStore';
@@ -7,8 +8,8 @@ export default function Inquiry() {
   const navigate = useNavigate();
   const { setShouldAutoOpen } = useDrawerStore();
 
+  // 문의 전송 처리
   const handleSubmit = () => {
-    // 실제 전송 로직 생략 (API 연동 가능)
     Swal.fire({
       icon: 'success',
       title: '문의가 완료되었습니다.',
@@ -34,6 +35,7 @@ export default function Inquiry() {
         <span className="inquiry-title">문의하기</span>
       </div>
 
+      {/* 본문 입력 영역 */}
       <div className="inquiry-body">
         <p className="inquiry-label">답변받으실 이메일</p>
         <input

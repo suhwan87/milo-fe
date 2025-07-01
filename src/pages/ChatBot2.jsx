@@ -1,3 +1,4 @@
+// 역할극 챗봇 페이지
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../config/axios';
@@ -11,9 +12,10 @@ import '../styles/ChatBot.css';
 const ChatBot2 = () => {
   const navigate = useNavigate();
   const chatBodyRef = useRef(null);
-  const inputRef = useRef(null); // 입력창 ref 추가
+  const inputRef = useRef(null);
   const userId = localStorage.getItem('userId');
 
+  // 상태값 정의
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showFolderModal, setShowFolderModal] = useState(false);
@@ -25,11 +27,13 @@ const ChatBot2 = () => {
   const [folderError, setFolderError] = useState('');
   const [tempSelectedIdx, setTempSelectedIdx] = useState(null);
 
+  // 시간 포맷 함수
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  // 컴포넌트 마운트 시 유저 유효성 확인 및 채팅 로그 불러오기
   useEffect(() => {
     if (!userId) {
       Swal.fire({
@@ -42,6 +46,7 @@ const ChatBot2 = () => {
     fetchLogs();
   }, [userId, navigate]);
 
+  // 메시지 변경 시 스크롤 하단 이동 및 localStorage에 저장
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -62,6 +67,7 @@ const ChatBot2 = () => {
     }
   }, [messages]);
 
+  // 역할극 로그 불러오기
   const fetchLogs = async () => {
     try {
       const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
@@ -83,6 +89,7 @@ const ChatBot2 = () => {
     }
   };
 
+  // 메시지 전송
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -159,7 +166,7 @@ const ChatBot2 = () => {
     }
   };
 
-  // ✅ 회복 문장 저장 또는 삭제
+  // 회복 문장 저장 또는 삭제
   const handleSave = async (actualIdx) => {
     const targetMessage = messages[actualIdx]?.text;
     const alreadySaved = savedMessageIds.some(
@@ -193,7 +200,7 @@ const ChatBot2 = () => {
     setShowFolderModal(true);
   };
 
-  // ✅ 회복 문장 저장 확정
+  // 회복 문장 저장 확정
   const handleConfirm = async () => {
     if (tempSelectedIdx === null || selectedFolders.length === 0) return;
 
@@ -226,7 +233,7 @@ const ChatBot2 = () => {
     setSelectedFolders([]);
   };
 
-  // ✅ 회복 문장 폴더 목록 불러오기
+  // 회복 문장 폴더 목록 불러오기
   useEffect(() => {
     const fetchFolders = async () => {
       try {
@@ -240,7 +247,7 @@ const ChatBot2 = () => {
     fetchFolders();
   }, []);
 
-  // ✅ 회복 문장 폴더 생성
+  // 회복 문장 폴더 생성
   const handleAddFolder = async () => {
     const trimmedName = newFolderName.trim();
     if (!trimmedName) return;
@@ -265,8 +272,8 @@ const ChatBot2 = () => {
     }
   };
 
+  // 역할극 종료 처리
   const handleEnd = () => {
-    // 응답 대기 중인지 확인
     const isWaiting = messages.some((msg) => msg.waiting);
     if (isWaiting) {
       Swal.fire({

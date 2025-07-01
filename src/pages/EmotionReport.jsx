@@ -1,3 +1,4 @@
+// 분석 리포트 페이지
 import React, { useState, useEffect, useRef } from 'react';
 import ReportHeader from '../components/ReportHeader';
 import EmotionTag from '../components/EmotionTag';
@@ -10,7 +11,7 @@ import api from '../config/axios';
 import EmptyIcon from '../assets/characters/crying-character.png';
 import LoadingIcon from '../assets/characters/login-character.png';
 
-/* 🔄 월 키(YYYY-MM) 헬퍼 ─ UTC 변환 없이 로컬 값 그대로 사용 */
+// 월 키(YYYY-MM) ─ UTC 변환 없이 로컬 값 그대로 사용
 const getMonthKey = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 
@@ -24,13 +25,13 @@ const EmotionReport = () => {
 
   const [loading, setLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const [pollingToken, setPollingToken] = useState(0); // ✅ 새 토큰
-  const pollingTokenRef = useRef(0);
+  const [pollingToken, setPollingToken] = useState(0); // 새 토큰
+  const pollingTokenRef = useRef(0); // 최신 polling 토큰 저장용
 
-  const MAX_RETRY = 5;
-  const RETRY_INTERVAL = 1000; // 1초
+  const MAX_RETRY = 5; // 최대 재시도 횟수
+  const RETRY_INTERVAL = 1000; // 재시도 간격 (1초)
 
-  /** ✅ 특정 날짜의 리포트 조회 */
+  // 특정 날짜의 리포트 조회
   const fetchReport = async (dateObj, token) => {
     const date = dateObj.toISOString().split('T')[0];
     const today = new Date().toISOString().split('T')[0];
@@ -52,7 +53,7 @@ const EmotionReport = () => {
 
       if (pollingTokenRef.current !== token) return;
 
-      // ✅ 오늘이고, 채팅 기록 있음, 리포트가 채팅 이후 생성되지 않았으면 → polling
+      // 오늘이고, 리포트가 아직 생성되지 않은 상태라면 polling 계속
       if (
         isToday &&
         lastChatEnd &&
@@ -65,7 +66,7 @@ const EmotionReport = () => {
           fetchReport(dateObj, token); // 꼭 token 넘겨야 함
         }, RETRY_INTERVAL);
       } else {
-        // ✅ 최신 리포트 또는 과거 리포트
+        // 정상 리포트 수신
         setReport(reportData);
         setNotFound(false);
         setLoading(false);
@@ -73,14 +74,14 @@ const EmotionReport = () => {
     } catch (err) {
       if ([400, 404].includes(err.response?.status)) {
         if (isToday && lastChatEnd && retryCount < MAX_RETRY) {
-          // ✅ 오늘이고, 리포트 아직 없음 → polling
+          // 리포트 아직 없음
           setLoading(true);
           setTimeout(() => {
             setRetryCount((prev) => prev + 1);
             fetchReport(dateObj, token);
           }, RETRY_INTERVAL);
         } else {
-          // ✅ 과거거나 retry 초과 → 진짜 없음
+          // 과거거나 retry 초과 → 진짜 없음
           setNotFound(true);
           setReport(null);
           setLoading(false);
@@ -92,11 +93,11 @@ const EmotionReport = () => {
     }
   };
 
-  /** ✅ 해당 월의 리포트 존재 일자 조회 - 레이스컨디션 & 시차 해결 */
+  // 월별 리포트 일자 조회 함수 (AbortController 포함)
   const fetchReportDays = (() => {
-    let controller; // 🔄 요청 취소용 AbortController
+    let controller; // 요청 취소용 AbortController
     return async (dateObj) => {
-      const ym = getMonthKey(dateObj); // 🔄 로컬 기준 YYYY-MM
+      const ym = getMonthKey(dateObj);
       const token = localStorage.getItem('token');
 
       controller?.abort(); // 이전 요청 취소
@@ -107,7 +108,7 @@ const EmotionReport = () => {
           headers: { Authorization: `Bearer ${token}` },
           signal: controller.signal,
         });
-        /* 🔄 여전히 사용자가 보고 있는 달일 때만 반영 */
+        // 현재 보고 있는 달과 일치할 때만 반영
         if (ym === getMonthKey(viewMonth)) {
           setReportDays(data.map(Number)); // 문자열 → 숫자
         }
@@ -120,10 +121,10 @@ const EmotionReport = () => {
     };
   })();
 
-  /* 날짜 선택 → 일일 리포트 요청 */
+  // 날짜 선택 → 일일 리포트 요청
   useEffect(() => {
     setNotFound(false);
-    setLoading(false); // 즉시 로딩 종료
+    setLoading(false);
     const newToken = pollingToken + 1;
     setPollingToken(newToken);
     pollingTokenRef.current = newToken;
@@ -131,10 +132,10 @@ const EmotionReport = () => {
     fetchReport(selectedDate, newToken);
   }, [selectedDate]);
 
-  /* 월 전환 → 월간 리포트 일자 요청 */
+  // 월 전환 → 월간 리포트 일자 요청
   useEffect(() => {
     fetchReportDays(viewMonth);
-  }, [viewMonth]); // viewMonth가 변할 때마다
+  }, [viewMonth]);
 
   return (
     <div className="report-container">
@@ -155,6 +156,7 @@ const EmotionReport = () => {
           </p>
         </div>
       ) : report ? (
+        // 리포트 표시
         <div className="emotion-info">
           <p className="section-title">나의 감정</p>
           <EmotionTag text={`#${report.mainEmotion}`} />

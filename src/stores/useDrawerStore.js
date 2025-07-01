@@ -1,4 +1,3 @@
-// src/stores/useDrawerStore.js
 // 설정창 전역연결
 import { create } from 'zustand';
 

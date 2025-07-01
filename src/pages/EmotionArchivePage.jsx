@@ -1,9 +1,8 @@
+// 감정 아카이빙 페이지
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../config/axios';
-
 import '../styles/EmotionArchivePage.css';
-
 import joyIcon from '../assets/icons/joy.png';
 import stableIcon from '../assets/icons/stable.png';
 import anxietyIcon from '../assets/icons/anxiety.png';
@@ -12,6 +11,7 @@ import angerIcon from '../assets/icons/anger.png';
 import summaryIcon from '../assets/icons/summary.png';
 import EmotionRadarChart from '../components/EmotionRadarChart';
 
+// 영문 감정 키와 아이콘 매핑
 const iconMap = {
   JOY: joyIcon,
   SADNESS: sadnessIcon,
@@ -19,6 +19,8 @@ const iconMap = {
   ANGER: angerIcon,
   STABLE: stableIcon,
 };
+
+// 한글 감정 키 → 영문 변환 맵
 const korToEng = {
   기쁨: 'JOY',
   슬픔: 'SADNESS',
@@ -26,6 +28,8 @@ const korToEng = {
   분노: 'ANGER',
   안정: 'STABLE',
 };
+
+// 감정명에 따른 아이콘 반환 함수
 const getIcon = (e) => iconMap[korToEng[e] || e] || stableIcon;
 
 const EmotionArchivePage = () => {
@@ -40,8 +44,10 @@ const EmotionArchivePage = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const scrollRef = useRef(null);
 
+  // YYYY-MM 형식의 문자열
   const yearMonthStr = `${viewMonth.getFullYear()}-${String(viewMonth.getMonth() + 1).padStart(2, '0')}`;
 
+  // 감정 기록 조회 API 호출
   useEffect(() => {
     const fetch = async () => {
       const token = localStorage.getItem('accessToken');
@@ -52,6 +58,7 @@ const EmotionArchivePage = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        // 날짜 기준 정렬 후 필요한 정보만 추출
         const list = data
           .sort((a, b) => new Date(a.date) - new Date(b.date))
           .map((v) => ({
@@ -68,6 +75,7 @@ const EmotionArchivePage = () => {
     fetch();
   }, [yearMonthStr]);
 
+  // 감정 총평 조회 API 호출
   useEffect(() => {
     const fetchFeedback = async () => {
       const token = localStorage.getItem('accessToken');
@@ -84,7 +92,7 @@ const EmotionArchivePage = () => {
           data.avgSadness,
           data.avgAnger,
         ];
-        const hasData = values.some((v) => v > 0);
+        const hasData = values.some((v) => v > 0); // 하나라도 0 이상이면 데이터 있다고 판단
         setHasEmotionData(hasData);
         setGptFeedback(feedback || '총평이 아직 생성되지 않았습니다.');
       } catch (e) {
@@ -96,6 +104,7 @@ const EmotionArchivePage = () => {
     fetchFeedback();
   }, [yearMonthStr]);
 
+  // 아이콘 트랙 스크롤 → 가장 오른쪽으로 자동 이동
   useEffect(() => {
     const box = scrollRef.current;
     if (!box) return;
@@ -104,6 +113,7 @@ const EmotionArchivePage = () => {
     }, 0);
   }, [records]);
 
+  // 아이콘 트랙 드래그 스크롤 구현
   useEffect(() => {
     const box = scrollRef.current;
     if (!box) return;
@@ -137,10 +147,11 @@ const EmotionArchivePage = () => {
     };
   }, []);
 
+  // 월 이동 버튼 클릭 핸들러
   const shiftMonth = (delta) => {
     const m = new Date(viewMonth);
     m.setMonth(viewMonth.getMonth() + delta);
-    if (delta > 0 && m > thisMonth) return;
+    if (delta > 0 && m > thisMonth) return; // 미래 월은 제한
     setViewMonth(m);
   };
 
@@ -161,6 +172,7 @@ const EmotionArchivePage = () => {
         <h2>감정 아카이브</h2>
       </div>
 
+      {/* 월 선택 영역 */}
       <div className="archive-page-month-selector">
         <span className="arrow" onClick={() => shiftMonth(-1)}>
           ‹
@@ -174,6 +186,7 @@ const EmotionArchivePage = () => {
         </span>
       </div>
 
+      {/* 감정 기록 섹션 */}
       <div className="archive-page-record-section">
         <div className="archive-page-record-header">
           <span className="record-title">이번달 기록</span>
@@ -197,6 +210,7 @@ const EmotionArchivePage = () => {
         </div>
       </div>
 
+      {/* 감정 분포 차트 */}
       <h3 className="emotion-archive-title">감정 분포</h3>
       <div
         className={`emotion-archive-section ${!hasEmotionData ? 'dimmed' : ''}`}
@@ -212,6 +226,7 @@ const EmotionArchivePage = () => {
         )}
       </div>
 
+      {/* 이번달 총평 */}
       <h3 className="emotion-archive-title">이번달 총평</h3>
       <div
         className={`archive-page-summary ${!hasEmotionData ? 'dimmed' : ''}`}
