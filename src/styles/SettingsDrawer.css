@@ -24,7 +24,6 @@
   right: -100%;
   width: 70%;
   max-width: 380px;
-  height: 100%;
   background-color: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
   z-index: 20;
@@ -33,6 +32,9 @@
   box-sizing: border-box;
   border-top-left-radius: 16px; /* 선택사항: 둥글게 */
   border-bottom-left-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .drawer.open {
@@ -83,15 +85,16 @@
 }
 
 .drawer-footer {
-  margin-top: 318px;
-  margin-left: 210px;
   display: flex;
-  text-align: center;
+  justify-content: center;
   align-items: center;
   font-size: 14px;
   gap: 8px;
   color: #555;
   cursor: pointer;
+  padding: 5px;
+  margin-top: auto; /* 👉 아래로 밀기 */
+  margin-left: auto; 
 }
 
 /* 앱 초기화 팝업 */
