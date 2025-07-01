@@ -1,8 +1,4 @@
-/* EmotionArchivePage.css */
-
-/* ─────────────────────────────────────
-   0. 공통 레이아웃
-───────────────────────────────────── */
+/* 감정 아카이브 페이지 */
 .archive-page-container {
   max-width: 598px;
   margin: 0 auto;
@@ -11,9 +7,7 @@
   background-color: #fffefc;
 }
 
-/* ─────────────────────────────────────
-   1. 헤더
-───────────────────────────────────── */
+/* 헤더 */
 .archive-page-header {
   position: relative;
   display: flex;
@@ -42,9 +36,7 @@
   margin: 0;
 }
 
-/* ─────────────────────────────────────
-   2. 월 선택
-───────────────────────────────────── */
+/* 월 선택 */
 .archive-page-month-selector {
   display: flex;
   justify-content: center;
@@ -66,9 +58,7 @@
   pointer-events: none;
 }
 
-/* ─────────────────────────────────────
-   3. 감정 기록(라인·아이콘·총개)
-───────────────────────────────────── */
+/* 감정 기록(라인·아이콘·총개) */
 .archive-page-record-section {
   margin: 10px 0;
 }
@@ -96,11 +86,11 @@
   font-weight: bold;
 }
 
-/* ▶▶ 새 레이아웃 */
+/* 새 레이아웃 */
 .record-track {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr auto; /* 왼쪽(라인+아이콘) / 오른쪽(총개) */
+  grid-template-columns: 1fr auto;
   align-items: center;
   margin-top: 24px;
   height: 100px;
@@ -121,7 +111,7 @@
   grid-column: 1 / 2;
   display: flex;
   justify-content: space-between;
-  padding: 0 56px 0 24px; /* 말풍선 공간 확보 */
+  padding: 0 56px 0 24px;
   z-index: 1;
 }
 
@@ -135,13 +125,12 @@
   overflow-y: hidden;
   scrollbar-width: none;
   cursor: grab;
-  min-height: 100px; /* .record-track 높이와 동일값 */
+  min-height: 100px;
 }
 .icon-scroll.dragging {
   cursor: grabbing;
-} /* 드래그 중 */
+}
 
-/* Chrome/Edge 스크롤바 숨기기 */
 .icon-scroll::-webkit-scrollbar {
   display: none;
 }
@@ -152,8 +141,8 @@
   align-items: center;
   gap: 2px;
   z-index: 1;
-  -webkit-user-drag: none; /* Safari */
-  user-select: none; /* 텍스트 선택 방지 */
+  -webkit-user-drag: none; 
+  user-select: none;
 }
 
 .record-item img {
@@ -161,8 +150,8 @@
   height: 50px;
   object-fit: contain;
   border-radius: 50%;
-  -webkit-user-drag: none; /* Safari */
-  user-select: none; /* 텍스트 선택 방지 */
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .record-total {
@@ -175,18 +164,16 @@
   font-weight: bold;
   color: #333;
   z-index: 1;
-  transform: translateY(-23px); /* 음수로 위로 이동 */
+  transform: translateY(-23px);
 }
 
 .record-item span {
-  margin-top: 2px; /* 값이 작을수록 위로 붙음 (0~2px 추천) */
+  margin-top: 2px;
   margin-left: -4px;
   font-size: 16px;
 }
 
-/* ─────────────────────────────────────
-   4. 감정 분포 (기존 그대로)
-───────────────────────────────────── */
+/* 감정 분포 */
 .radar-chart-container {
   position: relative;
   width: 320px;
@@ -235,9 +222,7 @@
   align-items: center;
 }
 
-/* ─────────────────────────────────────
-   5. 총평 (기존 그대로)
-───────────────────────────────────── */
+/* 총평 */
 .archive-page-summary {
   display: flex;
   align-items: center;
@@ -299,7 +284,7 @@
   padding: 0;
 }
 
-/* 🔹 데이터 없을 때 흐림 효과 */
+/* 데이터 없을 때 흐림 효과 */
 .dimmed {
   opacity: 0.4;
   position: relative;

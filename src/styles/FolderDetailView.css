@@ -130,9 +130,9 @@
 }
 
 .folder-sentence-content.scrollable {
-  max-height: 200px; /* 표시할 최대 높이 */
+  max-height: 200px;
   overflow-y: auto;
-  padding-right: 8px; /* 스크롤바 여유 */
+  padding-right: 8px;
   white-space: pre-line;
 }
 

@@ -1,3 +1,4 @@
+/* 아카이브 카드 전체 영역 */
 .archive-section {
   background-color: #ffffff;
   border-top: 3px solid #ffb26f;
@@ -9,6 +10,7 @@
   cursor: pointer;
 }
 
+/* 상단 헤더 (텍스트 + 화살표) */
 .archive-header {
   display: flex;
   justify-content: space-between;
@@ -20,24 +22,28 @@
   padding-left: 50px;
 }
 
+/* 오른쪽 화살표 아이콘 */
 .archive-arrow {
   font-size: 28px;
   color: #bbb;
   padding-right: 16px;
 }
 
+/* 아카이브 본문 텍스트 블록 */
 .archive-content {
   display: flex;
   flex-direction: column;
   padding-left: 50px;
 }
 
+/* 이모지 + 텍스트 줄 */
 .archive-title-row {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
+/* 감정 이모지 아이콘 */
 .archive-icon {
   width: 80px;
   height: 80px;
@@ -47,18 +53,21 @@
   object-fit: contain;
 }
 
+/* 텍스트 묶음 (굵은 텍스트 + 서브 텍스트) */
 .archive-texts {
   min-height: 40px;
   display: flex;
   flex-direction: column;
 }
 
+/* 강조 문구 */
 .archive-bold {
   font-size: 14px;
   font-weight: bold;
   color: #333;
 }
 
+/* 부가 설명 문구 */
 .archive-sub {
   font-size: 13px;
   color: #777;

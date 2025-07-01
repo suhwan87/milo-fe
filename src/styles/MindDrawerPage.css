@@ -1,4 +1,4 @@
-/* ✅ 전체 컨테이너 */
+/* 회복 문장 보관함 페이지 */
 .mind-drawer-container {
   padding: 16px;
   background-color: #ffffff;
@@ -6,7 +6,7 @@
   min-height: 100vh;
 }
 
-/* ✅ 헤더 */
+/* 헤더 */
 .mind-drawer-header-wrapper {
   padding-top: 12px;
   padding-bottom: 12px;
@@ -14,12 +14,12 @@
 }
 
 .mind-drawer-header {
-  position: relative; /* 기준 잡기 */
+  position: relative;
   display: flex;
   align-items: center;
   padding-bottom: 20px;
   border-bottom: 2px solid #ccc;
-  height: 48px; /* 높이 고정해주면 정렬 깔끔해짐 */
+  height: 48px;
 }
 
 .mind-drawer-back-button {
@@ -29,11 +29,11 @@
   border: none;
   margin-left: 20px;
   cursor: pointer;
-  z-index: 100; /* 겹치는 일 방지용 */
+  z-index: 100;
 }
 
 .mind-drawer-title {
-  position: absolute; /* 절대 위치로 중앙 고정 */
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
@@ -41,15 +41,15 @@
   margin: 0;
 }
 
-/* ✅ 폴더 생성/찾기  */
+/* 폴더 생성/찾기  */
 .mind-drawer-top-buttons {
   display: flex;
   justify-content: flex-end;
-  align-items: center; /* 👈 세로 정렬 */
+  align-items: center;
   gap: 8px;
   margin: 8px 0 30px;
   padding-right: 4px;
-  min-height: 38px; /* ✅ 검색창이 생겨도 높이 변화 없음 */
+  min-height: 38px;
   box-sizing: border-box;
 }
 
@@ -74,7 +74,7 @@
   background-color: none;
 }
 
-/* 🔍 검색 입력창 */
+/* 검색 입력창 */
 .search-input {
   padding: 8px 12px;
   border: 1px solid #ccc;
@@ -99,7 +99,7 @@
   font-size: 16px;
 }
 
-/* ✅ 폴더 리스트 */
+/* 폴더 리스트 */
 .mind-drawer-list {
   display: flex;
   flex-direction: column;
@@ -248,8 +248,8 @@
   width: 100%;
   height: 100%;
   border-radius: 2%;
-  background-color: rgba(0, 0, 0, 0.4); /* 💡 어두운 반투명 배경 */
-  backdrop-filter: blur(2px); /* 💡 흐림 효과 */
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
   display: flex;
   justify-content: center;
   align-items: center;

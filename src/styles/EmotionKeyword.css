@@ -1,3 +1,4 @@
+/* 분석 리포트 카드 전체 영역 */
 .report-section {
   background-color: #fffefc;
   padding: 15px;
@@ -10,7 +11,7 @@
   border-radius: 0px;
   border-top: 3px solid #ffb26f;
   border-bottom: 3px solid #ffb26f;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* 💡 약한 그림자 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   padding: 15px;
   margin: 24px 0;
   margin-bottom: 48px;
@@ -68,7 +69,7 @@
 .keyword-list {
   display: flex;
   gap: 8px;
-  margin-left: 130px; /* 아이콘 너비 + 간격만큼 들여쓰기 */
+  margin-left: 130px;
   margin-bottom: 10px;
 }
 
