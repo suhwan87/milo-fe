@@ -23,6 +23,7 @@ const EmotionKeyword = () => {
       localStorage.getItem(`lastChatEnd_${userId}`),
       10
     );
+    const now = Date.now();
 
     let retryCount = 0;
     let timeoutId;
@@ -36,42 +37,45 @@ const EmotionKeyword = () => {
         return;
       }
 
+      // 오늘 날짜 기준 리포트 요청
       try {
-        // 오늘 날짜 기준 리포트 요청
         const res = await api.get(`/api/report/daily?date=${today}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const report = res.data;
+        const mainEmotion = report.mainEmotion;
         const createdAt = new Date(report.createdAt).getTime();
 
-        if (createdAt <= lastChatEnd && retryCount < MAX_RETRY) {
-          retryCount++;
-          timeoutId = setTimeout(fetchTodayReport, RETRY_INTERVAL);
-          return;
-        }
-
-        // 리포트 수신 완료
-        const mainEmotion = report.mainEmotion;
-        if (mainEmotion) {
+        if (mainEmotion && (!lastChatEnd || createdAt > lastChatEnd)) {
           setKeywords([mainEmotion]);
           setNotFound(false);
+          setLoading(false);
+          return;
         } else {
-          setKeywords([]);
-          setNotFound(true);
-        }
-
-        setLoading(false);
-      } catch (err) {
-        if ([400, 404].includes(err.response?.status)) {
-          if (retryCount < MAX_RETRY) {
+          const justFinishedChat = lastChatEnd && now - lastChatEnd < 10000;
+          if (justFinishedChat && retryCount < MAX_RETRY) {
+            if (retryCount === 0) setLoading(true);
             retryCount++;
             timeoutId = setTimeout(fetchTodayReport, RETRY_INTERVAL);
             return;
+          } else {
+            setNotFound(true);
+            setLoading(false);
           }
-          setNotFound(true);
         }
-
+      } catch (err) {
+        if (err.response?.status === 404) {
+          const justFinishedChat = lastChatEnd && now - lastChatEnd < 10000;
+          if (justFinishedChat && retryCount < MAX_RETRY) {
+            retryCount++;
+            setLoading(true);
+            timeoutId = setTimeout(fetchTodayReport, RETRY_INTERVAL);
+            return;
+          } else {
+            setNotFound(true);
+          }
+        }
         setLoading(false);
       }
     };
