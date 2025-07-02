@@ -24,7 +24,7 @@
 .folder-sentence-card {
   user-select: none;
   flex: 0 0 350px;
-  margin: 0 10px;
+  margin: 10px;
   height: 450px;
   background-color: #fff3d8;
   padding: 40px;
@@ -34,6 +34,13 @@
   transition:
     transform 0.3s ease,
     opacity 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .folder-sentence-card {
+    padding : 100px;
+    height: auto;
+  }
 }
 
 /* 화살표 버튼 */
