@@ -264,7 +264,7 @@ function SignUp() {
                 오직 상담을 위한 목적으로만 사용되며, 몰래 팔거나 엿보는 일은
                 절대 없습니다.
                 <br />
-                마일로는 약속을 잘 지키는 너구리에요 헿{' '}
+                마일로는 약속을 잘 지키는 너구리에요{' '}
               </p>
               <button onClick={() => setShowPrivacyModal(false)}>닫기</button>
             </div>
