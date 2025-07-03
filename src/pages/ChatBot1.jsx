@@ -191,6 +191,31 @@ const ChatBot1 = () => {
     }
   };
 
+  // 메시지 url 하이퍼링크
+  const linkifyTextLine = (line) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const parts = line.split(urlRegex);
+
+    return parts.map((part, idx) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={idx}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'blue', wordBreak: 'break-all' }}
+          >
+            {part}
+          </a>
+        );
+      } else {
+        return <span key={idx}>{part}</span>;
+      }
+    });
+  };
+
   // 채팅 종료 시 localStorage 정리
   const clearStoredMessages = () => {
     try {
@@ -431,18 +456,22 @@ const ChatBot1 = () => {
                 ) : (
                   <>
                     <div className={`message-bubble ${msg.sender}`}>
-                      {(msg.text ?? '').split('\n').map((line, i) => (
-                        <p key={i}>
-                          {line}
-                          {msg.waiting && (
-                            <span className="typing-dots">
-                              <span className="typing-dot">.</span>
-                              <span className="typing-dot">.</span>
-                              <span className="typing-dot">.</span>
-                            </span>
-                          )}
+                      {msg.waiting ? (
+                        <p>
+                          {msg.text}
+                          <span className="typing-dots">
+                            <span className="typing-dot">.</span>
+                            <span className="typing-dot">.</span>
+                            <span className="typing-dot">.</span>
+                          </span>
                         </p>
-                      ))}
+                      ) : (
+                        msg.text
+                          .split('\n')
+                          .map((line, i) => (
+                            <p key={i}>{linkifyTextLine(line)}</p>
+                          ))
+                      )}
                     </div>
 
                     {!msg.waiting && !msg.isGreeting && (

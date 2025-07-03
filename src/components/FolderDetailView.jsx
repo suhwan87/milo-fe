@@ -142,6 +142,31 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
     else if (distance < -50) slideTo('prev');
   };
 
+  // 메시지 url 하이퍼링크
+  const linkifyTextLine = (line) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const parts = line.split(urlRegex);
+
+    return parts.map((part, idx) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={idx}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'blue', wordBreak: 'break-all' }}
+          >
+            {part}
+          </a>
+        );
+      } else {
+        return <span key={idx}>{part}</span>;
+      }
+    });
+  };
+
   return (
     <div className="folder-detail-container animate-slide-in">
       <div className="folder-sentence-card-container">
@@ -212,7 +237,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
                     {new Date(sentence.createdAt).toLocaleDateString('ko-KR')}
                   </div>
                   <div className="folder-sentence-content scrollable">
-                    {sentence.content}
+                    {linkifyTextLine(sentence.content)}
                   </div>
                   <div className="folder-sentence-tags">
                     #{sentence.emotion || '감정'}
