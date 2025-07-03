@@ -46,14 +46,26 @@ const AppLayout = ({ children }) => {
 
   // 토큰 만료 여부 확인 → 만료 시 로그아웃 처리
   useEffect(() => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+    const token = localStorage.getItem('token');
+    const expiredFlag = localStorage.getItem('sessionExpired');
 
+    // 이전 세션 만료 플래그가 있었다면 → Swal 없이 로그인 이동
+    if (expiredFlag === 'true') {
+      localStorage.removeItem('sessionExpired');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      window.location.href = '/login';
+      return;
+    }
+
+    if (!token) return;
+
+    try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const isExpired = Date.now() > payload.exp * 1000;
 
       if (isExpired) {
+        localStorage.setItem('sessionExpired', 'true');
         Swal.fire({
           icon: 'info',
           title: '세션 만료',
@@ -66,7 +78,7 @@ const AppLayout = ({ children }) => {
           window.location.href = '/login';
         });
       }
-    } catch (e) {
+    } catch {
       Swal.fire({
         icon: 'error',
         title: '잘못된 로그인 정보',
