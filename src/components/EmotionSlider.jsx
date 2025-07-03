@@ -69,7 +69,7 @@ const EmotionSlider = () => {
     const { isNewUser, hasAnyReport, hasTodayReport } = status;
 
     if (isNewUser) {
-      return `${nickname}님, 처음 뵙네요!\n마일로가 당신의 이야기를 기다리고 있어요 :)`;
+      return `${nickname}님 처음 뵙네요!\n마일로가 당신의 이야기를 기다리고 있어요 :)`;
     }
 
     if (!hasAnyReport) {
@@ -77,10 +77,10 @@ const EmotionSlider = () => {
     }
 
     if (!hasTodayReport) {
-      return `${nickname}님,\n오늘은 어떤 이야기를 나눠볼까요?`;
+      return `${nickname}님\n오늘은 어떤 이야기를 나눠볼까요?`;
     }
 
-    return `${nickname}님,\n이어서 이야기 나눠볼까요?`;
+    return `${nickname}님\n이어서 이야기 나눠볼까요?`;
   };
 
   // 역할극 문구 분기

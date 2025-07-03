@@ -48,6 +48,9 @@ const AppLayout = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const expiredFlag = localStorage.getItem('sessionExpired');
+    const isLoginPage = location.pathname === '/login';
+
+    if (isLoginPage) return;
 
     // 이전 세션 만료 플래그가 있었다면 → Swal 없이 로그인 이동
     if (expiredFlag === 'true') {
@@ -91,7 +94,7 @@ const AppLayout = ({ children }) => {
         window.location.href = '/login';
       });
     }
-  }, []);
+  }, [location.pathname]);
 
   return (
     // scrollable-container를 AppLayout에서 관리
