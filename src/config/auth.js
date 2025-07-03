@@ -1,9 +1,3 @@
-// JWT 토큰 발급 관련 코드
-export const isAuthenticated = () => {
-  const token = localStorage.getItem('token');
-  return !!token;
-};
-
 // 토큰 만료 여부 확인 함수
 export const isTokenExpired = (token) => {
   try {
@@ -13,4 +7,11 @@ export const isTokenExpired = (token) => {
   } catch (e) {
     return true; // 디코딩 실패 = 잘못된 토큰
   }
+};
+
+// 토큰 유효성 검사
+export const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  return !isTokenExpired(token);
 };
