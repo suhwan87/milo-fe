@@ -1,4 +1,3 @@
-// 메인 화면 설정 창 컴포넌트
 import React from 'react';
 import '../styles/SettingsDrawer.css';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +12,11 @@ import api from '../config/axios';
 const SettingsDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
-  // 앱 초기화: localStorage 전체 삭제
+  // ✅ 유저 ID와 카카오 여부
+  const userId = localStorage.getItem('userId');
+  const isKakaoUser = userId?.startsWith('kakao_');
+
+  // 앱 초기화
   const handleResetApp = async () => {
     const result = await Swal.fire({
       title: '앱 초기화',
@@ -36,14 +39,12 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
       await api.delete('/api/users/reset', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      // 전체 초기화 후 필요한 정보 복원
       localStorage.clear();
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
@@ -55,7 +56,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         confirmButtonText: '확인',
       });
 
-      window.location.reload(); // 앱 리로드
+      window.location.reload();
     } catch (err) {
       console.error('[앱초기화 오류]', err);
       Swal.fire({
@@ -66,7 +67,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
     }
   };
 
-  // 로그아웃: 토큰만 삭제 + 로그인 이동
+  // 로그아웃
   const handleLogout = () => {
     Swal.fire({
       title: '정말 로그아웃하시겠어요?',
@@ -80,18 +81,11 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
     }).then((result) => {
       if (!result.isConfirmed) return;
 
-      const userId = localStorage.getItem('userId');
-
-      // ✅ 로컬 데이터 정리
       localStorage.removeItem('token');
       localStorage.removeItem(`lastChatEnd_${userId}`);
       localStorage.removeItem('userId');
 
-      // ✅ 사용자 유형 판별
-      const isKakaoUser = userId?.startsWith('kakao_');
-
       if (isKakaoUser) {
-        // ✅ 카카오 사용자 로그아웃 → 리디렉션
         const REST_API_KEY = 'aabaae0d39dbd263ec77dc1cbf25e85f';
         const redirectUri =
           window.location.hostname === 'localhost'
@@ -100,7 +94,6 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
 
         window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${redirectUri}`;
       } else {
-        // ✅ 일반 사용자 → 단순 리디렉션
         window.location.href = '/login';
       }
     });
@@ -108,13 +101,11 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* 반투명 배경 */}
       <div
         className={`drawer-overlay ${isOpen ? 'visible' : ''}`}
         onClick={onClose}
       ></div>
 
-      {/* 사이드 메뉴 */}
       <div className={`drawer ${isOpen ? 'open' : ''}`}>
         <div className="drawer-header">
           <button onClick={onClose} className="drawer-header-back">
@@ -126,6 +117,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         {/* 회원정보 섹션 */}
         <div className="drawer-section">
           <p className="setting-section-title">회원정보</p>
+
           <div
             className="drawer-item"
             onClick={() => navigate('/settings/nickname')}
@@ -133,9 +125,22 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
             <FaUser className="drawer-item-icon" />
             닉네임 변경
           </div>
+
           <div
             className="drawer-item"
-            onClick={() => navigate('/settings/password')}
+            onClick={() => {
+              if (isKakaoUser) {
+                Swal.fire({
+                  icon: 'warning',
+                  title: '비밀번호 변경 불가',
+                  text: '카카오 로그인 사용자는 비밀번호를 변경할 수 없습니다.',
+                  confirmButtonColor: '#ffa158',
+                  confirmButtonText: '확인',
+                });
+              } else {
+                navigate('/settings/password');
+              }
+            }}
           >
             <FaLock className="drawer-item-icon" />
             비밀번호 변경

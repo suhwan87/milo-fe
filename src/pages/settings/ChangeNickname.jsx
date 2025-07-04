@@ -2,13 +2,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/ChangeNickname.css';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 import Swal from 'sweetalert2';
 import api from '../../config/axios';
 
 export default function ChangeNickname() {
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
 
   const [nickname, setNickname] = useState('');
   const [currentNickname, setCurrentNickname] = useState('');
@@ -78,8 +76,7 @@ export default function ChangeNickname() {
         <span
           className="nickname-back"
           onClick={() => {
-            setShouldAutoOpen(true);
-            navigate('/main');
+            navigate('/main', { state: { autoOpenDrawer: true } });
           }}
         >
           ←

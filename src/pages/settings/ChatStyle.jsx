@@ -3,14 +3,12 @@ import { useState, useEffect } from 'react';
 import '../../styles/ChangeStyle.css';
 import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 import Swal from 'sweetalert2';
 import api from '../../config/axios';
 
 export default function ChangeStyle() {
   const [selected, setSelected] = useState('');
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
 
   // 대화 스타일 조회
   useEffect(() => {
@@ -77,8 +75,7 @@ export default function ChangeStyle() {
         <span
           className="style-back"
           onClick={() => {
-            setShouldAutoOpen(true); // 플래그 설정
-            navigate('/main');
+            navigate('/main', { state: { autoOpenDrawer: true } });
           }}
         >
           ←

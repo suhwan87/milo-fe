@@ -4,12 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { FiLock } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import '../../styles/ChangePassword.css';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 import api from '../../config/axios';
 
 export default function ChangePassword() {
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
 
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
@@ -80,8 +78,7 @@ export default function ChangePassword() {
         <span
           className="pw-back"
           onClick={() => {
-            setShouldAutoOpen(true);
-            navigate('/main');
+            navigate('/main', { state: { autoOpenDrawer: true } });
           }}
         >
           ←

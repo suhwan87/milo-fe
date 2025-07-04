@@ -6,6 +6,8 @@
   flex-direction: column;
   overflow-y: auto;
   padding-bottom: 80px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
 /* 헤더 */

@@ -1,20 +1,16 @@
 // 서비스 이용약관 페이지
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Terms.css';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 
 export default function Terms() {
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
-
   return (
     <div className="terms-container">
       <div className="terms-header">
         <span
           className="terms-back"
           onClick={() => {
-            setShouldAutoOpen(true); // 플래그 설정
-            navigate('/main');
+            navigate('/main', { state: { autoOpenDrawer: true } });
           }}
         >
           ←

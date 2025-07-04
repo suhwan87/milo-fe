@@ -6,12 +6,10 @@ import '../../styles/Withdraw.css';
 import Character from '../../assets/characters/crying-character.png';
 import Flower from '../../assets/icons/flower.png';
 import { FiLock } from 'react-icons/fi';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 import api from '../../config/axios';
 
 export default function Withdraw() {
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
 
   const [password, setPassword] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -115,8 +113,7 @@ export default function Withdraw() {
             <span
               className="back-button"
               onClick={() => {
-                setShouldAutoOpen(true);
-                navigate('/main');
+                navigate('/main', { state: { autoOpenDrawer: true } });
               }}
             >
               ←

@@ -1,12 +1,10 @@
 // 문의하기 페이지
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Inquiry.css';
-import { useDrawerStore } from '../../stores/useDrawerStore';
 import Swal from 'sweetalert2';
 
 export default function Inquiry() {
   const navigate = useNavigate();
-  const { setShouldAutoOpen } = useDrawerStore();
 
   // 문의 전송 처리
   const handleSubmit = () => {
@@ -26,8 +24,7 @@ export default function Inquiry() {
         <span
           className="inquiry-back"
           onClick={() => {
-            setShouldAutoOpen(true); // 플래그 설정
-            navigate('/main');
+            navigate('/main', { state: { autoOpenDrawer: true } });
           }}
         >
           ←

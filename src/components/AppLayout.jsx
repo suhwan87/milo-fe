@@ -1,4 +1,3 @@
-// src/components/AppLayout.jsx
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
@@ -15,17 +14,21 @@ const AppLayout = ({ children }) => {
     shouldAutoOpen,
     setShouldAutoOpen,
   } = useDrawerStore();
+
   const location = useLocation();
+  const path = location.pathname;
 
-  const isMainPage = location.pathname === '/main';
+  const isMainPage = path === '/main';
   const allowDrawerPaths = ['/main'];
-  const isDrawerAllowed = allowDrawerPaths.includes(location.pathname);
+  const isDrawerAllowed = allowDrawerPaths.includes(path);
 
+  // ✅ Drawer 열림 여부 판단
   useEffect(() => {
     if (isMainPage) {
-      if (shouldAutoOpen) {
+      const fromState = location.state?.autoOpenDrawer;
+      if (fromState || shouldAutoOpen) {
         openDrawer();
-        setShouldAutoOpen(false);
+        setShouldAutoOpen(false); // ✅ 전역 상태 초기화 (단발성)
       } else {
         closeDrawer();
       }
@@ -33,23 +36,21 @@ const AppLayout = ({ children }) => {
       closeDrawer();
     }
   }, [
-    location.pathname,
+    path,
     shouldAutoOpen,
+    location.state,
+    isMainPage,
     openDrawer,
     closeDrawer,
     setShouldAutoOpen,
-    isMainPage,
   ]);
 
+  // ✅ 인증 및 세션 체크
   useEffect(() => {
     const token = localStorage.getItem('token');
     const expiredFlag = localStorage.getItem('sessionExpired');
     const justDeleted = localStorage.getItem('justDeleted');
-    const path = location.pathname;
 
-    const isLoginPage = path === '/login';
-
-    // ✅ 인증 없이 접근 가능한 경로 목록
     const publicPaths = [
       '/',
       '/login',
@@ -61,7 +62,7 @@ const AppLayout = ({ children }) => {
 
     const isPublicPath = publicPaths.includes(path);
 
-    // 🔸 세션 만료 시 처리
+    // 🔸 세션 만료 처리
     if (expiredFlag === 'true') {
       localStorage.removeItem('sessionExpired');
       localStorage.removeItem('token');
@@ -70,7 +71,7 @@ const AppLayout = ({ children }) => {
       return;
     }
 
-    // 🔸 탈퇴 후 페이지 유지: 인증이 없고 justDeleted가 true일 때도 publicPath는 허용
+    // 🔸 탈퇴 후 유지 허용 처리
     if (!token && justDeleted === 'true') {
       if (!isPublicPath) {
         setTimeout(() => {
@@ -78,16 +79,16 @@ const AppLayout = ({ children }) => {
           window.location.href = '/login';
         }, 2000);
       }
-      return; // publicPath일 경우 아무 처리도 하지 않음
+      return;
     }
 
-    // 🔸 인증 없는 상태에서 접근 제한
+    // 🔸 인증 없는 접근 차단
     if (!token && !isPublicPath) {
       window.location.href = '/login';
       return;
     }
 
-    // 🔸 토큰 유효성 검사
+    // 🔸 토큰 만료 확인
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -121,7 +122,7 @@ const AppLayout = ({ children }) => {
         });
       }
     }
-  }, [location.pathname]);
+  }, [path]);
 
   return (
     <div className="scrollable-container">
