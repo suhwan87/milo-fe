@@ -5,6 +5,7 @@ import '../styles/Login.css';
 import loginCharacter from '../assets/characters/login-character.png';
 import Swal from 'sweetalert2';
 import api from '../config/axios';
+import KakaoLoginButton from '../components/KakaoLoginButton'; // 경로는 실제 위치에 따라 수정
 
 function Login() {
   const navigate = useNavigate();
@@ -78,6 +79,30 @@ function Login() {
     }
   };
 
+  // 카카오 로그인 성공 시 처리
+  const handleKakaoLoginSuccess = (token, userId, nickname) => {
+    Swal.fire({
+      title: '로그인 완료!',
+      text: '환영합니다 😊',
+      icon: 'success',
+      confirmButtonColor: '#ffa158',
+      confirmButtonText: '확인',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      document.body.style.overflow = 'hidden';
+      setFadeOut(true);
+      setTimeout(() => {
+        document.body.style.overflow = '';
+        if (nickname === '카카오유저') {
+          navigate('/change-nickname');
+        } else {
+          navigate('/main');
+        }
+      }, 300);
+    });
+  };
+
   return (
     <div className={`Login ${fadeOut ? 'fade-out' : ''}`}>
       <div className="login-container">
@@ -133,6 +158,14 @@ function Login() {
           아직 계정이 없으신가요?{' '}
           <span onClick={() => handleNavigate('/signup')}>Signup</span>
         </p>
+        {/* 구분선 + 또는 */}
+        <div className="divider-container">
+          <hr className="divider-line" />
+          <span className="divider-text">또는</span>
+          <hr className="divider-line" />
+        </div>
+        {/* 카카오 로그인 버튼 */}
+        <KakaoLoginButton onSuccess={handleKakaoLoginSuccess} />
       </div>
     </div>
   );

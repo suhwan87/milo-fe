@@ -97,6 +97,26 @@
   color: #ff7a1a;
 }
 
+.divider-container {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+  border: none;
+}
+
+.divider-text {
+  margin: 0 10px;
+  color: #888;
+  font-size: 14px;
+}
+
+
 /* 페이드 아웃 + 스크롤 방지 */
 .fade-out {
   animation: fadeOut 0.3s ease forwards;

@@ -78,11 +78,30 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       confirmButtonColor: '#ff9f4a',
       cancelButtonColor: '#dcdcdc',
     }).then((result) => {
-      if (result.isConfirmed) {
-        const userId = localStorage.getItem('userId');
-        localStorage.removeItem('token'); // 토큰만 제거
-        localStorage.removeItem(`lastChatEnd_${userId}`);
-        navigate('/login', { replace: true }); // replace로 뒤로가기 차단
+      if (!result.isConfirmed) return;
+
+      const userId = localStorage.getItem('userId');
+
+      // ✅ 로컬 데이터 정리
+      localStorage.removeItem('token');
+      localStorage.removeItem(`lastChatEnd_${userId}`);
+      localStorage.removeItem('userId');
+
+      // ✅ 사용자 유형 판별
+      const isKakaoUser = userId?.startsWith('kakao_');
+
+      if (isKakaoUser) {
+        // ✅ 카카오 사용자 로그아웃 → 리디렉션
+        const REST_API_KEY = 'aabaae0d39dbd263ec77dc1cbf25e85f';
+        const redirectUri =
+          window.location.hostname === 'localhost'
+            ? 'http://localhost:3000/login'
+            : 'http://211.188.59.173:3000/login';
+
+        window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${redirectUri}`;
+      } else {
+        // ✅ 일반 사용자 → 단순 리디렉션
+        window.location.href = '/login';
       }
     });
   };
