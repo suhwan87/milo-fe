@@ -1,18 +1,22 @@
-// 공통 axios 인스턴스 생성
+// src/config/axios.js
+
 import axios from 'axios';
 
-// 로컬 여부에 따라 baseURL 분기
+// 로컬 환경 여부 판단
 const isLocal = window.location.hostname === 'localhost';
 
+// baseURL 설정
 const instance = axios.create({
-  baseURL: isLocal ? 'http://localhost:8085' : 'http://211.188.59.173:8085',
+  baseURL: isLocal
+    ? 'http://localhost:8085' // 로컬 백엔드 주소
+    : 'https://soswithmilo.site', // 배포된 도메인 (프록시로 /api 처리)
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // 쿠키 포함 (세션 처리용)
+  withCredentials: true, // JWT 쿠키나 세션 사용 시 필요
 });
 
-// 요청 인터셉터: Authorization 헤더 자동 삽입
+// 요청 인터셉터: Authorization 헤더 자동 추가
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -21,20 +25,17 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-// 응답 인터셉터
+// 응답 인터셉터: 인증 오류 시 리다이렉트 처리
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // 401 Unauthorized 응답 → 토큰 만료 or 위조
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-
-      // 강제 리다이렉트
-      window.location.href = '/login';
+      window.location.href = '/login'; // 로그인 페이지로 이동
     }
-
     return Promise.reject(error);
   }
 );
+
 export default instance;
