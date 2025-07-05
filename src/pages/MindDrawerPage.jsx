@@ -55,7 +55,7 @@ const MindDrawerPage = () => {
   // 폴더 목록 불러오기
   const fetchFolders = async () => {
     try {
-      const res = await api.get('/api/recovery/folders');
+      const res = await api.get('/recovery/folders');
       const folders = res.data.map((folder) => ({
         title: folder.folderName,
         folderId: folder.folderId,
@@ -113,7 +113,7 @@ const MindDrawerPage = () => {
     if (!newFolderName.trim()) return;
 
     try {
-      const res = await api.post('/api/recovery/folder/create', {
+      const res = await api.post('/recovery/folder/create', {
         folderName: newFolderName.trim(),
       });
 
@@ -163,7 +163,7 @@ const MindDrawerPage = () => {
     if (!editFolderName.trim()) return;
 
     try {
-      await api.put('/api/recovery/folder/update', {
+      await api.put('/recovery/folder/update', {
         folderId: drawerList[editTargetIndex].folderId,
         updatedName: editFolderName.trim(),
       });
@@ -198,7 +198,7 @@ const MindDrawerPage = () => {
     const targetFolder = drawerList[index];
 
     try {
-      await api.delete('/api/recovery/folder', {
+      await api.delete('/recovery/folder', {
         data: { folderId: targetFolder.folderId },
       });
 

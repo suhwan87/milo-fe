@@ -88,7 +88,7 @@ const ChatBot1 = () => {
         } else {
           // 기존 메시지가 없으면 초기 인사말 가져오기 및 메시지 배열에 추가
           const userId = localStorage.getItem('userId');
-          const res = await api.get(`/api/chat/init?user_id=${userId}`);
+          const res = await api.get(`/chat/init?user_id=${userId}`);
           const greetingMessage = res.data.output.split('\n')[0];
 
           // 초기 인사말을 메시지 배열에 추가
@@ -162,7 +162,7 @@ const ChatBot1 = () => {
     setMessages((prev) => [...prev, waitingMessage]);
 
     try {
-      const response = await api.post('/api/chat/send', {
+      const response = await api.post('/chat/send', {
         message: input,
       });
 
@@ -257,7 +257,7 @@ const ChatBot1 = () => {
     });
 
     try {
-      const res = await api.post('/api/session/end');
+      const res = await api.post('/session/end');
       const { status } = res.data;
 
       if (status === 'no_messages') {
@@ -300,7 +300,7 @@ const ChatBot1 = () => {
 
     if (alreadySaved) {
       try {
-        await api.delete('/api/recovery/sentence', {
+        await api.delete('/recovery/sentence', {
           data: { content: targetMessage },
         });
 
@@ -331,7 +331,7 @@ const ChatBot1 = () => {
     try {
       await Promise.all(
         selectedFolders.map((folder) =>
-          api.post('/api/recovery/sentence', {
+          api.post('/recovery/sentence', {
             folderId: folder.folderId,
             content: targetMessage,
           })
@@ -357,7 +357,7 @@ const ChatBot1 = () => {
   useEffect(() => {
     const fetchFolders = async () => {
       try {
-        const res = await api.get('/api/recovery/folders');
+        const res = await api.get('/recovery/folders');
         setFolders(res.data);
       } catch (err) {
         console.error('폴더 목록 불러오기 실패:', err);
@@ -378,7 +378,7 @@ const ChatBot1 = () => {
     }
 
     try {
-      const res = await api.post('/api/recovery/folder/create', {
+      const res = await api.post('/recovery/folder/create', {
         folderName: trimmedName,
       });
 

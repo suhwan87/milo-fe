@@ -53,7 +53,7 @@ const EmotionArchivePage = () => {
       const token = localStorage.getItem('accessToken');
       try {
         const { data } = await api.get(
-          `/api/report/records?month=${yearMonthStr}`,
+          `/report/records?month=${yearMonthStr}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -80,7 +80,7 @@ const EmotionArchivePage = () => {
     const fetchFeedback = async () => {
       const token = localStorage.getItem('accessToken');
       try {
-        const { data } = await api.get(`/api/emotion/monthly-summary`, {
+        const { data } = await api.get(`/emotion/monthly-summary`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { yearMonth: yearMonthStr },
         });

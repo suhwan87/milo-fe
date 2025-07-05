@@ -41,7 +41,7 @@ function RolePlay() {
       }
 
       try {
-        const res = await api.get(`/api/character/${userId}/exists`);
+        const res = await api.get(`/character/${userId}/exists`);
         // 이미 역할이 존재하는 경우 → 바로 채팅 페이지로 이동
         if (res.data === true) {
           navigate('/roleplay/chat');
@@ -104,7 +104,7 @@ function RolePlay() {
           situation: updated[4],
         };
 
-        const res = await api.post('/api/character', payload);
+        const res = await api.post('/character', payload);
         const characterId = res.data;
 
         // 성공 알림 후 페이드 아웃 → 역할극 채팅 화면 이동

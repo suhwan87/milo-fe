@@ -5,18 +5,17 @@ import axios from 'axios';
 // 로컬 환경 여부 판단
 const isLocal = window.location.hostname === 'localhost';
 
-// baseURL 설정
 const instance = axios.create({
   baseURL: isLocal
-    ? 'http://localhost:8085' // 로컬 백엔드 주소
-    : 'https://soswithmilo.site', // 배포된 도메인 (프록시로 /api 처리)
+    ? 'http://localhost:8085/api' // 로컬 개발용 백엔드 주소
+    : '/api', // 🔥 배포 시에는 nginx 프록시 경로 사용 (HTTPS 환경 안전)
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // JWT 쿠키나 세션 사용 시 필요
+  withCredentials: true,
 });
 
-// 요청 인터셉터: Authorization 헤더 자동 추가
+// 요청 인터셉터: 토큰 자동 첨부
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -25,14 +24,14 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-// 응답 인터셉터: 인증 오류 시 리다이렉트 처리
+// 응답 인터셉터: 인증 실패 시 처리
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-      window.location.href = '/login'; // 로그인 페이지로 이동
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

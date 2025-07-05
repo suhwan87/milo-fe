@@ -44,7 +44,7 @@ function SignUp() {
       return;
     }
     try {
-      const response = await api.get('/api/users/check-id', {
+      const response = await api.get('/users/check-id', {
         params: { id },
       });
 
@@ -95,7 +95,7 @@ function SignUp() {
 
     // 회원가입 요청
     try {
-      await api.post('/api/users/register', {
+      await api.post('/users/register', {
         userId: id,
         password,
         nickname,

@@ -43,7 +43,7 @@ const EmotionReport = () => {
     const lastEnd = parseInt(lastChatEnd, 10);
 
     try {
-      const res = await api.get(`/api/report/daily?date=${date}`, {
+      const res = await api.get(`/report/daily?date=${date}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
 
@@ -103,7 +103,7 @@ const EmotionReport = () => {
       controller = new AbortController();
 
       try {
-        const { data } = await api.get(`/api/report/days?month=${ym}`, {
+        const { data } = await api.get(`/report/days?month=${ym}`, {
           headers: { Authorization: `Bearer ${token}` },
           signal: controller.signal,
         });

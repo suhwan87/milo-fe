@@ -17,7 +17,7 @@ export default function ChangeNickname() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const res = await api.get('/api/users/me');
+        const res = await api.get('/users/me');
         setCurrentNickname(res.data.nickname);
       } catch (err) {
         console.error('닉네임 불러오기 실패', err);
@@ -45,7 +45,7 @@ export default function ChangeNickname() {
     }
 
     try {
-      await api.patch('/api/users/nickname', { nickname: trimmed });
+      await api.patch('/users/nickname', { nickname: trimmed });
 
       Swal.fire({
         title: '닉네임 변경 완료!',

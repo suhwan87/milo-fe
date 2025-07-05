@@ -16,7 +16,7 @@ function FindPassword() {
   const handleFindPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/api/users/verify-user', {
+      const res = await api.post('/users/verify-user', {
         nickname,
         userId,
         email,

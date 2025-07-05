@@ -36,7 +36,7 @@ function Login() {
 
     try {
       // 로그인 요청
-      const response = await api.post('/api/users/login', {
+      const response = await api.post('/users/login', {
         userId: id,
         password: password,
       });

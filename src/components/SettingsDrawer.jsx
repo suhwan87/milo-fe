@@ -39,7 +39,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
 
     try {
       const token = localStorage.getItem('token');
-      await api.delete('/api/users/reset', {
+      await api.delete('/users/reset', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +90,7 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
         const redirectUri =
           window.location.hostname === 'localhost'
             ? 'http://localhost:3000/login'
-            : 'http://211.188.59.173:3000/login';
+            : 'https://soswithmilo.site/login';
 
         window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${redirectUri}`;
       } else {

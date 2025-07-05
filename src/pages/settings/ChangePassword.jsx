@@ -46,7 +46,7 @@ export default function ChangePassword() {
 
     // 서버에 비밀번호 변경 요청
     try {
-      await api.patch('/api/users/password', {
+      await api.patch('/users/password', {
         currentPassword: currentPw,
         newPassword: newPw,
       });

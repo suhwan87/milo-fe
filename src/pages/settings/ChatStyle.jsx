@@ -14,7 +14,7 @@ export default function ChangeStyle() {
   useEffect(() => {
     const fetchUserPrompt = async () => {
       try {
-        const res = await api.get('/api/prompt');
+        const res = await api.get('/prompt');
         console.log('응답:', res.data);
 
         if (typeof res.data === 'string') {
@@ -33,7 +33,7 @@ export default function ChangeStyle() {
     const promptValue = selected === '공감형' ? 0 : 1;
 
     try {
-      await api.put('/api/prompt', {
+      await api.put('/prompt', {
         emotionPrompt: promptValue,
       });
 

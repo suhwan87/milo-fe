@@ -17,14 +17,11 @@ const EmotionArchive = () => {
         const today = new Date();
         const yearMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
-        const response = await api.get(
-          `/api/report/records?month=${yearMonth}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await api.get(`/report/records?month=${yearMonth}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setRecordCount(response.data.length);
       } catch (error) {

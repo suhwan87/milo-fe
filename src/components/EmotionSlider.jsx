@@ -42,13 +42,13 @@ const EmotionSlider = () => {
 
       try {
         const [infoRes, statusRes, roleRes] = await Promise.all([
-          api.get('/api/users/me', {
+          api.get('/users/me', {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          api.get('/api/users/status', {
+          api.get('/users/status', {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          api.get(`/api/character/${userId}/exists`),
+          api.get(`/character/${userId}/exists`),
         ]);
 
         setNickname(infoRes.data.nickname || '사용자');

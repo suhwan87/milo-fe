@@ -20,7 +20,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
     const fetchSentencesWithEmotion = async () => {
       try {
         setIsLoading(true);
-        const res = await api.get(`/api/recovery/sentence/${folder.folderId}`);
+        const res = await api.get(`/recovery/sentence/${folder.folderId}`);
         const token = localStorage.getItem('token');
 
         const enriched = await Promise.all(
@@ -28,7 +28,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
             const date = s.createdAt.split('T')[0]; // 날짜 추출
 
             try {
-              const emotionRes = await api.get('/api/report/daily', {
+              const emotionRes = await api.get('/report/daily', {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { date },
               });
@@ -65,7 +65,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      await api.delete('/api/recovery/sentence/folder', {
+      await api.delete('/recovery/sentence/folder', {
         headers: { Authorization: `Bearer ${token}` },
         data: {
           folderId: folder.folderId,
@@ -101,7 +101,7 @@ const FolderDetailView = ({ folder, onSentenceDelete }) => {
     try {
       const token = localStorage.getItem('token');
       await api.put(
-        '/api/recovery/sentence/update',
+        '/recovery/sentence/update',
         {
           sentenceId: selectedSentence.sentenceId, // 고유 ID
           updatedContent: editContent,

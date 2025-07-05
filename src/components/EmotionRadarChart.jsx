@@ -22,7 +22,7 @@ const EmotionRadarChart = ({ yearMonth = '2025-06' }) => {
     const fetchEmotionSummary = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await api.get('/api/emotion/monthly-summary', {
+        const response = await api.get('/emotion/monthly-summary', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

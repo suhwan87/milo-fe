@@ -19,7 +19,7 @@ function FindId() {
   const handleFindId = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/api/users/find-id', {
+      const res = await api.post('/users/find-id', {
         nickname,
         email,
       });

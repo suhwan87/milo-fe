@@ -39,7 +39,7 @@ const EmotionKeyword = () => {
 
       // 오늘 날짜 기준 리포트 요청
       try {
-        const res = await api.get(`/api/report/daily?date=${today}`, {
+        const res = await api.get(`/report/daily?date=${today}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

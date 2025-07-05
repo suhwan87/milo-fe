@@ -38,7 +38,7 @@ const ChatBot2 = () => {
     // 역할극 로그 불러오기
     const fetchLogs = async () => {
       try {
-        const res = await api.get(`/api/roleplay/logs?userId=${userId}`);
+        const res = await api.get(`/roleplay/logs?userId=${userId}`);
         const logs = res.data.flatMap((log) => [
           {
             sender: 'user',
@@ -124,7 +124,7 @@ const ChatBot2 = () => {
     setMessages((prev) => [...prev, waitingMessage]);
 
     try {
-      const res = await api.post('/api/roleplay', { user_id: userId, input });
+      const res = await api.post('/roleplay', { user_id: userId, input });
       const botReply = res.data.output || '응답을 받아오지 못했습니다.';
       const botTime = formatTime(new Date());
 
@@ -177,7 +177,7 @@ const ChatBot2 = () => {
     if (alreadySaved) {
       // 삭제 요청
       try {
-        await api.delete('/api/recovery/sentence', {
+        await api.delete('/recovery/sentence', {
           data: { content: targetMessage },
         });
 
@@ -209,7 +209,7 @@ const ChatBot2 = () => {
     try {
       await Promise.all(
         selectedFolders.map((folder) =>
-          api.post('/api/recovery/sentence', {
+          api.post('/recovery/sentence', {
             folderId: folder.folderId,
             content: targetMessage,
           })
@@ -236,7 +236,7 @@ const ChatBot2 = () => {
   useEffect(() => {
     const fetchFolders = async () => {
       try {
-        const res = await api.get('/api/recovery/folders');
+        const res = await api.get('/recovery/folders');
         setFolders(res.data); // 서버에서 받은 폴더 리스트 저장
       } catch (err) {
         console.error('폴더 목록 불러오기 실패:', err);
@@ -257,7 +257,7 @@ const ChatBot2 = () => {
     }
 
     try {
-      const res = await api.post('/api/recovery/folder/create', {
+      const res = await api.post('/recovery/folder/create', {
         folderName: trimmedName,
       });
 
@@ -295,7 +295,7 @@ const ChatBot2 = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await api.delete(`/api/character/${userId}`);
+          await api.delete(`/character/${userId}`);
           localStorage.removeItem(`roleplayMessages_${userId}`);
           navigate('/main');
         } catch (err) {
