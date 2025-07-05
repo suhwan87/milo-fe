@@ -29,6 +29,7 @@ function SignUp() {
   // 에러 메시지
   const [passwordFormatError, setPasswordFormatError] = useState('');
   const [passwordMatchError, setPasswordMatchError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [agreementError, setAgreementError] = useState('');
 
   // 아이디 중복 확인 핸들러
@@ -114,6 +115,13 @@ function SignUp() {
         setTimeout(() => navigate('/login'), 300);
       });
     } catch (error) {
+      const msg = error.response?.data?.message;
+
+      if (msg?.includes('이메일')) {
+        setEmailError('이미 사용 중인 이메일입니다.');
+        return;
+      }
+
       Swal.fire({
         title: '회원가입 실패!',
         text: error.response?.data || '서버 오류가 발생했습니다.',
@@ -201,6 +209,7 @@ function SignUp() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {emailError && <p className="error-message">{emailError}</p>}
 
           <div className="checkbox-row">
             {/* 개인정보 수집 및 이용 */}
