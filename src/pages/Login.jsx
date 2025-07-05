@@ -71,7 +71,7 @@ function Login() {
         title: '로그인 실패!',
         text:
           error.response?.data?.message ||
-          '아이디 또는 비밀번호를 확인해주세요.',
+          '아이디 또는 비밀번호를 확인해 주세요.',
         icon: 'error',
         confirmButtonColor: '#d33',
         confirmButtonText: '확인',
@@ -129,7 +129,7 @@ function Login() {
           아이디
           <input
             type="text"
-            placeholder="아이디를 입력해주세요"
+            placeholder="아이디를 입력해 주세요"
             value={id}
             onChange={(e) => setId(e.target.value)}
             required
@@ -137,7 +137,7 @@ function Login() {
           비밀번호
           <input
             type="password"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="비밀번호를 입력해 주세요"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
