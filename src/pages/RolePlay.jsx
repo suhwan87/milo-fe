@@ -8,7 +8,7 @@ import '../styles/RolePlay.css';
 
 // 역할극 질문 목록 정의
 const steps = [
-  { id: 1, question: '상대방의 이름을 알려주세요.' },
+  { id: 1, question: '상대방의 호칭을 알려주세요.' },
   { id: 2, question: '상대방과의 관계를 알려주세요.' },
   { id: 3, question: '상대방의 말투는 어떤가요?' },
   { id: 4, question: '상대방의 성격은 어떤가요?' },
