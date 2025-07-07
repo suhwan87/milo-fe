@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigationType, useLocation } from 'react-router-dom';
 import Header from './Header';
 import SettingsDrawer from './SettingsDrawer';
 import { useDrawerStore } from '../stores/useDrawerStore';
@@ -24,6 +24,7 @@ const AppLayout = ({ children }) => {
     setShouldAutoOpen,
   } = useDrawerStore();
 
+  const action = useNavigationType();
   const location = useLocation();
   const path = location.pathname;
 
@@ -63,7 +64,11 @@ const AppLayout = ({ children }) => {
   useEffect(() => {
     if (isMainPage) {
       const fromState = location.state?.autoOpenDrawer;
-      if (fromState || shouldAutoOpen) {
+
+      if (action === 'POP') {
+        // 뒤로가기인 경우 무조건 닫기
+        closeDrawer();
+      } else if (fromState || shouldAutoOpen) {
         openDrawer();
         setShouldAutoOpen(false);
       } else {
