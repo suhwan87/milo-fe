@@ -5,7 +5,7 @@ import axios from 'axios';
 const isLocal = window.location.hostname === 'localhost';
 
 const instance = axios.create({
-  baseURL: isLocal ? 'http://localhost:8085' : 'http://211.188.59.173:8085',
+  baseURL: isLocal ? 'http://localhost:8085' : '',
   headers: {
     'Content-Type': 'application/json',
   },
