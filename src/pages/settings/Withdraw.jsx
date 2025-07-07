@@ -96,7 +96,7 @@ export default function Withdraw() {
       const redirectUri =
         window.location.hostname === 'localhost'
           ? 'http://localhost:3000/login'
-          : 'http://211.188.59.173:3000/login';
+          : 'http://soswithmilo.site/login';
 
       window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=${REST_API_KEY}&logout_redirect_uri=${redirectUri}`;
     } else {

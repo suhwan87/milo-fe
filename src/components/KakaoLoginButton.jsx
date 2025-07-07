@@ -16,7 +16,7 @@ const KakaoLoginButton = ({ onSuccess }) => {
         const backendBaseUrl =
           window.location.hostname === 'localhost'
             ? 'http://localhost:8085'
-            : 'http://211.188.59.173:8085';
+            : '';
 
         fetch(`${backendBaseUrl}/oauth/kakao`, {
           method: 'POST',
