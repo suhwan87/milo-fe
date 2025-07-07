@@ -23,7 +23,13 @@ const KakaoLoginButton = ({ onSuccess }) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ accessToken }),
         })
-          .then((res) => res.json())
+          .then(async (res) => {
+            if (!res.ok) {
+              const errorText = await res.text(); // HTML 에러 방지용
+              throw new Error(`HTTP error ${res.status}: ${errorText}`);
+            }
+            return res.json();
+          })
           .then((data) => {
             const { token, userId, nickname } = data;
 
