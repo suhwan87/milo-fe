@@ -1,5 +1,5 @@
 # React 앱 빌드용 Node 환경
-FROM node:18 AS build
+FROM node:20 AS build
 
 WORKDIR /app
 COPY . .
