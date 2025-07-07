@@ -82,8 +82,9 @@ const SettingsDrawer = ({ isOpen, onClose }) => {
       if (!result.isConfirmed) return;
 
       localStorage.removeItem('token');
-      localStorage.removeItem(`lastChatEnd_${userId}`);
       localStorage.removeItem('userId');
+      localStorage.removeItem(`lastChatEnd_${userId}`);
+      localStorage.removeItem(`chatMessages_${userId}`);
 
       if (isKakaoUser) {
         const REST_API_KEY = 'aabaae0d39dbd263ec77dc1cbf25e85f';

@@ -228,7 +228,6 @@ const ChatBot1 = () => {
 
   // 사용자가 채팅을 종료(뒤로가기)
   const handleExit = async () => {
-    localStorage.clear();
     const isWaiting = messages.some((msg) => msg.waiting);
     if (isWaiting) {
       Swal.fire({
