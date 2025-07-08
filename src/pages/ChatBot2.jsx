@@ -458,7 +458,12 @@ const ChatBot2 = () => {
                 )}
               </li>
             ) : (
-              <li onClick={() => setIsAddingFolder(true)}>➕ 새 폴더 만들기</li>
+              <li
+                onClick={() => setIsAddingFolder(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                ➕ 새 폴더 만들기
+              </li>
             )}
           </ul>
 

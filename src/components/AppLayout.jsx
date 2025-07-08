@@ -135,7 +135,7 @@ const AppLayout = ({ children }) => {
         localStorage.setItem('sessionExpired', 'true');
         localStorage.setItem('expiredTime', now.toString());
 
-        Swal.fire({
+        /* Swal.fire({
           icon: 'info',
           title: '세션 만료',
           text: '보안을 위해 자동 로그아웃 되었습니다.',
@@ -143,9 +143,9 @@ const AppLayout = ({ children }) => {
           confirmButtonText: '확인',
           allowOutsideClick: false,
           allowEscapeKey: false,
-        }).then(() => {
-          window.location.href = '/login';
-        });
+        }).then(() => { */
+        window.location.href = '/login';
+        // });
       }
     }
   }, [path]);
