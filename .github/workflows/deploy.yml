@@ -1,4 +1,34 @@
-name: Deploy Frontend to NCP
+# name: Deploy Frontend to NCP
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Deploy via SSH
+#         uses: appleboy/ssh-action@v1.0.0
+#         with:
+#           host: ${{ secrets.NCP_HOST }}
+#           username: ${{ secrets.NCP_USER }}
+#           key: ${{ secrets.NCP_SSH_KEY }}
+#           port: 22
+#           script: |
+#             cd /root/milo-fe
+#             docker rm -f milo-fe || true
+#             git pull origin main
+#             npm install
+#             npm run build
+#             docker-compose -f /root/docker-compose.yml build frontend
+#             docker-compose -f /root/docker-compose.yml up -d frontend
+
+name: Deploy Frontend to AWS
 
 on:
   push:
@@ -12,18 +42,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Deploy via SSH
+      - name: Deploy via SSH to AWS EC2
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.NCP_HOST }}
-          username: ${{ secrets.NCP_USER }}
-          key: ${{ secrets.NCP_SSH_KEY }}
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
-            cd /root/milo-fe
+            cd /home/ubuntu/milo-fe
             docker rm -f milo-fe || true
             git pull origin main
-            npm install
-            npm run build
-            docker-compose -f /root/docker-compose.yml build frontend
-            docker-compose -f /root/docker-compose.yml up -d frontend
+            docker-compose -f /home/ubuntu/docker-compose.yml build milo-fe
+            docker-compose -f /home/ubuntu/docker-compose.yml up -d milo-fe
